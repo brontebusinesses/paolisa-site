@@ -67,40 +67,38 @@ const storeOpen = isStoreOpen();
       </div>
 
       {/* Right — Recherche / Compte / Panier
-          - Recherche : caché tant qu'on n'a pas de fonctionnalité (1 produit, search inutile)
-          - Compte    : caché en pré-lancement (pas de comptes clients, pas d'achats)
+          - Recherche : caché tant qu'on n'a pas la fonctionnalité (1 produit, search inutile)
+          - Compte    : caché en pré-lancement (pas de comptes clients)
                         Au launch, pointera vers Shopify customer accounts
-          - Panier    : caché en pré-lancement (pas d'achat possible)
-                        Au launch, affichera le compte d'articles
+          - Panier    : toujours visible (équilibre visuel + lien vers /panier)
+                        En pré-lancement il affiche 0 et la page dit "panier vide"
       */}
       <div class="flex items-center justify-end gap-4 md:gap-6">
         {
           storeOpen && (
-            <>
-              <a
-                href="/compte"
-                class:list={[
-                  'mono-label hidden md:inline-block hover:opacity-70 transition-opacity duration-150 ease-in-out',
-                  transparent ? 'text-ink-inverse' : 'text-ink-primary',
-                ]}
-              >
-                COMPTE
-              </a>
-              <a
-                href="/panier"
-                aria-label="Panier"
-                class:list={[
-                  'mono-label inline-flex items-center gap-1 hover:opacity-70 transition-opacity duration-150 ease-in-out',
-                  transparent ? 'text-ink-inverse' : 'text-ink-primary',
-                ]}
-              >
-                <span>[</span>
-                <span data-cart-count>0</span>
-                <span>]</span>
-              </a>
-            </>
+            <a
+              href="/compte"
+              class:list={[
+                'mono-label hidden md:inline-block hover:opacity-70 transition-opacity duration-150 ease-in-out',
+                transparent ? 'text-ink-inverse' : 'text-ink-primary',
+              ]}
+            >
+              COMPTE
+            </a>
           )
         }
+        <a
+          href="/panier"
+          aria-label="Panier"
+          class:list={[
+            'mono-label inline-flex items-center gap-1 hover:opacity-70 transition-opacity duration-150 ease-in-out',
+            transparent ? 'text-ink-inverse' : 'text-ink-primary',
+          ]}
+        >
+          <span>[</span>
+          <span data-cart-count>0</span>
+          <span>]</span>
+        </a>
       </div>
     </div>
   </div>
