@@ -1,0 +1,66 @@
+---
+/**
+ * BaseLayout — chargement fonts (§2.2 stack v1) + CSS global.
+ * Cormorant Garamond (wordmark) · Inter (display + body) · JetBrains Mono (mono).
+ * font-display: swap — §8.7 Performance.
+ */
+import '../styles/global.css';
+
+interface Props {
+  title: string;
+  description?: string;
+  ogImage?: string;
+  noindex?: boolean;
+  /**
+   * heroOverlay = true → la première section commence à top:0 (le hero
+   * full-bleed passe SOUS la NoticeBar et SOUS le Header transparent).
+   * heroOverlay = false → on pousse le contenu de NoticeBar+Header pour
+   * qu'il ne soit pas masqué.
+   */
+  heroOverlay?: boolean;
+}
+
+const {
+  title,
+  description = 'PAOLISA — Une huile, le matin. Cinq huiles méditerranéennes pures, certifiées COSMOS Organic.',
+  ogImage,
+  noindex = false,
+  heroOverlay = false,
+} = Astro.props;
+
+const canonicalURL = new URL(Astro.url.pathname, Astro.site ?? 'https://paolisa.eu');
+---
+
+<!doctype html>
+<html lang="fr">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <meta name="generator" content={Astro.generator} />
+
+    <title>{title}</title>
+    <meta name="description" content={description} />
+    <link rel="canonical" href={canonicalURL} />
+    {noindex && <meta name="robots" content="noindex,nofollow" />}
+
+    {/* Open Graph */}
+    <meta property="og:title" content={title} />
+    <meta property="og:description" content={description} />
+    <meta property="og:type" content="website" />
+    <meta property="og:url" content={canonicalURL} />
+    {ogImage && <meta property="og:image" content={ogImage} />}
+
+    {/* Fonts — Cormorant Garamond, Inter, JetBrains Mono — font-display: swap */}
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      rel="stylesheet"
+      href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@400;500&family=Inter:wght@400;500;600&family=JetBrains+Mono:wght@400&display=swap"
+    />
+
+    <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
+  </head>
+  <body data-hero-overlay={heroOverlay ? 'true' : 'false'}>
+    <slot />
+  </body>
+</html>

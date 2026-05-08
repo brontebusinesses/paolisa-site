@@ -1,0 +1,200 @@
+---
+/**
+ * <Header /> — §5.2
+ * Layout flottant transparent sur le hero, devient blanc opaque au scroll au-delà de 100px.
+ *
+ * Layout §3.2 :
+ *   ≡ MENU      L'INVENTAIRE          PAOLISA ●          RECHERCHE
+ *   COMPTE      [ 0 ]
+ *
+ * Comportement : transparent par défaut sur la home, scroll > 100px → opaque.
+ */
+import Wordmark from './Wordmark.astro';
+
+interface Props {
+  transparent?: boolean;
+  currentPath?: string;
+}
+
+const { transparent = false, currentPath = '/' } = Astro.props;
+---
+
+<header
+  data-header
+  data-transparent={transparent ? 'true' : 'false'}
+  style="top: var(--notice-bar-height, 36px);"
+  class:list={[
+    'fixed inset-x-0 z-40 transition-colors duration-200 ease-in-out',
+    transparent ? 'bg-transparent' : 'bg-bg-primary border-b border-line-subtle',
+  ]}
+>
+  <div class="container-paolisa">
+    <div class="grid grid-cols-3 items-center h-[64px] md:h-[72px]">
+      {/* Left — Menu + L'inventaire */}
+      <div class="flex items-center gap-6 md:gap-8">
+        <button
+          type="button"
+          data-menu-toggle
+          aria-label="Ouvrir le menu"
+          aria-expanded="false"
+          class:list={[
+            'mono-label inline-flex items-center gap-2 hover:opacity-70 transition-opacity duration-150 ease-in-out',
+            transparent ? 'text-ink-inverse' : 'text-ink-primary',
+          ]}
+        >
+          <span aria-hidden="true">≡</span>
+          <span>MENU</span>
+        </button>
+        <a
+          href="/huile/no-01"
+          class:list={[
+            'mono-label hidden md:inline-block hover:opacity-70 transition-opacity duration-150 ease-in-out',
+            transparent ? 'text-ink-inverse' : 'text-ink-primary',
+            currentPath?.startsWith('/huile') ? 'opacity-70' : '',
+          ]}
+        >
+          L'INVENTAIRE
+        </a>
+      </div>
+
+      {/* Centre — Wordmark */}
+      <div class="flex justify-center">
+        <a href="/" aria-label="Paolisa — accueil" class="hover:opacity-100">
+          <Wordmark size="nav" inverse={transparent} />
+        </a>
+      </div>
+
+      {/* Right — Recherche / Compte / Panier */}
+      <div class="flex items-center justify-end gap-4 md:gap-6">
+        <button
+          type="button"
+          aria-label="Rechercher"
+          class:list={[
+            'mono-label hidden md:inline-block hover:opacity-70 transition-opacity duration-150 ease-in-out',
+            transparent ? 'text-ink-inverse' : 'text-ink-primary',
+          ]}
+        >
+          RECHERCHE
+        </button>
+        <a
+          href="/compte"
+          class:list={[
+            'mono-label hidden md:inline-block hover:opacity-70 transition-opacity duration-150 ease-in-out',
+            transparent ? 'text-ink-inverse' : 'text-ink-primary',
+          ]}
+        >
+          COMPTE
+        </a>
+        <a
+          href="/panier"
+          aria-label="Panier"
+          class:list={[
+            'mono-label inline-flex items-center gap-1 hover:opacity-70 transition-opacity duration-150 ease-in-out',
+            transparent ? 'text-ink-inverse' : 'text-ink-primary',
+          ]}
+        >
+          <span>[</span>
+          <span data-cart-count>0</span>
+          <span>]</span>
+        </a>
+      </div>
+    </div>
+  </div>
+</header>
+
+{/* Menu overlay full-screen — §3.2 */}
+<div
+  data-menu-overlay
+  class="fixed inset-0 z-50 bg-bg-primary hidden flex-col"
+  aria-hidden="true"
+>
+  <div class="container-paolisa flex items-center justify-between h-[64px] md:h-[72px] border-b border-line-subtle">
+    <button
+      type="button"
+      data-menu-close
+      aria-label="Fermer le menu"
+      class="mono-label text-ink-primary hover:opacity-70 transition-opacity duration-150 ease-in-out"
+    >
+      <span aria-hidden="true">×</span> FERMER
+    </button>
+    <Wordmark size="md" />
+    <span class="w-[60px]"></span>
+  </div>
+
+  <nav class="container-paolisa flex-1 flex items-start py-12 md:py-20">
+    <div class="grid grid-cols-1 md:grid-cols-2 gap-12 md:gap-20 w-full">
+      <div>
+        <p class="mono-label mb-6">L'INVENTAIRE</p>
+        <ul class="space-y-3">
+          <li><a href="/huile/no-01" class="display-s hover:opacity-70 transition-opacity duration-150 ease-in-out">N°01 — Huile matin</a></li>
+          <li><span class="display-s text-ink-tertiary">N°02 — Soir (bientôt)</span></li>
+        </ul>
+      </div>
+      <div>
+        <p class="mono-label mb-6">— EXPLORER —</p>
+        <ul class="space-y-3">
+          <li><a href="/rituel" class="display-s hover:opacity-70 transition-opacity duration-150 ease-in-out">Le rituel</a></li>
+          <li><a href="/origine" class="display-s hover:opacity-70 transition-opacity duration-150 ease-in-out">L'origine</a></li>
+          <li><a href="/journal" class="display-s hover:opacity-70 transition-opacity duration-150 ease-in-out">Le journal</a></li>
+          <li><a href="/contact" class="display-s hover:opacity-70 transition-opacity duration-150 ease-in-out">Contact</a></li>
+          <li><a href="/faq" class="display-s hover:opacity-70 transition-opacity duration-150 ease-in-out">FAQ</a></li>
+        </ul>
+      </div>
+    </div>
+  </nav>
+</div>
+
+<script>
+  // Scroll behaviour — header transparent → opaque au-delà de 100px (§5.2).
+  const header = document.querySelector<HTMLElement>('[data-header]');
+  if (header && header.dataset.transparent === 'true') {
+    const onScroll = () => {
+      const scrolled = window.scrollY > 100;
+      if (scrolled) {
+        header.classList.remove('bg-transparent');
+        header.classList.add('bg-bg-primary', 'border-b', 'border-line-subtle');
+        header.querySelectorAll<HTMLElement>('.text-ink-inverse').forEach((el) => {
+          el.classList.remove('text-ink-inverse');
+          el.classList.add('text-ink-primary');
+          el.dataset.invertedOnScroll = 'true';
+        });
+        // Wordmark dot stays terracotta — handled via CSS class.
+      } else {
+        header.classList.add('bg-transparent');
+        header.classList.remove('bg-bg-primary', 'border-b', 'border-line-subtle');
+        header.querySelectorAll<HTMLElement>('[data-inverted-on-scroll="true"]').forEach((el) => {
+          el.classList.add('text-ink-inverse');
+          el.classList.remove('text-ink-primary');
+        });
+      }
+    };
+    window.addEventListener('scroll', onScroll, { passive: true });
+    onScroll();
+  }
+
+  // Menu overlay
+  const overlay = document.querySelector<HTMLElement>('[data-menu-overlay]');
+  const toggle = document.querySelector<HTMLButtonElement>('[data-menu-toggle]');
+  const close = document.querySelector<HTMLButtonElement>('[data-menu-close]');
+
+  const open = () => {
+    overlay?.classList.remove('hidden');
+    overlay?.classList.add('flex');
+    overlay?.setAttribute('aria-hidden', 'false');
+    toggle?.setAttribute('aria-expanded', 'true');
+    document.body.style.overflow = 'hidden';
+  };
+  const shut = () => {
+    overlay?.classList.add('hidden');
+    overlay?.classList.remove('flex');
+    overlay?.setAttribute('aria-hidden', 'true');
+    toggle?.setAttribute('aria-expanded', 'false');
+    document.body.style.overflow = '';
+  };
+
+  toggle?.addEventListener('click', open);
+  close?.addEventListener('click', shut);
+  document.addEventListener('keydown', (e) => {
+    if (e.key === 'Escape') shut();
+  });
+</script>

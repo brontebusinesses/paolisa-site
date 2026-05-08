@@ -1,0 +1,45 @@
+---
+/**
+ * <NoticeBar /> — §5.1
+ * Fond #18181B, texte mono #DDDDDA, padding 8px, sticky top.
+ */
+interface Props {
+  message: string;
+  dismissible?: boolean;
+}
+
+const { message, dismissible = false } = Astro.props;
+---
+
+<div
+  class="fixed top-0 inset-x-0 z-50 bg-bg-dark text-line-subtle py-2 text-center"
+  data-notice-bar
+>
+  <div class="container-paolisa flex items-center justify-center gap-4">
+    <span class="font-mono uppercase text-[10px] tracking-[0.18em]">{message}</span>
+    {
+      dismissible && (
+        <button
+          type="button"
+          aria-label="Fermer"
+          class="font-mono uppercase text-[10px] tracking-[0.18em] text-line-subtle hover:opacity-70 transition-opacity duration-150 ease-in-out"
+          data-notice-dismiss
+        >
+          ×
+        </button>
+      )
+    }
+  </div>
+</div>
+
+{
+  dismissible && (
+    <script>
+      const bar = document.querySelector<HTMLElement>('[data-notice-bar]');
+      const btn = document.querySelector<HTMLButtonElement>('[data-notice-dismiss]');
+      btn?.addEventListener('click', () => {
+        bar?.remove();
+      });
+    </script>
+  )
+}

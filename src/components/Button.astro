@@ -1,0 +1,62 @@
+---
+/**
+ * <Button /> — §5.8
+ * Variantes : primary (fond noir, texte blanc), secondary (border noir, texte noir),
+ * text (souligné fin). Tailles : default, small. Coins droits, padding généreux.
+ * Tokens : §2.1 palette, §2.4 border 0.5px, §2.5 transition 0.2s.
+ */
+interface Props {
+  variant?: 'primary' | 'secondary' | 'text';
+  size?: 'default' | 'small';
+  href?: string;
+  type?: 'button' | 'submit' | 'reset';
+  fullWidth?: boolean;
+  ariaLabel?: string;
+  class?: string;
+}
+
+const {
+  variant = 'primary',
+  size = 'default',
+  href,
+  type = 'button',
+  fullWidth = false,
+  ariaLabel,
+  class: className = '',
+} = Astro.props;
+
+const base =
+  'inline-flex items-center justify-center font-mono uppercase tracking-[0.18em] text-[10px] md:text-[10px] leading-none transition-colors duration-200 ease-in-out';
+
+const sizing =
+  size === 'small'
+    ? 'px-4 py-2.5 min-h-[36px]'
+    : 'px-6 py-4 min-h-[48px] md:px-8 md:py-[18px]';
+
+const variants: Record<string, string> = {
+  primary:
+    'bg-bg-dark text-ink-inverse border border-bg-dark hover:bg-ink-secondary hover:border-ink-secondary',
+  secondary:
+    'bg-transparent text-ink-primary border border-ink-primary hover:bg-ink-primary hover:text-ink-inverse',
+  text:
+    'bg-transparent text-ink-primary border-0 underline underline-offset-[6px] decoration-[0.5px] hover:opacity-70 px-0 py-1 min-h-0',
+};
+
+const widthCls = fullWidth ? 'w-full' : '';
+
+const classes = [base, variant === 'text' ? '' : sizing, variants[variant], widthCls, className]
+  .filter(Boolean)
+  .join(' ');
+---
+
+{
+  href ? (
+    <a href={href} class={classes} aria-label={ariaLabel}>
+      <slot />
+    </a>
+  ) : (
+    <button type={type} class={classes} aria-label={ariaLabel}>
+      <slot />
+    </button>
+  )
+}

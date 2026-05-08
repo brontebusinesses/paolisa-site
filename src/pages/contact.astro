@@ -1,0 +1,176 @@
+---
+/**
+ * Contact — §4.6
+ * Page minimale. Mono label + display M + email + formulaire + adresse + délai.
+ */
+import BaseLayout from '../layouts/BaseLayout.astro';
+import NoticeBar from '../components/NoticeBar.astro';
+import Header from '../components/Header.astro';
+import Footer from '../components/Footer.astro';
+import Input from '../components/Input.astro';
+import Button from '../components/Button.astro';
+
+const params = Astro.url.searchParams;
+const sent = params.get('envoye') === '1';
+const errorCode = params.get('erreur');
+---
+
+<BaseLayout
+  title="Contact — PAOLISA"
+  description="Écrivez-nous. Réponse sous 48h ouvrés. bonjour@paolisa.eu"
+>
+  <NoticeBar message="FREE EU SHIPPING — €60+" />
+  <Header transparent={false} currentPath="/contact" />
+
+  <main>
+    <section class="container-paolisa pt-12 md:pt-20 pb-20 md:pb-32">
+      <header class="mb-16 md:mb-24 max-w-3xl">
+        <p class="mono-label mb-4">— CONTACT —</p>
+        <h1 class="display-l">Écrivez-nous.</h1>
+        <p class="body-l text-ink-secondary mt-8 max-w-prose">
+          Pour toute question sur le produit, une commande en cours, une demande presse ou un partenariat — nous lisons tout, nous répondons à tout.
+        </p>
+      </header>
+
+      <div class="grid grid-cols-1 md:grid-cols-12 gap-12 md:gap-16">
+        {/* Colonne gauche — coordonnées */}
+        <aside class="md:col-span-5 md:order-2">
+          <div class="md:sticky md:top-[120px] space-y-10">
+            <div>
+              <p class="mono-label mb-3">— EMAIL DIRECT</p>
+              <p class="body-l">
+                <a
+                  href="mailto:bonjour@paolisa.eu"
+                  class="text-ink-primary border-b border-ink-primary pb-0.5 hover:opacity-70 transition-opacity duration-150 ease-in-out"
+                >
+                  bonjour@paolisa.eu
+                </a>
+              </p>
+            </div>
+
+            <div>
+              <p class="mono-label mb-3">— PRESSE</p>
+              <p class="body-l">
+                <a
+                  href="mailto:presse@paolisa.eu"
+                  class="text-ink-primary border-b border-ink-primary pb-0.5 hover:opacity-70 transition-opacity duration-150 ease-in-out"
+                >
+                  presse@paolisa.eu
+                </a>
+              </p>
+            </div>
+
+            <div>
+              <p class="mono-label mb-3">— ADRESSE</p>
+              <address class="body-l text-ink-secondary">
+                PAOLISA SRL<br />
+                Rue de Flandre 46<br />
+                1000 Bruxelles<br />
+                Belgique
+              </address>
+            </div>
+
+            <div>
+              <p class="mono-label mb-3">— DÉLAI DE RÉPONSE</p>
+              <p class="body-l text-ink-secondary">
+                Sous 48 heures ouvrées.<br />
+                Du lundi au vendredi, 9h — 18h CET.
+              </p>
+            </div>
+          </div>
+        </aside>
+
+        {/* Colonne droite — formulaire */}
+        <div class="md:col-span-7 md:order-1">
+          {
+            sent && (
+              <div class="border border-line-subtle bg-bg-secondary p-6 mb-10" role="status">
+                <p class="mono-label text-ink-primary mb-2">— MESSAGE BIEN REÇU —</p>
+                <p class="body-l text-ink-secondary">
+                  Merci. Nous vous répondons sous 48h ouvrées à l'adresse que vous nous avez indiquée.
+                </p>
+              </div>
+            )
+          }
+          {
+            errorCode && (
+              <div class="border border-line-subtle bg-bg-secondary p-6 mb-10" role="alert">
+                <p class="mono-label text-ink-primary mb-2">— ERREUR D'ENVOI —</p>
+                <p class="body-l text-ink-secondary">
+                  {errorCode === 'email_invalide' && 'Votre adresse email semble invalide. Vérifiez et réessayez.'}
+                  {errorCode === 'message_manquant' && 'Le message est requis. Décrivez-nous brièvement votre demande.'}
+                  {errorCode !== 'email_invalide' && errorCode !== 'message_manquant' &&
+                    'Une erreur est survenue. Réessayez dans un instant ou écrivez-nous directement à bonjour@paolisa.eu.'}
+                </p>
+              </div>
+            )
+          }
+          <form
+            method="post"
+            action="/api/contact"
+            class="space-y-8"
+            data-contact-form
+          >
+            <div>
+              <label for="contact-name" class="mono-label block mb-2">— NOM</label>
+              <Input
+                type="text"
+                name="name"
+                id="contact-name"
+                required
+                ariaLabel="Votre nom"
+                autocomplete="name"
+              />
+            </div>
+
+            <div>
+              <label for="contact-email" class="mono-label block mb-2">— EMAIL</label>
+              <Input
+                type="email"
+                name="email"
+                id="contact-email"
+                required
+                ariaLabel="Votre adresse email"
+                autocomplete="email"
+              />
+            </div>
+
+            <div>
+              <label for="contact-subject" class="mono-label block mb-2">— SUJET</label>
+              <Input
+                type="text"
+                name="subject"
+                id="contact-subject"
+                ariaLabel="Sujet"
+              />
+            </div>
+
+            <div>
+              <label for="contact-message" class="mono-label block mb-2">— MESSAGE</label>
+              <textarea
+                name="message"
+                id="contact-message"
+                rows="6"
+                required
+                aria-label="Votre message"
+                class="block w-full bg-transparent font-sans text-[14px] md:text-[15px] leading-[1.75] py-3 px-0 border-0 border-b border-line-subtle text-ink-primary placeholder:text-ink-tertiary focus:outline-none focus:ring-0 focus:border-ink-primary resize-y"
+              ></textarea>
+            </div>
+
+            <div class="pt-4">
+              <Button variant="primary" type="submit">
+                ENVOYER →
+              </Button>
+            </div>
+
+            <p class="mono-micro text-ink-tertiary">
+              VOS DONNÉES SONT TRAITÉES UNIQUEMENT POUR RÉPONDRE À VOTRE DEMANDE. AUCUN ENVOI MARKETING SANS VOTRE CONSENTEMENT EXPLICITE.
+            </p>
+          </form>
+        </div>
+      </div>
+    </section>
+  </main>
+
+  <Footer />
+</BaseLayout>

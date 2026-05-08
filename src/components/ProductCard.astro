@@ -1,0 +1,51 @@
+---
+/**
+ * <ProductCard /> — §5.10
+ * Format carte voûtée : image arche en haut (200px 200px 4px 4px §2.4),
+ * infos texte en bas. Mono label + display title + prix.
+ */
+interface Props {
+  href: string;
+  image?: string | null;
+  imageAlt?: string;
+  eyebrow: string;     // mono label, ex. "N°01 / RITUEL MATIN"
+  title: string;       // display title, ex. "Huile visage rituelle"
+  price: string;       // ex. "€48"
+  status?: string;     // ex. "DISPONIBLE" / "Q3 / 2026"
+}
+
+const { href, image = null, imageAlt = '', eyebrow, title, price, status } = Astro.props;
+---
+
+<a
+  href={href}
+  class="group block bg-bg-secondary hover:bg-bg-tertiary transition-colors duration-200 ease-in-out"
+>
+  {/* Image en arche §2.4 */}
+  <div class="relative w-full aspect-[3/4] overflow-hidden arch">
+    {
+      image ? (
+        <img
+          src={image}
+          alt={imageAlt}
+          class="absolute inset-0 w-full h-full object-cover"
+          loading="lazy"
+        />
+      ) : (
+        <div class="absolute inset-0 w-full h-full bg-line-faint flex items-center justify-center">
+          <span class="mono-micro text-ink-tertiary">— PHOTO À VENIR —</span>
+        </div>
+      )
+    }
+  </div>
+
+  {/* Infos texte */}
+  <div class="px-4 md:px-6 py-6 border-t border-line-subtle">
+    <p class="mono-label mb-3">{eyebrow}</p>
+    <h3 class="display-s mb-4">{title}</h3>
+    <div class="flex items-baseline justify-between">
+      <span class="font-mono text-ink-primary text-[14px] tracking-[0.05em]">{price}</span>
+      {status && <span class="mono-micro text-ink-tertiary">{status}</span>}
+    </div>
+  </div>
+</a>

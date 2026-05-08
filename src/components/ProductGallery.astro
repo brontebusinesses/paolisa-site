@@ -1,0 +1,74 @@
+---
+/**
+ * <ProductGallery /> — galerie PDP (§4.2)
+ * Desktop : 4 à 6 photos empilées, sticky.
+ * Mobile : carousel horizontal avec scroll-snap.
+ */
+interface Image {
+  src?: string | null;
+  alt: string;
+  caption?: string;
+}
+
+interface Props {
+  images: Image[];
+}
+
+const { images } = Astro.props;
+---
+
+<div class="md:sticky md:top-[120px]">
+  {/* Mobile : carousel horizontal */}
+  <div class="md:hidden flex overflow-x-auto snap-x snap-mandatory -mx-5">
+    {
+      images.map((img) => (
+        <div class="snap-start shrink-0 w-full px-5">
+          <div class="relative w-full aspect-[3/4] bg-line-faint">
+            {img.src ? (
+              <img
+                src={img.src}
+                alt={img.alt}
+                class="absolute inset-0 w-full h-full object-cover"
+                loading="lazy"
+              />
+            ) : (
+              <div class="absolute inset-0 flex items-center justify-center">
+                <span class="mono-micro text-ink-tertiary">— PHOTO À VENIR —</span>
+              </div>
+            )}
+          </div>
+        </div>
+      ))
+    }
+  </div>
+
+  {/* Desktop : photos empilées */}
+  <div class="hidden md:block space-y-6">
+    {
+      images.map((img, i) => (
+        <figure>
+          <div class:list={[
+            'relative w-full bg-line-faint',
+            i === 0 ? 'aspect-[4/5]' : 'aspect-square',
+          ]}>
+            {img.src ? (
+              <img
+                src={img.src}
+                alt={img.alt}
+                class="absolute inset-0 w-full h-full object-cover"
+                loading={i === 0 ? 'eager' : 'lazy'}
+              />
+            ) : (
+              <div class="absolute inset-0 flex items-center justify-center">
+                <span class="mono-micro text-ink-tertiary">— PHOTO À VENIR —</span>
+              </div>
+            )}
+          </div>
+          {img.caption && (
+            <figcaption class="mono-micro mt-3">{img.caption}</figcaption>
+          )}
+        </figure>
+      ))
+    }
+  </div>
+</div>

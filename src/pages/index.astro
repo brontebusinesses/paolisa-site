@@ -1,0 +1,75 @@
+---
+/**
+ * Home — § 4.1
+ * Composition : NoticeBar → Header (transparent over hero) → Hero → TrioBar → Manifesto → CompositionList → Footer.
+ * Copy : § 6.1.
+ */
+import BaseLayout from '../layouts/BaseLayout.astro';
+import NoticeBar from '../components/NoticeBar.astro';
+import Header from '../components/Header.astro';
+import Hero from '../components/Hero.astro';
+import TrioBar from '../components/TrioBar.astro';
+import Manifesto from '../components/Manifesto.astro';
+import CompositionList from '../components/CompositionList.astro';
+import Footer from '../components/Footer.astro';
+
+// § 6.1 — Trio bar items
+const trioItems = [
+  { label: 'N°01 — MATIN', status: '[ DISPONIBLE ]', href: '/huile/no-01' },
+  { label: 'N°02 — SOIR', status: '[ Q3 / 2026 ]' },
+  { label: 'JOURNAL', status: '[ 04 ENTRÉES ]', href: '/journal' },
+];
+
+// § 6.1 — Composition (5 ingrédients + aroma).
+// Ligne 06 « aroma · mandarine florale » conservée d'après la spec mais § 11 décision n°5 ouverte.
+const ingredients = [
+  { index: '01', name: 'OLIVE',    origin: 'Italie' },
+  { index: '02', name: 'AMANDE',   origin: 'Sicile' },
+  { index: '03', name: 'ABRICOT',  origin: 'Provence' },
+  { index: '04', name: 'AVOCAT',   origin: 'Espagne' },
+  { index: '05', name: 'ROSEHIP',  origin: 'Chili' },
+  { index: '06', name: 'aroma · mandarine florale', origin: '—' },
+];
+---
+
+<BaseLayout
+  title="PAOLISA — Une huile, le matin."
+  description="N°01 — Huile visage rituelle, matin. Cinq huiles méditerranéennes pures, certifiées COSMOS Organic. €48 · 30 ml."
+  heroOverlay
+>
+  <NoticeBar message="FREE EU SHIPPING — €60+" />
+
+  <Header transparent currentPath="/" />
+
+  {/* Décalage = hauteur de la NoticeBar (+ rien : le header est position fixed
+      par-dessus le hero, donc la photo commence à 0). */}
+
+  <main>
+    <Hero
+      eyebrow="N°01 / RITUEL MATIN / 30ML"
+      headlineLine1="Le matin —"
+      headlineLine2="Vous appartient."
+      cta1={{ label: "DÉCOUVRIR L'HUILE →", href: '/huile/no-01' }}
+      cta2={{ label: 'ORIGINE', href: '/origine' }}
+    />
+
+    <TrioBar items={trioItems} />
+
+    <Manifesto
+      eyebrow="— MANIFESTE —"
+      headlineLine1="Une huile. Le matin."
+      headlineLine2="Voilà tout."
+      body="Cinq huiles méditerranéennes pures, certifiées COSMOS Organic. Un seul geste, une seule intention."
+    />
+
+    <CompositionList
+      eyebrow="LA COMPOSITION"
+      subEyebrow="N°01 / 05 INGRÉDIENTS"
+      ingredients={ingredients}
+      footnote="* CERTIFIÉ COSMOS ORGANIC · 99% NATUREL"
+      cta={{ label: 'FICHE PRODUIT →', href: '/huile/no-01' }}
+    />
+  </main>
+
+  <Footer />
+</BaseLayout>

@@ -1,0 +1,71 @@
+---
+/**
+ * <QuantitySelector /> — sélecteur quantité PDP (§4.2).
+ * Coins droits, bordure 0.5px.
+ */
+interface Props {
+  initial?: number;
+  min?: number;
+  max?: number;
+  name?: string;
+}
+
+const { initial = 1, min = 1, max = 9, name = 'quantity' } = Astro.props;
+---
+
+<div class="inline-flex items-stretch border border-ink-primary" data-qty>
+  <button
+    type="button"
+    aria-label="Diminuer la quantité"
+    data-qty-dec
+    class="w-12 h-12 mono-label flex items-center justify-center hover:bg-ink-primary hover:text-ink-inverse transition-colors duration-200 ease-in-out"
+  >
+    −
+  </button>
+  <input
+    type="number"
+    name={name}
+    value={initial}
+    min={min}
+    max={max}
+    aria-label="Quantité"
+    data-qty-input
+    class="w-12 h-12 text-center bg-transparent border-0 border-l border-r border-ink-primary font-mono text-[14px] focus:outline-none"
+  />
+  <button
+    type="button"
+    aria-label="Augmenter la quantité"
+    data-qty-inc
+    class="w-12 h-12 mono-label flex items-center justify-center hover:bg-ink-primary hover:text-ink-inverse transition-colors duration-200 ease-in-out"
+  >
+    +
+  </button>
+</div>
+
+<script>
+  document.querySelectorAll<HTMLElement>('[data-qty]').forEach((el) => {
+    const input = el.querySelector<HTMLInputElement>('[data-qty-input]');
+    const dec = el.querySelector<HTMLButtonElement>('[data-qty-dec]');
+    const inc = el.querySelector<HTMLButtonElement>('[data-qty-inc]');
+    if (!input) return;
+    const min = Number(input.min || 1);
+    const max = Number(input.max || 99);
+    dec?.addEventListener('click', () => {
+      input.value = String(Math.max(min, Number(input.value) - 1));
+    });
+    inc?.addEventListener('click', () => {
+      input.value = String(Math.min(max, Number(input.value) + 1));
+    });
+  });
+</script>
+
+<style>
+  input[type='number']::-webkit-outer-spin-button,
+  input[type='number']::-webkit-inner-spin-button {
+    -webkit-appearance: none;
+    margin: 0;
+  }
+  input[type='number'] {
+    -moz-appearance: textfield;
+  }
+</style>

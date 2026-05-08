@@ -1,0 +1,254 @@
+/*
+ * PAOLISA — global styles
+ * Tokens définis en accord avec PAOLISA_design_build_spec_v1.md §2.
+ * Aucune couleur, font, ou espacement hors palette ne doit être ajouté ici.
+ */
+
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+/* --------------------------------------------------------------------------
+ * Fonts — §2.2 stack v1
+ * Cormorant Garamond (wordmark) · Inter (display + body) · JetBrains Mono (labels)
+ * Loaded via Google Fonts <link> in Layout.astro with font-display: swap.
+ * -------------------------------------------------------------------------- */
+
+@layer base {
+  :root {
+    --bg-primary: #FFFFFF;
+    --bg-secondary: #FAFAF8;
+    --bg-tertiary: #F4F4F0;
+    --bg-dark: #18181B;
+
+    --ink-primary: #18181B;
+    --ink-secondary: #4A4A48;
+    --ink-tertiary: #6B6B68;
+    --ink-inverse: #FAFAF8;
+
+    --line-subtle: #DDDDDA;
+    --line-faint: #E8E8E5;
+
+    --terracotta: #A85A35;
+  }
+
+  html {
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+    text-rendering: optimizeLegibility;
+  }
+
+  body {
+    @apply bg-bg-primary text-ink-primary font-sans;
+    font-size: 0.9375rem;
+    line-height: 1.75;
+    /* §4.1 — NoticeBar 36px sticky top, Header 64-72px en dessous. */
+    --notice-bar-height: 36px;
+    --header-height: 64px;
+  }
+
+  @media (min-width: 768px) {
+    body {
+      --header-height: 72px;
+    }
+  }
+
+  /* Pages sans hero full-bleed : on pousse le main pour ne pas être masqué
+     par la NoticeBar fixe (36px) + le Header fixe (64-72px). */
+  body[data-hero-overlay='false'] main {
+    padding-top: calc(var(--notice-bar-height) + var(--header-height));
+  }
+
+  /* §2.2 — Pas d'italique. Aucune exception. */
+  i, em, cite, dfn, address, var {
+    font-style: normal;
+  }
+
+  /* §2.4 — Coins droits par défaut, ombres : aucune. */
+  *, *::before, *::after {
+    border-radius: 0;
+  }
+
+  /* Re-allow border-radius on explicitly-arched elements only. */
+  .arch {
+    border-radius: 200px 200px 4px 4px;
+  }
+
+  /* Default border colour matches §2.4 — 0.5px solid #DDDDDA. */
+  *, *::before, *::after {
+    border-color: var(--line-subtle);
+  }
+
+  ::selection {
+    background-color: var(--ink-primary);
+    color: var(--ink-inverse);
+  }
+
+  /* Headings inherit display tokens — utilities applied per-component. */
+  h1, h2, h3, h4, h5, h6 {
+    font-weight: 500;
+    color: var(--ink-primary);
+  }
+
+  /* Links: minimal underline, transition only on hover. §2.5 */
+  a {
+    color: inherit;
+    text-decoration: none;
+    transition: opacity 0.15s ease;
+  }
+
+  a:hover {
+    opacity: 0.7;
+  }
+
+  button {
+    cursor: pointer;
+    font-family: inherit;
+    transition: background-color 0.2s ease, color 0.2s ease, border-color 0.2s ease;
+  }
+
+  /* Focus ring — minimal, ink-primary, no glow. */
+  :focus-visible {
+    outline: 1px solid var(--ink-primary);
+    outline-offset: 2px;
+  }
+}
+
+@layer components {
+  /* Wordmark — §2.2 : Cormorant Garamond avec point ● terracotta réservé.
+   * Use this class on the brand mark only. */
+  .wordmark {
+    @apply font-wordmark font-normal tracking-tight text-ink-primary;
+    font-feature-settings: 'liga' 1, 'kern' 1;
+  }
+
+  .wordmark-dot {
+    color: var(--terracotta);
+    display: inline-block;
+    margin-left: 0.15em;
+  }
+
+  /* Mono labels — §2.2 — uppercase, generous tracking. */
+  .mono-label {
+    @apply font-mono uppercase text-ink-tertiary;
+    font-size: 0.625rem;
+    letter-spacing: 0.18em;
+  }
+
+  .mono-micro {
+    @apply font-mono uppercase text-ink-tertiary;
+    font-size: 0.59375rem;
+    letter-spacing: 0.22em;
+  }
+
+  /* Display headings — §2.2 — Inter 500, negative tracking, uppercase. */
+  .display-l {
+    @apply font-sans uppercase text-ink-primary;
+    font-weight: 500;
+    font-size: 1.375rem;
+    line-height: 1.15;
+    letter-spacing: -0.018em;
+  }
+
+  @media (min-width: 768px) {
+    .display-l {
+      font-size: 1.625rem;
+    }
+  }
+
+  .display-m {
+    @apply font-sans uppercase text-ink-primary;
+    font-weight: 500;
+    font-size: 1.125rem;
+    line-height: 1.2;
+    letter-spacing: -0.012em;
+  }
+
+  @media (min-width: 768px) {
+    .display-m {
+      font-size: 1.375rem;
+    }
+  }
+
+  .display-s {
+    @apply font-sans uppercase text-ink-primary;
+    font-weight: 500;
+    font-size: 0.9375rem;
+    line-height: 1.25;
+    letter-spacing: -0.01em;
+  }
+
+  @media (min-width: 768px) {
+    .display-s {
+      font-size: 1.0625rem;
+    }
+  }
+
+  /* Body sizes. */
+  .body-l {
+    @apply font-sans text-ink-primary;
+    font-weight: 400;
+    font-size: 0.875rem;
+    line-height: 1.75;
+  }
+
+  @media (min-width: 768px) {
+    .body-l {
+      font-size: 0.9375rem;
+    }
+  }
+
+  .body-m {
+    @apply font-sans text-ink-secondary;
+    font-weight: 400;
+    font-size: 0.75rem;
+    line-height: 1.7;
+  }
+
+  @media (min-width: 768px) {
+    .body-m {
+      font-size: 0.8125rem;
+    }
+  }
+
+  .caption {
+    @apply font-sans text-ink-tertiary;
+    font-weight: 400;
+    font-size: 0.6875rem;
+    letter-spacing: 0.05em;
+  }
+
+  @media (min-width: 768px) {
+    .caption {
+      font-size: 0.75rem;
+    }
+  }
+
+  /* Container — §2.3 max-width 1200px, padding latéral 32px desktop / 20px mobile. */
+  .container-paolisa {
+    @apply mx-auto;
+    max-width: 1200px;
+    padding-left: 20px;
+    padding-right: 20px;
+  }
+
+  @media (min-width: 768px) {
+    .container-paolisa {
+      padding-left: 32px;
+      padding-right: 32px;
+    }
+  }
+
+  /* Section vertical rhythm — §2.3 : sections principales 4-6rem. */
+  .section-y {
+    padding-top: 4rem;
+    padding-bottom: 4rem;
+  }
+
+  @media (min-width: 768px) {
+    .section-y {
+      padding-top: 6rem;
+      padding-bottom: 6rem;
+    }
+  }
+}

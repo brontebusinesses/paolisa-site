@@ -1,0 +1,42 @@
+---
+/**
+ * <Manifesto /> — §5.6
+ * Section centrée, max-width 480px, padding vertical généreux.
+ * §4.1 hauteur indicative ~360px.
+ */
+interface Props {
+  eyebrow?: string;
+  headlineLine1: string;
+  headlineLine2?: string;
+  body?: string;
+  background?: 'primary' | 'secondary' | 'tertiary';
+}
+
+const {
+  eyebrow,
+  headlineLine1,
+  headlineLine2,
+  body,
+  background = 'primary',
+} = Astro.props;
+
+const bgMap: Record<string, string> = {
+  primary: 'bg-bg-primary',
+  secondary: 'bg-bg-secondary',
+  tertiary: 'bg-bg-tertiary',
+};
+---
+
+<section class:list={['section-y', bgMap[background]]}>
+  <div class="container-paolisa">
+    <div class="max-w-manifesto mx-auto text-center">
+      {eyebrow && <p class="mono-label mb-6">{eyebrow}</p>}
+      <h2 class="display-m mb-6">
+        {headlineLine1}
+        {headlineLine2 && <><br />{headlineLine2}</>}
+      </h2>
+      {body && <p class="body-l text-ink-secondary">{body}</p>}
+      <slot />
+    </div>
+  </div>
+</section>

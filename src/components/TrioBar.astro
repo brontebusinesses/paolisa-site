@@ -1,0 +1,51 @@
+---
+/**
+ * <TrioBar /> — §5.5
+ * 3 statuts produits/sections en ligne, fond blanc, séparateur fin en bas.
+ * Hauteur §4.1 : ~100px desktop.
+ *
+ * Copy §6.1 :
+ *   N°01 — MATIN     [ DISPONIBLE ]
+ *   N°02 — SOIR      [ Q3 / 2026 ]
+ *   JOURNAL          [ 04 ENTRÉES ]
+ */
+interface Item {
+  label: string;
+  status: string;
+  href?: string;
+}
+
+interface Props {
+  items: Item[];
+}
+
+const { items } = Astro.props;
+---
+
+<section class="bg-bg-primary border-t border-line-subtle border-b border-line-subtle">
+  <div class="container-paolisa">
+    <ul class="grid grid-cols-1 md:grid-cols-3 divide-y md:divide-y-0 md:divide-x divide-line-faint">
+      {
+        items.map((item) => {
+          const Inner = (
+            <div class="flex items-center justify-between md:justify-center gap-6 py-6 md:py-8 px-0 md:px-8">
+              <span class="mono-label text-ink-primary">{item.label}</span>
+              <span class="mono-micro text-ink-tertiary">{item.status}</span>
+            </div>
+          );
+          return (
+            <li>
+              {item.href ? (
+                <a href={item.href} class="block hover:opacity-70 transition-opacity duration-150 ease-in-out">
+                  {Inner}
+                </a>
+              ) : (
+                Inner
+              )}
+            </li>
+          );
+        })
+      }
+    </ul>
+  </div>
+</section>

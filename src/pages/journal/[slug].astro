@@ -1,0 +1,160 @@
+---
+/**
+ * Journal — entrée individuelle (§4.4)
+ * Layout long-form : header + image + corps prose + CTA fin d'article.
+ */
+import { getCollection, type CollectionEntry } from 'astro:content';
+import BaseLayout from '../../layouts/BaseLayout.astro';
+import NoticeBar from '../../components/NoticeBar.astro';
+import Header from '../../components/Header.astro';
+import Footer from '../../components/Footer.astro';
+import Input from '../../components/Input.astro';
+import Button from '../../components/Button.astro';
+
+export async function getStaticPaths() {
+  const entries = await getCollection('journal', ({ data }) => !data.draft);
+  return entries.map((entry) => ({
+    params: { slug: entry.slug },
+    props: { entry },
+  }));
+}
+
+interface Props {
+  entry: CollectionEntry<'journal'>;
+}
+
+const { entry } = Astro.props;
+const { Content } = await entry.render();
+
+const formatDate = (d: Date) =>
+  d.toLocaleDateString('fr-FR', { day: '2-digit', month: '2-digit', year: 'numeric' }).replace(/\//g, '.');
+---
+
+<BaseLayout
+  title={`${entry.data.title} — Journal · PAOLISA`}
+  description={entry.data.excerpt}
+>
+  <NoticeBar message="FREE EU SHIPPING — €60+" />
+  <Header transparent={false} currentPath="/journal" />
+
+  <main>
+    {/* Header article */}
+    <header class="container-paolisa pt-12 md:pt-20 pb-12 md:pb-16">
+      <div class="max-w-prose mx-auto">
+        <p class="mono-label mb-6">
+          <a href="/journal" class="hover:opacity-70 transition-opacity duration-150 ease-in-out">
+            ← LE JOURNAL
+          </a>
+        </p>
+        <h1 class="display-l mb-8">{entry.data.title}</h1>
+        <div class="flex items-center gap-4 mono-micro text-ink-tertiary">
+          <time datetime={entry.data.date.toISOString()}>{formatDate(entry.data.date)}</time>
+          <span aria-hidden="true">·</span>
+          <span>{entry.data.readingTime}</span>
+        </div>
+      </div>
+    </header>
+
+    {/* Image plein cadre */}
+    <div class="container-paolisa mb-12 md:mb-20">
+      <div class="relative w-full aspect-[16/9] md:aspect-[21/9] bg-line-faint">
+        {
+          entry.data.image ? (
+            <img
+              src={entry.data.image}
+              alt={entry.data.imageAlt ?? ''}
+              class="absolute inset-0 w-full h-full object-cover"
+            />
+          ) : (
+            <div class="absolute inset-0 flex items-center justify-center">
+              <span class="mono-micro text-ink-tertiary">— PHOTO À VENIR —</span>
+            </div>
+          )
+        }
+      </div>
+    </div>
+
+    {/* Corps article */}
+    <article class="container-paolisa pb-20 md:pb-32">
+      <div class="max-w-prose mx-auto prose-paolisa">
+        <Content />
+      </div>
+    </article>
+
+    {/* CTA fin d'article : newsletter */}
+    <section class="bg-bg-tertiary border-t border-line-subtle">
+      <div class="container-paolisa section-y">
+        <div class="max-w-manifesto mx-auto text-center">
+          <p class="mono-label mb-4">— RECEVEZ LE RITUEL —</p>
+          <h2 class="display-m mb-8">Un PDF, six emails, l'accès en avant-première.</h2>
+          <form
+            method="post"
+            action="/api/newsletter"
+            class="flex flex-col sm:flex-row gap-4"
+          >
+            <input type="hidden" name="source" value="article" />
+            <input type="hidden" name="return" value={`/journal/${entry.slug}`} />
+            <div class="flex-1">
+              <label for="article-email" class="sr-only">Votre email</label>
+              <Input
+                type="email"
+                name="email"
+                id="article-email"
+                placeholder="VOTRE EMAIL"
+                required
+                ariaLabel="Votre adresse email"
+                autocomplete="email"
+              />
+            </div>
+            <Button variant="primary" type="submit">S'INSCRIRE →</Button>
+          </form>
+        </div>
+      </div>
+    </section>
+  </main>
+
+  <Footer />
+</BaseLayout>
+
+<style is:global>
+  /* Prose — pas d'italique, pas de bullets exotiques. Échelle typo §2.2. */
+  .prose-paolisa h2 {
+    font-weight: 500;
+    font-size: 17px;
+    line-height: 1.25;
+    letter-spacing: -0.01em;
+    text-transform: uppercase;
+    color: var(--ink-primary);
+    margin-top: 3rem;
+    margin-bottom: 1.5rem;
+  }
+  @media (min-width: 768px) {
+    .prose-paolisa h2 { font-size: 19px; }
+  }
+  .prose-paolisa p {
+    color: var(--ink-secondary);
+    font-size: 15px;
+    line-height: 1.85;
+    margin-bottom: 1.5rem;
+  }
+  .prose-paolisa p:first-of-type {
+    color: var(--ink-primary);
+    font-size: 17px;
+    line-height: 1.7;
+    margin-bottom: 2rem;
+  }
+  .prose-paolisa a {
+    color: var(--ink-primary);
+    border-bottom: 0.5px solid var(--ink-primary);
+    padding-bottom: 1px;
+  }
+  .prose-paolisa ul, .prose-paolisa ol {
+    color: var(--ink-secondary);
+    padding-left: 1.5rem;
+    margin-bottom: 1.5rem;
+  }
+  .prose-paolisa li {
+    margin-bottom: 0.5rem;
+  }
+  .prose-paolisa em, .prose-paolisa i { font-style: normal; }
+</style>

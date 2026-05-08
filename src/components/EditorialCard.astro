@@ -1,0 +1,58 @@
+---
+/**
+ * <EditorialCard /> — §5.11
+ * Pour le journal : image carrée + titre + extrait + date.
+ * Format magazine §4.4.
+ */
+interface Props {
+  href: string;
+  image?: string | null;
+  imageAlt?: string;
+  title: string;
+  excerpt?: string;
+  date: string;        // affiché en mono, ex. "07.05.2026"
+  readingTime?: string; // ex. "4 MIN"
+}
+
+const { href, image = null, imageAlt = '', title, excerpt, date, readingTime } = Astro.props;
+---
+
+<article>
+  <a href={href} class="group block">
+    {/* Image carrée */}
+    <div class="relative w-full aspect-square overflow-hidden">
+      {
+        image ? (
+          <img
+            src={image}
+            alt={imageAlt}
+            class="absolute inset-0 w-full h-full object-cover"
+            loading="lazy"
+          />
+        ) : (
+          <div class="absolute inset-0 w-full h-full bg-line-faint flex items-center justify-center">
+            <span class="mono-micro text-ink-tertiary">— PHOTO À VENIR —</span>
+          </div>
+        )
+      }
+    </div>
+
+    <div class="pt-6">
+      <div class="flex items-center gap-3 mb-3">
+        <time class="mono-micro text-ink-tertiary" datetime={date}>{date}</time>
+        {
+          readingTime && (
+            <>
+              <span class="mono-micro text-ink-tertiary" aria-hidden="true">·</span>
+              <span class="mono-micro text-ink-tertiary">{readingTime}</span>
+            </>
+          )
+        }
+      </div>
+      <h3 class="display-s mb-3 group-hover:opacity-70 transition-opacity duration-150 ease-in-out">
+        {title}
+      </h3>
+      {excerpt && <p class="body-m text-ink-secondary">{excerpt}</p>}
+    </div>
+  </a>
+</article>

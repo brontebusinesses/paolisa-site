@@ -1,0 +1,145 @@
+---
+/**
+ * Origine — §4.3
+ * Hero éditorial + 3 sections (PA / ISA / LISA) + manifeste long + CTA discret.
+ */
+import BaseLayout from '../layouts/BaseLayout.astro';
+import NoticeBar from '../components/NoticeBar.astro';
+import Header from '../components/Header.astro';
+import Footer from '../components/Footer.astro';
+import Button from '../components/Button.astro';
+
+const chapters = [
+  {
+    code: 'PA',
+    name: 'Paolo',
+    role: 'Le Nonno',
+    line: 'Italie · 1932 — 2018',
+    title: 'Le vélo, la fenêtre, la mémoire qui s\'efface.',
+    body: [
+      'Paolo réparait des vélos dans un atelier à l\'ouest de Trieste. Le geste de la main qui tourne la clé, la lumière qui passait entre deux maisons à dix heures du matin, la peau qu\'on lave à l\'huile d\'olive parce qu\'il n\'y a rien d\'autre.',
+      'À la fin, il oubliait nos noms mais reconnaissait l\'odeur de l\'huile sur ses paumes. C\'est de là que vient ce flacon — d\'un geste qui ne s\'oubliait pas, même quand le reste s\'effaçait.',
+    ],
+  },
+  {
+    code: 'ISA',
+    name: 'Isabelle',
+    role: 'La mère',
+    line: 'Bruxelles · 1968',
+    title: 'Deux gestes maximum. La simplicité, c\'est aussi du soin.',
+    body: [
+      'Maman ne s\'est jamais maquillée. Elle se lavait le visage à l\'eau froide, mettait une huile, et c\'était tout. Quand on lui demandait son secret, elle haussait les épaules : « Il n\'y a pas de secret. »',
+      'C\'est la rigueur d\'un soin réduit à son essentiel. Pas une pauvreté de moyens — un choix. Plutôt deux gestes parfaits que dix gestes approximatifs.',
+    ],
+  },
+  {
+    code: 'LISA',
+    name: 'Lisa',
+    role: 'La petite sœur',
+    line: 'Bruxelles · 1998',
+    title: 'La passion du soin, transmise sans qu\'on s\'en aperçoive.',
+    body: [
+      'Lisa a grandi en regardant. Elle a appris la consistance d\'une huile entre les doigts, la lumière qu\'il faut pour bien voir sa peau, l\'heure du matin qui change tout.',
+      'C\'est la transmission silencieuse. Personne n\'a enseigné, personne n\'a appris. Et pourtant tout est là.',
+    ],
+  },
+];
+---
+
+<BaseLayout
+  title="L'origine — PAOLISA"
+  description="Trois prénoms. Trois générations. Une conviction. L'histoire familiale derrière Paolisa, marque-famille italo-belge de soin du visage."
+>
+  <NoticeBar message="FREE EU SHIPPING — €60+" />
+  <Header transparent={false} currentPath="/origine" />
+
+  <main>
+    {/* Hero éditorial */}
+    <section class="section-y">
+      <div class="container-paolisa text-center">
+        <p class="mono-label mb-6">— L'ORIGINE —</p>
+        <h1 class="display-l max-w-prose mx-auto">
+          Trois prénoms.<br />Trois générations.<br />Une conviction.
+        </h1>
+        <div class="mt-12 max-w-3xl mx-auto">
+          <div class="relative w-full aspect-[16/9] bg-line-faint">
+            <div class="absolute inset-0 flex items-center justify-center">
+              <span class="mono-micro text-ink-tertiary">— PHOTO MOOD : LIN, FENÊTRE, SILHOUETTE —</span>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    {/* Trois chapitres PA / ISA / LISA */}
+    {
+      chapters.map((ch, i) => (
+        <section class:list={[
+          'section-y',
+          i % 2 === 0 ? 'bg-bg-primary' : 'bg-bg-secondary',
+        ]}>
+          <div class="container-paolisa">
+            <div class:list={[
+              'grid grid-cols-1 md:grid-cols-12 gap-8 md:gap-16 items-start',
+              i === 1 ? 'md:[&>*:first-child]:order-2' : '',
+            ]}>
+              {/* Photo */}
+              <div class="md:col-span-6">
+                <div class="relative w-full aspect-[4/5] bg-line-faint">
+                  <div class="absolute inset-0 flex items-center justify-center">
+                    <span class="mono-micro text-ink-tertiary">— PORTRAIT {ch.code} —</span>
+                  </div>
+                </div>
+              </div>
+
+              {/* Texte */}
+              <div class="md:col-span-6 md:pt-8">
+                <p class="mono-label mb-4">— {ch.code} —</p>
+                <p class="caption mb-2">{ch.name} · {ch.role}</p>
+                <p class="mono-micro text-ink-tertiary mb-8">{ch.line}</p>
+                <h2 class="display-m mb-8">{ch.title}</h2>
+                {ch.body.map((para) => (
+                  <p class="body-l text-ink-secondary mb-5 max-w-prose">{para}</p>
+                ))}
+              </div>
+            </div>
+          </div>
+        </section>
+      ))
+    }
+
+    {/* Manifeste long */}
+    <section id="manifeste" class="bg-bg-tertiary section-y">
+      <div class="container-paolisa">
+        <div class="max-w-prose mx-auto text-center">
+          <p class="mono-label mb-6">— MANIFESTE —</p>
+          <h2 class="display-m mb-8">
+            Pas de pyramide à dix étages.<br />Pas d'ingrédient miracle.<br />Pas de promesse qu'on ne tient pas.
+          </h2>
+          <p class="body-l text-ink-secondary mb-6">
+            On a fait Paolisa parce qu'on en avait assez de l'inflation cosmétique — assez des routines à sept étapes, des sérums qui multiplient, des actifs qu'on ajoute pour faire long sur l'étiquette.
+          </p>
+          <p class="body-l text-ink-secondary mb-6">
+            Une huile, le matin, c'est tout ce dont la peau a besoin pour démarrer la journée. Cinq végétaux purs, un aroma discret, et trente secondes de temps pour soi devant une fenêtre.
+          </p>
+          <p class="body-l text-ink-secondary">
+            On préfère un seul produit qu'on aime à dix produits qu'on tolère.
+          </p>
+        </div>
+      </div>
+    </section>
+
+    {/* CTA discret */}
+    <section class="section-y">
+      <div class="container-paolisa text-center">
+        <p class="mono-label mb-4">— DÉCOUVRIR —</p>
+        <h2 class="display-s mb-8">L'huile qui a donné son nom à tout ça.</h2>
+        <Button variant="primary" href="/huile/no-01">
+          DÉCOUVRIR L'HUILE →
+        </Button>
+      </div>
+    </section>
+  </main>
+
+  <Footer />
+</BaseLayout>

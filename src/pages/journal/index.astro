@@ -1,0 +1,56 @@
+---
+/**
+ * Journal — index (§4.4)
+ * Liste des entrées en grille 2 colonnes, format magazine.
+ */
+import { getCollection } from 'astro:content';
+import BaseLayout from '../../layouts/BaseLayout.astro';
+import NoticeBar from '../../components/NoticeBar.astro';
+import Header from '../../components/Header.astro';
+import Footer from '../../components/Footer.astro';
+import EditorialCard from '../../components/EditorialCard.astro';
+
+const all = await getCollection('journal', ({ data }) => !data.draft);
+const entries = all.sort((a, b) => b.data.date.getTime() - a.data.date.getTime());
+
+const formatDate = (d: Date) =>
+  d.toLocaleDateString('fr-FR', { day: '2-digit', month: '2-digit', year: 'numeric' }).replace(/\//g, '.');
+---
+
+<BaseLayout
+  title="Journal — PAOLISA"
+  description="Pourquoi une huile le matin. Olive, amande, abricot — un terroir. Le rituel des trois gestes. L'aroma signature."
+>
+  <NoticeBar message="FREE EU SHIPPING — €60+" />
+  <Header transparent={false} currentPath="/journal" />
+
+  <main>
+    <section class="container-paolisa pt-12 md:pt-20 pb-20 md:pb-32">
+      <header class="mb-16 md:mb-24 max-w-3xl">
+        <p class="mono-label mb-4">— LE JOURNAL —</p>
+        <h1 class="display-l">Notes de marque, notes de soin.</h1>
+        <p class="body-l text-ink-secondary mt-8 max-w-prose">
+          {entries.length} entrée{entries.length > 1 ? 's' : ''} à ce jour.
+          On y parle des huiles, du rituel, du terroir et des décisions qu'on prend chemin faisant.
+        </p>
+      </header>
+
+      <div class="grid grid-cols-1 md:grid-cols-2 gap-12 md:gap-16">
+        {
+          entries.map((entry) => (
+            <EditorialCard
+              href={`/journal/${entry.slug}`}
+              imageAlt={entry.data.imageAlt}
+              title={entry.data.title}
+              excerpt={entry.data.excerpt}
+              date={formatDate(entry.data.date)}
+              readingTime={entry.data.readingTime}
+            />
+          ))
+        }
+      </div>
+    </section>
+  </main>
+
+  <Footer />
+</BaseLayout>

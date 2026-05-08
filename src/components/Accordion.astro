@@ -1,0 +1,61 @@
+---
+/**
+ * <Accordion /> — utilisé sur la PDP (onglets composition/application/etc.)
+ * et sur la FAQ.
+ *
+ * Tokens : §2.1, §2.4 bordures 0.5px.
+ * §2.5 : aucune animation décorative — on utilise <details>/<summary>
+ * natifs, qui ouvrent/ferment instantanément (rotation chevron via CSS,
+ * pas de transition de hauteur).
+ */
+interface Item {
+  question: string;
+  answer: string; // HTML autorisé via Astro.set:html dans la page consommatrice si besoin
+  defaultOpen?: boolean;
+}
+
+interface Props {
+  items: Item[];
+  variant?: 'default' | 'tabs';
+}
+
+const { items, variant = 'default' } = Astro.props;
+---
+
+<div class="border-t border-line-subtle">
+  {
+    items.map((item) => (
+      <details
+        class="group border-b border-line-subtle"
+        open={item.defaultOpen}
+      >
+        <summary class="list-none cursor-pointer select-none flex items-center justify-between gap-6 py-5 md:py-6">
+          <span
+            class:list={[
+              variant === 'tabs'
+                ? 'mono-label text-ink-primary'
+                : 'display-s',
+            ]}
+          >
+            {item.question}
+          </span>
+          <span
+            aria-hidden="true"
+            class="font-mono text-ink-tertiary text-[14px] leading-none transition-transform duration-200 ease-in-out group-open:rotate-45"
+          >
+            +
+          </span>
+        </summary>
+        <div class="pb-6 md:pb-8 pr-10">
+          <div class="body-l text-ink-secondary" set:html={item.answer} />
+        </div>
+      </details>
+    ))
+  }
+</div>
+
+<style>
+  /* Cache le marqueur par défaut du <summary> sur tous les navigateurs. */
+  details > summary { list-style: none; }
+  details > summary::-webkit-details-marker { display: none; }
+</style>

@@ -1,0 +1,104 @@
+---
+/**
+ * <Hero /> — §5.4
+ * Photo plein cadre, texte bottom-left, CTAs côte à côte.
+ * §4.1 — min-height 90vh.
+ *
+ * Props :
+ *   image       — chemin de la photo hero (ou null pour placeholder gris)
+ *   imageAlt    — alt text
+ *   eyebrow     — mono label au-dessus du titre
+ *   headline    — display L (deux lignes possibles via <br/> ou \n)
+ *   cta1, cta2  — { label, href }
+ */
+import Button from './Button.astro';
+
+interface Cta {
+  label: string;
+  href: string;
+}
+
+interface Props {
+  image?: string | null;
+  imageAlt?: string;
+  eyebrow: string;
+  headlineLine1: string;
+  headlineLine2?: string;
+  cta1: Cta;
+  cta2?: Cta;
+}
+
+const {
+  image = null,
+  imageAlt = '',
+  eyebrow,
+  headlineLine1,
+  headlineLine2,
+  cta1,
+  cta2,
+} = Astro.props;
+---
+
+<section class="relative w-full" style="min-height: 90vh;" aria-label="Hero">
+  {/* Image plein cadre — placeholder gris si pas d'image. §4.1 hero immersif. */}
+  {
+    image ? (
+      <img
+        src={image}
+        alt={imageAlt}
+        class="absolute inset-0 w-full h-full object-cover"
+      />
+    ) : (
+      <div
+        class="absolute inset-0 w-full h-full bg-line-faint"
+        aria-label="Photo hero — placeholder, à remplacer"
+      >
+        <div class="absolute inset-0 flex items-center justify-center">
+          <span class="mono-micro text-ink-tertiary">— PHOTO HERO À VENIR —</span>
+        </div>
+      </div>
+    )
+  }
+
+  {/* Léger voile pour lisibilité du texte sur photo claire — §2.4 pas d'ombre,
+      donc gradient subtil noir 0 → 0.15 vers le bas-gauche. À retirer si la
+      photo finale a déjà la luminosité voulue. */}
+  <div
+    class="absolute inset-0 pointer-events-none"
+    style="background: linear-gradient(to top right, rgba(24,24,27,0.18) 0%, rgba(24,24,27,0) 55%);"
+    aria-hidden="true"
+  ></div>
+
+  {/* Texte hero bottom-left — §4.1 */}
+  <div class="relative h-full" style="min-height: 90vh;">
+    <div class="container-paolisa absolute inset-x-0 bottom-0 pb-16 md:pb-24">
+      <div class="max-w-2xl">
+        <p class="mono-label text-ink-inverse mb-6">{eyebrow}</p>
+        <h1 class="display-l text-ink-inverse mb-10">
+          {headlineLine1}
+          {headlineLine2 && <><br />{headlineLine2}</>}
+        </h1>
+        <div class="flex flex-col sm:flex-row gap-4 sm:gap-6">
+          <Button
+            variant="primary"
+            href={cta1.href}
+            class="bg-bg-primary text-ink-primary border-bg-primary hover:bg-line-subtle hover:border-line-subtle"
+          >
+            {cta1.label}
+          </Button>
+          {
+            cta2 && (
+              <Button
+                variant="secondary"
+                href={cta2.href}
+                class="border-bg-primary text-ink-inverse hover:bg-bg-primary hover:text-ink-primary"
+              >
+                {cta2.label}
+              </Button>
+            )
+          }
+        </div>
+      </div>
+    </div>
+  </div>
+</section>

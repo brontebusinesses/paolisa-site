@@ -1,0 +1,43 @@
+---
+/**
+ * Panier — §4.8
+ * V1 : un seul produit, pas de gestion de panier multi-items.
+ * Le bouton AJOUTER AU PANIER de la PDP fait directement /api/checkout.
+ * Cette page sert de fallback si quelqu'un arrive ici directement.
+ */
+import BaseLayout from '../layouts/BaseLayout.astro';
+import NoticeBar from '../components/NoticeBar.astro';
+import Header from '../components/Header.astro';
+import Footer from '../components/Footer.astro';
+import Button from '../components/Button.astro';
+---
+
+<BaseLayout
+  title="Panier — PAOLISA"
+  description="Votre panier."
+  noindex
+>
+  <NoticeBar message="FREE EU SHIPPING — €60+" />
+  <Header transparent={false} currentPath="/panier" />
+
+  <main>
+    <section class="container-paolisa pt-12 md:pt-20 pb-20 md:pb-32">
+      <header class="mb-12">
+        <p class="mono-label mb-4">— PANIER —</p>
+        <h1 class="display-l">Votre panier.</h1>
+      </header>
+
+      <div class="border-t border-line-subtle py-12 text-center">
+        <p class="body-l text-ink-secondary mb-2">Votre panier est vide.</p>
+        <p class="mono-micro text-ink-tertiary mb-10">
+          AU LANCEMENT, UN SEUL PRODUIT. AJOUTEZ-LE DEPUIS LA FICHE PRODUIT.
+        </p>
+        <Button variant="primary" href="/huile/no-01">
+          DÉCOUVRIR L'HUILE →
+        </Button>
+      </div>
+    </section>
+  </main>
+
+  <Footer />
+</BaseLayout>

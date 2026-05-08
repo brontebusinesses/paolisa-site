@@ -1,0 +1,110 @@
+---
+/**
+ * PDP — N°01 Huile visage rituelle (§4.2)
+ * Layout : galerie photos à gauche (sticky desktop) + bloc info à droite + tabs.
+ */
+import BaseLayout from '../../layouts/BaseLayout.astro';
+import NoticeBar from '../../components/NoticeBar.astro';
+import Header from '../../components/Header.astro';
+import Footer from '../../components/Footer.astro';
+import Button from '../../components/Button.astro';
+import ProductGallery from '../../components/ProductGallery.astro';
+import QuantitySelector from '../../components/QuantitySelector.astro';
+import Accordion from '../../components/Accordion.astro';
+import { getProduct } from '../../lib/products';
+import { buildPdpTabs } from '../../lib/pdp-tabs';
+
+const product = getProduct('no-01')!;
+
+const galleryImages = [
+  { src: null, alt: 'Flacon Paolisa N°01 sur fond crème', caption: '01 — Flacon de face' },
+  { src: null, alt: "Détail de l'étiquette", caption: '02 — Détail étiquette' },
+  { src: null, alt: 'Flacon avec dropper sorti', caption: '03 — Dropper · gouttes' },
+  { src: null, alt: 'Flacon dans la main', caption: '04 — Geste · paume' },
+  { src: null, alt: 'Flacon en contexte céramique et lin', caption: '05 — Contexte' },
+];
+
+const tabs = buildPdpTabs(product);
+---
+
+<BaseLayout
+  title={`${product.title} — ${product.number} · PAOLISA`}
+  description={product.shortDescription}
+>
+  <NoticeBar message="FREE EU SHIPPING — €60+" />
+  <Header transparent={false} currentPath="/huile/no-01" />
+
+  <main>
+    <section class="container-paolisa pt-8 md:pt-12 pb-20 md:pb-32">
+      <div class="grid grid-cols-1 md:grid-cols-12 gap-8 md:gap-16">
+        {/* Galerie */}
+        <div class="md:col-span-7">
+          <ProductGallery images={galleryImages} />
+        </div>
+
+        {/* Bloc info — sticky desktop */}
+        <aside class="md:col-span-5">
+          <div class="md:sticky md:top-[120px] md:max-w-md">
+            <p class="mono-label mb-4">{product.number} / {product.ritual}</p>
+            <h1 class="display-m mb-3">{product.title}</h1>
+            <p class="mono-label text-ink-tertiary mb-6">{product.format}</p>
+
+            <p class="font-mono text-[18px] tracking-[0.05em] text-ink-primary mb-8">
+              {product.priceLabel}
+            </p>
+
+            <p class="body-l text-ink-secondary mb-10 max-w-prose">
+              {product.shortDescription}
+            </p>
+
+            <form
+              method="post"
+              action="/api/checkout"
+              class="mb-6"
+              data-add-to-cart-form
+            >
+              <input type="hidden" name="productSlug" value={product.slug} />
+              <div class="flex flex-col sm:flex-row sm:items-center gap-4 sm:gap-6 mb-6">
+                <span class="mono-label text-ink-tertiary">QUANTITÉ</span>
+                <QuantitySelector initial={1} max={9} name="quantity" />
+              </div>
+              <Button variant="primary" type="submit" fullWidth>
+                AJOUTER AU PANIER →
+              </Button>
+            </form>
+
+            <p class="mono-micro text-ink-tertiary">
+              LIVRAISON OFFERTE DÈS €60 &nbsp;·&nbsp; RETOURS SOUS 30 JOURS
+            </p>
+          </div>
+        </aside>
+      </div>
+
+      {/* Onglets — pleine largeur sous les colonnes */}
+      <div class="mt-20 md:mt-32 grid grid-cols-1 md:grid-cols-12 gap-8 md:gap-16">
+        <div class="md:col-span-4">
+          <h2 class="display-s mb-3">— LE PRODUIT EN DÉTAIL</h2>
+          <p class="mono-label">{product.number} / {product.ritual}</p>
+        </div>
+        <div class="md:col-span-8">
+          <Accordion items={tabs} variant="default" />
+        </div>
+      </div>
+    </section>
+
+    {/* "Vous pourriez aussi aimer" — vide pour v1 (§4.2). À activer avec N°02. */}
+    <section class="bg-bg-secondary section-y">
+      <div class="container-paolisa text-center">
+        <p class="mono-label mb-4">— BIENTÔT —</p>
+        <h2 class="display-m max-w-prose mx-auto">
+          N°02 Soir arrive au troisième trimestre 2026.
+        </h2>
+        <p class="body-l text-ink-secondary mt-6 max-w-prose mx-auto">
+          Une huile de nuit, pour terminer le rituel. Inscrivez-vous à la newsletter pour être prévenue en avant-première.
+        </p>
+      </div>
+    </section>
+  </main>
+
+  <Footer />
+</BaseLayout>

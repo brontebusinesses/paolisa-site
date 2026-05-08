@@ -1,0 +1,46 @@
+---
+/**
+ * <Wordmark /> — Marque Paolisa avec point ● terracotta.
+ * §2.2 — Cormorant Garamond, point ● réservé à #A85A35.
+ * Le point reste terracotta même sur fond sombre — c'est l'unique exception
+ * à la règle « pas d'autre couleur ».
+ */
+type Props = {
+  size?: 'nav' | 'sm' | 'md' | 'lg';
+  inverse?: boolean;
+  class?: string;
+  as?: 'span' | 'h1' | 'div';
+};
+
+const {
+  size = 'md',
+  inverse = false,
+  class: className = '',
+  as = 'span',
+} = Astro.props as Props;
+
+// nav = taille header (réduite pour ne pas dominer la nav).
+// sm  = product cards, mentions secondaires.
+// md  = footer, menu overlay, présence marque.
+// lg  = grandes occurrences éditoriales.
+const sizeMap: Record<string, string> = {
+  nav: 'text-[16px] md:text-[18px]',
+  sm: 'text-[15px] md:text-[17px]',
+  md: 'text-[19px] md:text-[22px]',
+  lg: 'text-[28px] md:text-[36px]',
+};
+
+const colorClass = inverse ? 'text-ink-inverse' : 'text-ink-primary';
+const Tag = as;
+---
+
+<Tag
+  class:list={[
+    'wordmark inline-flex items-baseline leading-none',
+    sizeMap[size],
+    colorClass,
+    className,
+  ]}
+>
+  <span>PAOLISA</span><span class="wordmark-dot" aria-hidden="true">●</span>
+</Tag>

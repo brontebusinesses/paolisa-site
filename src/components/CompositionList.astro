@@ -1,0 +1,70 @@
+---
+/**
+ * <CompositionList /> — §5.7
+ * Liste 2 colonnes, fond #F4F4F0 (bg-tertiary), séparateurs entre lignes.
+ * §4.1 hauteur indicative ~420px.
+ *
+ * Copy §6.1 — exemple :
+ *   01 OLIVE — Italie
+ *   02 AMANDE — Sicile
+ *   ...
+ *   06 aroma · mandarine florale — —
+ */
+interface Ingredient {
+  index: string; // "01", "02", ... or "06"
+  name: string;
+  origin: string;
+}
+
+interface Props {
+  eyebrow: string;       // ex. "LA COMPOSITION"
+  subEyebrow?: string;   // ex. "N°01 / 05 INGRÉDIENTS"
+  ingredients: Ingredient[];
+  footnote?: string;
+  cta?: { label: string; href: string };
+}
+
+const { eyebrow, subEyebrow, ingredients, footnote, cta } = Astro.props;
+---
+
+<section class="bg-bg-tertiary section-y">
+  <div class="container-paolisa">
+    <div class="grid grid-cols-1 md:grid-cols-12 gap-8 md:gap-12 items-start">
+      {/* Header colonne gauche */}
+      <header class="md:col-span-4">
+        <h2 class="display-s mb-3">{eyebrow}</h2>
+        {subEyebrow && <p class="mono-label">{subEyebrow}</p>}
+      </header>
+
+      {/* Liste colonne droite */}
+      <div class="md:col-span-8">
+        <ul class="border-t border-line-subtle">
+          {
+            ingredients.map((ing) => (
+              <li class="grid grid-cols-12 gap-4 py-4 md:py-5 border-b border-line-subtle items-baseline">
+                <span class="col-span-2 md:col-span-1 mono-label text-ink-tertiary">{ing.index}</span>
+                <span class="col-span-6 md:col-span-7 body-l text-ink-primary uppercase tracking-[0.05em]">
+                  {ing.name}
+                </span>
+                <span class="col-span-4 body-m text-ink-secondary text-right">{ing.origin}</span>
+              </li>
+            ))
+          }
+        </ul>
+        {footnote && <p class="mono-micro text-ink-tertiary mt-6">{footnote}</p>}
+        {
+          cta && (
+            <div class="mt-10">
+              <a
+                href={cta.href}
+                class="mono-label inline-flex items-center gap-2 text-ink-primary border-b border-ink-primary pb-1 hover:opacity-70 transition-opacity duration-150 ease-in-out"
+              >
+                {cta.label}
+              </a>
+            </div>
+          )
+        }
+      </div>
+    </div>
+  </div>
+</section>

@@ -1,0 +1,171 @@
+---
+/**
+ * FAQ — §4.7
+ * Accordéon classique, 4 catégories.
+ */
+import BaseLayout from '../layouts/BaseLayout.astro';
+import NoticeBar from '../components/NoticeBar.astro';
+import Header from '../components/Header.astro';
+import Footer from '../components/Footer.astro';
+import Accordion from '../components/Accordion.astro';
+
+const categories = [
+  {
+    id: 'produit',
+    label: 'Le produit',
+    items: [
+      {
+        question: 'Pour quel type de peau l\'huile N°01 est-elle adaptée ?',
+        answer:
+          'Pour tous les types de peau, des plus sèches aux plus mixtes. Le mélange est conçu pour rester non-comédogène et léger en finition. Les peaux très réactives peuvent commencer par appliquer une goutte à la place de trois pendant la première semaine.',
+      },
+      {
+        question: 'Puis-je l\'utiliser pendant la grossesse ou l\'allaitement ?',
+        answer:
+          'Le formula est conçu pour être utilisable pendant la grossesse et l\'allaitement. Comme pour tout produit de soin, demandez confirmation à votre médecin si vous avez un doute spécifique.',
+      },
+      {
+        question: 'Comment se conserve-t-elle ?',
+        answer:
+          'À l\'abri de la lumière directe, à température ambiante. Le flacon en verre ambré protège déjà des UV. Une fois ouverte, l\'huile se conserve 12 mois dans des conditions normales.',
+      },
+      {
+        question: 'L\'aroma · mandarine florale est-il un parfum ajouté ?',
+        answer:
+          'Il s\'agit d\'huiles essentielles naturelles dosées à très faible concentration. C\'est elles qui donnent la signature olfactive sans nécessiter de parfum synthétique. Une version sans aroma est à l\'étude pour les peaux très réactives.',
+      },
+    ],
+  },
+  {
+    id: 'commande',
+    label: 'La commande et la livraison',
+    items: [
+      {
+        question: 'Quels sont les délais de livraison ?',
+        answer:
+          'En Belgique : 2 à 3 jours ouvrés. En France et au Luxembourg : 3 à 5 jours ouvrés. Reste de l\'Union européenne : 5 à 7 jours ouvrés. Toutes nos expéditions sont suivies.',
+      },
+      {
+        question: 'La livraison est-elle gratuite ?',
+        answer:
+          'Oui, pour toute commande de €60 ou plus dans l\'Union européenne. En dessous, un forfait de €5,90 s\'applique.',
+      },
+      {
+        question: 'Quels moyens de paiement sont acceptés ?',
+        answer:
+          'Carte bancaire (Visa, Mastercard, American Express), Bancontact, iDEAL, Apple Pay et Google Pay. Tous les paiements sont sécurisés par Stripe.',
+      },
+    ],
+  },
+  {
+    id: 'retours',
+    label: 'Les retours et échanges',
+    items: [
+      {
+        question: 'Puis-je retourner mon produit ?',
+        answer:
+          'Vous disposez de 30 jours après réception pour nous retourner un produit non ouvert. Pour les produits ouverts, contactez-nous à bonjour@paolisa.eu — nous étudierons chaque cas individuellement.',
+      },
+      {
+        question: 'Comment effectuer un retour ?',
+        answer:
+          'Écrivez-nous à bonjour@paolisa.eu avec votre numéro de commande. Nous vous enverrons une étiquette de retour prépayée et vous indiquerons la procédure.',
+      },
+    ],
+  },
+  {
+    id: 'marque',
+    label: 'La marque',
+    items: [
+      {
+        question: 'Où est fabriquée l\'huile ?',
+        answer:
+          'La formulation et la fabrication sont réalisées en France, dans un laboratoire familial certifié COSMOS et BPF. Le conditionnement et l\'expédition se font en Belgique.',
+      },
+      {
+        question: 'L\'huile est-elle vegan et cruelty-free ?',
+        answer:
+          'Oui, à 100%. Aucun ingrédient d\'origine animale, aucun test sur animaux à aucune étape de la chaîne. Certification Leaping Bunny.',
+      },
+      {
+        question: 'Quelles sont vos certifications ?',
+        answer:
+          'COSMOS Organic (Ecocert), Leaping Bunny (cruelty-free), Vegan Society. Le flacon en verre est consigné — nous étudions un programme de retour pour 2026.',
+      },
+      {
+        question: 'Comment puis-je vous contacter ?',
+        answer:
+          'Par email à bonjour@paolisa.eu — nous répondons sous 48h ouvrés. Pour les questions presse ou partenariats, écrivez à presse@paolisa.eu.',
+      },
+    ],
+  },
+];
+---
+
+<BaseLayout
+  title="FAQ — PAOLISA"
+  description="Toutes les réponses sur l'huile N°01, la commande, la livraison, les retours et la marque."
+>
+  <NoticeBar message="FREE EU SHIPPING — €60+" />
+  <Header transparent={false} currentPath="/faq" />
+
+  <main>
+    <section class="container-paolisa pt-12 md:pt-20 pb-20 md:pb-32">
+      {/* Hero compact */}
+      <header class="mb-16 md:mb-24 max-w-3xl">
+        <p class="mono-label mb-4">— FAQ —</p>
+        <h1 class="display-l">Questions fréquentes.</h1>
+      </header>
+
+      {/* Sommaire ancres */}
+      <nav class="mb-16 md:mb-24" aria-label="Catégories">
+        <ul class="grid grid-cols-2 md:grid-cols-4 gap-x-6 gap-y-3 border-t border-b border-line-subtle py-6">
+          {
+            categories.map((cat) => (
+              <li>
+                <a
+                  href={`#${cat.id}`}
+                  class="mono-label inline-flex items-baseline gap-2 hover:opacity-70 transition-opacity duration-150 ease-in-out"
+                >
+                  <span aria-hidden="true">→</span>
+                  <span>{cat.label}</span>
+                </a>
+              </li>
+            ))
+          }
+        </ul>
+      </nav>
+
+      {/* Catégories */}
+      <div class="space-y-16 md:space-y-24">
+        {
+          categories.map((cat) => (
+            <section id={cat.id} class="grid grid-cols-1 md:grid-cols-12 gap-8 md:gap-16 scroll-mt-32">
+              <header class="md:col-span-4">
+                <h2 class="display-s mb-3">— {cat.label.toUpperCase()}</h2>
+                <p class="mono-label">{String(cat.items.length).padStart(2, '0')} QUESTIONS</p>
+              </header>
+              <div class="md:col-span-8">
+                <Accordion items={cat.items} />
+              </div>
+            </section>
+          ))
+        }
+      </div>
+
+      {/* Contact fallback */}
+      <div class="mt-20 md:mt-32 pt-12 border-t border-line-subtle text-center">
+        <p class="mono-label mb-4">— UNE QUESTION QU'ON N'A PAS COUVERTE ? —</p>
+        <h2 class="display-s mb-8">Écrivez-nous directement.</h2>
+        <a
+          href="/contact"
+          class="mono-label inline-flex items-center gap-2 text-ink-primary border-b border-ink-primary pb-1 hover:opacity-70 transition-opacity duration-150 ease-in-out"
+        >
+          NOUS CONTACTER →
+        </a>
+      </div>
+    </section>
+  </main>
+
+  <Footer />
+</BaseLayout>

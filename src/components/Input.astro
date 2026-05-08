@@ -1,0 +1,56 @@
+---
+/**
+ * <Input /> — §5.9
+ * Variantes : default (border 0.5px), dark (sur fond noir, border #444441).
+ * Pas de border-radius. §2.4.
+ */
+interface Props {
+  type?: 'text' | 'email' | 'tel' | 'url';
+  name: string;
+  id?: string;
+  placeholder?: string;
+  required?: boolean;
+  variant?: 'default' | 'dark';
+  ariaLabel?: string;
+  value?: string;
+  autocomplete?: string;
+  class?: string;
+}
+
+const {
+  type = 'text',
+  name,
+  id,
+  placeholder,
+  required = false,
+  variant = 'default',
+  ariaLabel,
+  value,
+  autocomplete,
+  class: className = '',
+} = Astro.props;
+
+const base =
+  'block w-full bg-transparent font-sans text-[14px] md:text-[15px] leading-[1.75] py-3 px-0 border-0 border-b focus:outline-none focus:ring-0';
+
+const variants: Record<string, string> = {
+  default:
+    'border-line-subtle text-ink-primary placeholder:text-ink-tertiary focus:border-ink-primary',
+  dark:
+    'border-[#444441] text-ink-inverse placeholder:text-ink-tertiary focus:border-ink-inverse',
+};
+
+const classes = [base, variants[variant], className].filter(Boolean).join(' ');
+---
+
+<input
+  type={type}
+  name={name}
+  id={id ?? name}
+  placeholder={placeholder}
+  required={required}
+  aria-label={ariaLabel}
+  value={value}
+  autocomplete={autocomplete}
+  class={classes}
+/>

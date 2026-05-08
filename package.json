@@ -1,0 +1,24 @@
+{
+  "name": "paolisa-site",
+  "type": "module",
+  "version": "0.1.0",
+  "private": true,
+  "scripts": {
+    "dev": "astro dev",
+    "start": "astro dev",
+    "build": "astro build",
+    "preview": "astro preview",
+    "astro": "astro"
+  },
+  "dependencies": {
+    "@astrojs/check": "^0.9.4",
+    "@astrojs/compiler": "^4.0.0",
+    "@astrojs/tailwind": "^5.1.2",
+    "@astrojs/vercel": "^8.0.0",
+    "astro": "^5.0.0",
+    "shiki": "^4.0.2",
+    "stripe": "^17.7.0",
+    "tailwindcss": "^3.4.14",
+    "typescript": "^5.6.3"
+  }
+}

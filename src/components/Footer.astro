@@ -1,0 +1,156 @@
+---
+/**
+ * <Footer /> — §5.3
+ * Trois zones : newsletter (haut centré), 4 colonnes liens, mentions (bas).
+ * Toujours fond #18181B, texte #FAFAF8.
+ *
+ * Copy §6.4.
+ */
+import Wordmark from './Wordmark.astro';
+import Input from './Input.astro';
+import Button from './Button.astro';
+---
+
+<footer class="bg-bg-dark text-ink-inverse">
+  {/* Newsletter — §6.4 */}
+  <div class="border-b border-[#2A2A2D]">
+    <div class="container-paolisa section-y text-center">
+      <p class="mono-label text-ink-tertiary mb-4">— RECEVEZ LE RITUEL —</p>
+      <h2 class="display-m text-ink-inverse mb-8 max-w-prose mx-auto">
+        Un PDF, six emails, l'accès en avant-première.
+      </h2>
+
+      {/* Feedback inscription — lit ?newsletter=ok|erreur dans l'URL */}
+      <div data-newsletter-feedback class="hidden max-w-md mx-auto mb-6">
+        <p data-feedback-ok class="hidden caption text-ink-inverse border border-[#2A2A2D] py-3 px-4">
+          ✓ MERCI. UN EMAIL VIENT D'ARRIVER DANS VOTRE BOÎTE — CONFIRMEZ VOTRE INSCRIPTION POUR RECEVOIR LE PDF.
+        </p>
+        <p data-feedback-erreur class="hidden caption text-ink-inverse border border-[#2A2A2D] py-3 px-4">
+          ⚠ UNE ERREUR EST SURVENUE. ESSAYEZ ENCORE OU ÉCRIVEZ-NOUS À BONJOUR@PAOLISA.EU.
+        </p>
+      </div>
+
+      <form
+        class="max-w-md mx-auto flex flex-col sm:flex-row items-stretch gap-4 sm:gap-0"
+        action="/api/newsletter"
+        method="post"
+        data-newsletter-form
+      >
+        <input type="hidden" name="source" value="footer" />
+        <input type="hidden" name="return" data-return-input />
+        <div class="flex-1">
+          <label class="sr-only" for="footer-email">Votre email</label>
+          <Input
+            type="email"
+            name="email"
+            id="footer-email"
+            placeholder="VOTRE EMAIL"
+            required
+            variant="dark"
+            ariaLabel="Votre adresse email"
+            autocomplete="email"
+          />
+        </div>
+        <Button variant="primary" type="submit" class="sm:ml-4 bg-bg-primary text-ink-primary border-bg-primary hover:bg-line-subtle hover:border-line-subtle">
+          S'INSCRIRE →
+        </Button>
+      </form>
+      <p class="caption text-ink-tertiary mt-6 max-w-prose mx-auto">
+        En vous inscrivant, vous acceptez de recevoir nos communications. Désinscription en un clic.
+      </p>
+    </div>
+  </div>
+
+  <script>
+    // Reflète la page actuelle dans le champ caché « return » pour que le
+    // backend redirige sur la même page après inscription.
+    const returnInputs = document.querySelectorAll<HTMLInputElement>('[data-return-input]');
+    returnInputs.forEach((el) => {
+      el.value = window.location.pathname || '/';
+    });
+
+    // Affiche le feedback si on revient avec ?newsletter=ok ou ?newsletter=erreur.
+    const params = new URLSearchParams(window.location.search);
+    const status = params.get('newsletter');
+    if (status === 'ok' || status === 'erreur') {
+      const wrap = document.querySelector<HTMLElement>('[data-newsletter-feedback]');
+      const ok = document.querySelector<HTMLElement>('[data-feedback-ok]');
+      const erreur = document.querySelector<HTMLElement>('[data-feedback-erreur]');
+      wrap?.classList.remove('hidden');
+      if (status === 'ok') ok?.classList.remove('hidden');
+      else erreur?.classList.remove('hidden');
+
+      // Nettoie l'URL pour ne pas garder le paramètre après reload.
+      const cleanUrl = window.location.pathname + window.location.hash;
+      window.history.replaceState({}, document.title, cleanUrl);
+    }
+  </script>
+
+  {/* 4 colonnes de liens — §6.4 */}
+  <div class="container-paolisa py-12 md:py-16">
+    <div class="grid grid-cols-2 md:grid-cols-5 gap-8 md:gap-12">
+      <div class="col-span-2 md:col-span-1">
+        <Wordmark size="md" inverse />
+        <p class="body-m text-ink-tertiary mt-6 max-w-[240px]">
+          Une marque-famille italo-belge de soin du visage. Bruxelles.
+        </p>
+      </div>
+
+      <div>
+        <h3 class="mono-label text-ink-tertiary mb-5">— MAISON —</h3>
+        <ul class="space-y-3">
+          <li><a href="/origine" class="body-m text-ink-inverse hover:opacity-70 transition-opacity duration-150 ease-in-out">Origine</a></li>
+          <li><a href="/rituel" class="body-m text-ink-inverse hover:opacity-70 transition-opacity duration-150 ease-in-out">Le rituel</a></li>
+          <li><a href="/journal" class="body-m text-ink-inverse hover:opacity-70 transition-opacity duration-150 ease-in-out">Le journal</a></li>
+          <li><a href="/origine#manifeste" class="body-m text-ink-inverse hover:opacity-70 transition-opacity duration-150 ease-in-out">Manifeste</a></li>
+        </ul>
+      </div>
+
+      <div>
+        <h3 class="mono-label text-ink-tertiary mb-5">— BOUTIQUE —</h3>
+        <ul class="space-y-3">
+          <li><a href="/huile/no-01" class="body-m text-ink-inverse hover:opacity-70 transition-opacity duration-150 ease-in-out">N°01 Huile matin</a></li>
+          <li><span class="body-m text-ink-tertiary">N°02 Soir (bientôt)</span></li>
+          <li><span class="body-m text-ink-tertiary">Carte cadeau (futur)</span></li>
+        </ul>
+      </div>
+
+      <div>
+        <h3 class="mono-label text-ink-tertiary mb-5">— AIDE —</h3>
+        <ul class="space-y-3">
+          <li><a href="/faq" class="body-m text-ink-inverse hover:opacity-70 transition-opacity duration-150 ease-in-out">FAQ</a></li>
+          <li><a href="/contact" class="body-m text-ink-inverse hover:opacity-70 transition-opacity duration-150 ease-in-out">Contact</a></li>
+          <li><a href="/faq#livraison" class="body-m text-ink-inverse hover:opacity-70 transition-opacity duration-150 ease-in-out">Livraison</a></li>
+          <li><a href="/faq#retours" class="body-m text-ink-inverse hover:opacity-70 transition-opacity duration-150 ease-in-out">Retours</a></li>
+        </ul>
+      </div>
+
+      <div>
+        <h3 class="mono-label text-ink-tertiary mb-5">— SUIVRE —</h3>
+        <ul class="space-y-3">
+          <li><a href="https://instagram.com/paolisa" rel="noopener" class="body-m text-ink-inverse hover:opacity-70 transition-opacity duration-150 ease-in-out">Instagram</a></li>
+          <li><a href="https://tiktok.com/@paolisa" rel="noopener" class="body-m text-ink-inverse hover:opacity-70 transition-opacity duration-150 ease-in-out">TikTok</a></li>
+          <li><a href="https://pinterest.com/paolisa" rel="noopener" class="body-m text-ink-inverse hover:opacity-70 transition-opacity duration-150 ease-in-out">Pinterest</a></li>
+          <li><a href="#footer-email" class="body-m text-ink-inverse hover:opacity-70 transition-opacity duration-150 ease-in-out">Newsletter</a></li>
+        </ul>
+      </div>
+    </div>
+  </div>
+
+  {/* Mentions bas — §6.4 */}
+  <div class="border-t border-[#2A2A2D]">
+    <div class="container-paolisa py-6">
+      <div class="flex flex-col md:flex-row md:items-center md:justify-between gap-4">
+        <div class="flex flex-wrap items-center gap-x-6 gap-y-2">
+          <span class="mono-micro text-ink-tertiary">PAOLISA / BRUXELLES</span>
+          <span class="mono-micro text-ink-tertiary">© 2026 / V.01</span>
+        </div>
+        <div class="flex flex-wrap items-center gap-x-6 gap-y-2">
+          <a href="/mentions-legales" class="mono-micro text-ink-tertiary hover:text-ink-inverse transition-colors duration-150 ease-in-out">MENTIONS LÉGALES</a>
+          <a href="/cgv" class="mono-micro text-ink-tertiary hover:text-ink-inverse transition-colors duration-150 ease-in-out">CGV</a>
+          <a href="/confidentialite" class="mono-micro text-ink-tertiary hover:text-ink-inverse transition-colors duration-150 ease-in-out">CONFIDENTIALITÉ</a>
+        </div>
+      </div>
+    </div>
+  </div>
+</footer>

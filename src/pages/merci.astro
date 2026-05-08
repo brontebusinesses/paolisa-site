@@ -1,0 +1,92 @@
+---
+/**
+ * Page /merci — succès post-checkout Stripe.
+ * Récupère la session via session_id pour confirmer le statut côté serveur.
+ */
+import BaseLayout from '../layouts/BaseLayout.astro';
+import NoticeBar from '../components/NoticeBar.astro';
+import Header from '../components/Header.astro';
+import Footer from '../components/Footer.astro';
+import Button from '../components/Button.astro';
+import { stripe } from '../lib/stripe';
+
+export const prerender = false;
+
+const sessionId = Astro.url.searchParams.get('session_id');
+
+let customerEmail: string | null = null;
+let amountTotal: number | null = null;
+let currency: string = 'EUR';
+let paymentStatus: string = 'unknown';
+
+if (sessionId && import.meta.env.STRIPE_SECRET_KEY) {
+  try {
+    const session = await stripe.checkout.sessions.retrieve(sessionId, {
+      expand: ['customer_details'],
+    });
+    customerEmail = session.customer_details?.email ?? null;
+    amountTotal = session.amount_total;
+    currency = (session.currency ?? 'eur').toUpperCase();
+    paymentStatus = session.payment_status;
+  } catch (err) {
+    console.error('[merci] Stripe retrieve error', err);
+  }
+}
+
+const formattedAmount =
+  amountTotal != null
+    ? new Intl.NumberFormat('fr-BE', { style: 'currency', currency }).format(amountTotal / 100)
+    : null;
+---
+
+<BaseLayout
+  title="Commande confirmée — PAOLISA"
+  description="Merci. Votre commande est confirmée."
+  noindex
+>
+  <NoticeBar message="FREE EU SHIPPING — €60+" />
+  <Header transparent={false} currentPath="/merci" />
+
+  <main>
+    <section class="container-paolisa pt-12 md:pt-20 pb-20 md:pb-32">
+      <div class="max-w-prose mx-auto text-center">
+        <p class="mono-label mb-6">— COMMANDE CONFIRMÉE —</p>
+        <h1 class="display-l mb-8">Merci.</h1>
+        <p class="body-l text-ink-secondary mb-8">
+          Votre paiement a bien été enregistré.
+          {customerEmail ? <>Un reçu vient de partir vers <span class="text-ink-primary">{customerEmail}</span>.</> : <>Un reçu vient de partir vers votre adresse email.</>}
+        </p>
+
+        {
+          formattedAmount && (
+            <div class="border-y border-line-subtle py-6 my-12">
+              <p class="mono-label mb-2">— TOTAL PAYÉ —</p>
+              <p class="display-m">{formattedAmount}</p>
+              {paymentStatus !== 'paid' && (
+                <p class="mono-micro text-ink-tertiary mt-3">
+                  STATUT : {paymentStatus.toUpperCase()}
+                </p>
+              )}
+            </div>
+          )
+        }
+
+        <p class="body-m mb-12 max-w-prose mx-auto">
+          Votre flacon sera préparé et expédié sous 48h ouvrées depuis Bruxelles.
+          Vous recevrez un email avec le numéro de suivi dès l'expédition.
+        </p>
+
+        <div class="flex flex-col sm:flex-row gap-4 sm:gap-6 justify-center">
+          <Button variant="primary" href="/">
+            RETOUR À L'ACCUEIL
+          </Button>
+          <Button variant="secondary" href="/journal">
+            DÉCOUVRIR LE JOURNAL
+          </Button>
+        </div>
+      </div>
+    </section>
+  </main>
+
+  <Footer />
+</BaseLayout>
