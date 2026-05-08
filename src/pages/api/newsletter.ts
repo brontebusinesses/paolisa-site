@@ -36,7 +36,9 @@ export const POST: APIRoute = async ({ request, redirect }) => {
     email,
     source === 'article'
       ? 'Site paolisa.eu — fin d\'article journal'
-      : 'Site paolisa.eu — footer'
+      : source === 'waitlist'
+        ? 'Site paolisa.eu — liste d\'attente N°01 (pré-lancement)'
+        : 'Site paolisa.eu — footer'
   );
 
   if (result.ok) {

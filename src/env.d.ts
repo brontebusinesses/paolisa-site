@@ -9,6 +9,8 @@ interface ImportMetaEnv {
   readonly KLAVIYO_LIST_ID?: string;
   // Site
   readonly PUBLIC_SITE_URL?: string;
+  // Mode boutique : "true" → ouvert (panier actif), sinon → mode pré-lancement (waitlist)
+  readonly STORE_OPEN?: string;
 }
 
 interface ImportMeta {

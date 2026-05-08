@@ -12,10 +12,17 @@ import TrioBar from '../components/TrioBar.astro';
 import Manifesto from '../components/Manifesto.astro';
 import CompositionList from '../components/CompositionList.astro';
 import Footer from '../components/Footer.astro';
+import { isStoreOpen } from '../lib/store-status';
+
+const storeOpen = isStoreOpen();
 
 // § 6.1 — Trio bar items
 const trioItems = [
-  { label: 'N°01 — MATIN', status: '[ DISPONIBLE ]', href: '/huile/no-01' },
+  {
+    label: 'N°01 — MATIN',
+    status: storeOpen ? '[ DISPONIBLE ]' : '[ BIENTÔT ]',
+    href: '/huile/no-01',
+  },
   { label: 'N°02 — SOIR', status: '[ Q3 / 2026 ]' },
   { label: 'JOURNAL', status: '[ 04 ENTRÉES ]', href: '/journal' },
 ];

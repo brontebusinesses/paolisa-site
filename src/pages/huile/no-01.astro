@@ -8,13 +8,16 @@ import NoticeBar from '../../components/NoticeBar.astro';
 import Header from '../../components/Header.astro';
 import Footer from '../../components/Footer.astro';
 import Button from '../../components/Button.astro';
+import Input from '../../components/Input.astro';
 import ProductGallery from '../../components/ProductGallery.astro';
 import QuantitySelector from '../../components/QuantitySelector.astro';
 import Accordion from '../../components/Accordion.astro';
 import { getProduct } from '../../lib/products';
 import { buildPdpTabs } from '../../lib/pdp-tabs';
+import { isStoreOpen, LAUNCH_LABEL } from '../../lib/store-status';
 
 const product = getProduct('no-01')!;
+const storeOpen = isStoreOpen();
 
 const galleryImages = [
   { src: null, alt: 'Flacon Paolisa N°01 sur fond crème', caption: '01 — Flacon de face' },
@@ -25,6 +28,11 @@ const galleryImages = [
 ];
 
 const tabs = buildPdpTabs(product);
+
+// Feedback waitlist (?newsletter=ok|erreur)
+const params = Astro.url.searchParams;
+const waitlistOk = params.get('newsletter') === 'ok';
+const waitlistError = params.get('newsletter') === 'erreur';
 ---
 
 <BaseLayout
@@ -57,25 +65,81 @@ const tabs = buildPdpTabs(product);
               {product.shortDescription}
             </p>
 
-            <form
-              method="post"
-              action="/api/checkout"
-              class="mb-6"
-              data-add-to-cart-form
-            >
-              <input type="hidden" name="productSlug" value={product.slug} />
-              <div class="flex flex-col sm:flex-row sm:items-center gap-4 sm:gap-6 mb-6">
-                <span class="mono-label text-ink-tertiary">QUANTITÉ</span>
-                <QuantitySelector initial={1} max={9} name="quantity" />
-              </div>
-              <Button variant="primary" type="submit" fullWidth>
-                AJOUTER AU PANIER →
-              </Button>
-            </form>
+            {
+              storeOpen ? (
+                <>
+                  <form
+                    method="post"
+                    action="/api/checkout"
+                    class="mb-6"
+                    data-add-to-cart-form
+                  >
+                    <input type="hidden" name="productSlug" value={product.slug} />
+                    <div class="flex flex-col sm:flex-row sm:items-center gap-4 sm:gap-6 mb-6">
+                      <span class="mono-label text-ink-tertiary">QUANTITÉ</span>
+                      <QuantitySelector initial={1} max={9} name="quantity" />
+                    </div>
+                    <Button variant="primary" type="submit" fullWidth>
+                      AJOUTER AU PANIER →
+                    </Button>
+                  </form>
 
-            <p class="mono-micro text-ink-tertiary">
-              LIVRAISON OFFERTE DÈS €60 &nbsp;·&nbsp; RETOURS SOUS 30 JOURS
-            </p>
+                  <p class="mono-micro text-ink-tertiary">
+                    LIVRAISON OFFERTE DÈS €60 &nbsp;·&nbsp; RETOURS SOUS 30 JOURS
+                  </p>
+                </>
+              ) : (
+                <div class="border border-line-subtle p-6 md:p-8 mb-6">
+                  <p class="mono-label mb-3">— BIENTÔT DISPONIBLE —</p>
+                  <p class="display-s mb-4">Lancement {LAUNCH_LABEL}.</p>
+                  <p class="body-l text-ink-secondary mb-8">
+                    Rejoignez la liste d'attente pour recevoir l'accès en avant-première,
+                    le PDF du rituel et le journal de marque.
+                  </p>
+
+                  {waitlistOk && (
+                    <div class="border-t border-line-subtle pt-4 mb-6" role="status">
+                      <p class="mono-label text-ink-primary mb-1">— BIEN REÇU —</p>
+                      <p class="body-m text-ink-secondary">
+                        Vérifiez votre boîte de réception : un email de confirmation vient de partir.
+                      </p>
+                    </div>
+                  )}
+                  {waitlistError && (
+                    <div class="border-t border-line-subtle pt-4 mb-6" role="alert">
+                      <p class="mono-label text-ink-primary mb-1">— ERREUR —</p>
+                      <p class="body-m text-ink-secondary">
+                        Vérifiez votre adresse email et réessayez.
+                      </p>
+                    </div>
+                  )}
+
+                  <form method="post" action="/api/newsletter" class="space-y-6">
+                    <input type="hidden" name="source" value="waitlist" />
+                    <input type="hidden" name="return" value="/huile/no-01" />
+                    <div>
+                      <label class="sr-only" for="waitlist-email">Votre email</label>
+                      <Input
+                        type="email"
+                        name="email"
+                        id="waitlist-email"
+                        placeholder="VOTRE EMAIL"
+                        required
+                        ariaLabel="Votre adresse email"
+                        autocomplete="email"
+                      />
+                    </div>
+                    <Button variant="primary" type="submit" fullWidth>
+                      REJOINDRE LA LISTE D'ATTENTE →
+                    </Button>
+                  </form>
+
+                  <p class="mono-micro text-ink-tertiary mt-6">
+                    DÉSINSCRIPTION EN UN CLIC. PAS DE SPAM, JAMAIS.
+                  </p>
+                </div>
+              )
+            }
           </div>
         </aside>
       </div>
