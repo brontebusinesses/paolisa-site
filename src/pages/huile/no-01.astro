@@ -28,11 +28,6 @@ const galleryImages = [
 ];
 
 const tabs = buildPdpTabs(product);
-
-// Feedback waitlist (?newsletter=ok|erreur)
-const params = Astro.url.searchParams;
-const waitlistOk = params.get('newsletter') === 'ok';
-const waitlistError = params.get('newsletter') === 'erreur';
 ---
 
 <BaseLayout
@@ -89,7 +84,7 @@ const waitlistError = params.get('newsletter') === 'erreur';
                   </p>
                 </>
               ) : (
-                <div class="border border-line-subtle p-6 md:p-8 mb-6">
+                <div id="waitlist-block" class="border border-line-subtle p-6 md:p-8 mb-6">
                   <p class="mono-label mb-3">— BIENTÔT DISPONIBLE —</p>
                   <p class="display-s mb-4">Lancement {LAUNCH_LABEL}.</p>
                   <p class="body-l text-ink-secondary mb-8">
@@ -97,24 +92,21 @@ const waitlistError = params.get('newsletter') === 'erreur';
                     le PDF du rituel et le journal de marque.
                   </p>
 
-                  {waitlistOk && (
-                    <div class="border-t border-line-subtle pt-4 mb-6" role="status">
-                      <p class="mono-label text-ink-primary mb-1">— BIEN REÇU —</p>
-                      <p class="body-m text-ink-secondary">
-                        Vérifiez votre boîte de réception : un email de confirmation vient de partir.
-                      </p>
-                    </div>
-                  )}
-                  {waitlistError && (
-                    <div class="border-t border-line-subtle pt-4 mb-6" role="alert">
-                      <p class="mono-label text-ink-primary mb-1">— ERREUR —</p>
-                      <p class="body-m text-ink-secondary">
-                        Vérifiez votre adresse email et réessayez.
-                      </p>
-                    </div>
-                  )}
+                  {/* Feedback affiché en JS client après redirect ?newsletter=ok|erreur */}
+                  <div data-waitlist-ok class="hidden border-t border-line-subtle pt-4 mb-6" role="status">
+                    <p class="mono-label text-ink-primary mb-1">— BIEN REÇU —</p>
+                    <p class="body-m text-ink-secondary">
+                      Vous êtes sur la liste d'attente. Vous recevrez un email à l'ouverture des ventes.
+                    </p>
+                  </div>
+                  <div data-waitlist-erreur class="hidden border-t border-line-subtle pt-4 mb-6" role="alert">
+                    <p class="mono-label text-ink-primary mb-1">— ERREUR —</p>
+                    <p class="body-m text-ink-secondary">
+                      Vérifiez votre adresse email et réessayez.
+                    </p>
+                  </div>
 
-                  <form method="post" action="/api/newsletter" class="space-y-6">
+                  <form method="post" action="/api/newsletter" class="space-y-6" data-waitlist-form>
                     <input type="hidden" name="source" value="waitlist" />
                     <input type="hidden" name="return" value="/huile/no-01" />
                     <div>
@@ -138,6 +130,34 @@ const waitlistError = params.get('newsletter') === 'erreur';
                     DÉSINSCRIPTION EN UN CLIC. PAS DE SPAM, JAMAIS.
                   </p>
                 </div>
+
+                <script is:inline>
+                  // Affiche le feedback waitlist après redirect ?newsletter=ok|erreur
+                  // Détecte côté client (la page est statique, params URL non disponibles au build)
+                  (function () {
+                    const params = new URLSearchParams(window.location.search);
+                    const status = params.get('newsletter');
+                    if (status !== 'ok' && status !== 'erreur') return;
+
+                    const ok = document.querySelector('[data-waitlist-ok]');
+                    const erreur = document.querySelector('[data-waitlist-erreur]');
+                    if (status === 'ok') {
+                      ok && ok.classList.remove('hidden');
+                      const form = document.querySelector('[data-waitlist-form]');
+                      form && form.classList.add('hidden'); // cache le form après succès
+                    } else {
+                      erreur && erreur.classList.remove('hidden');
+                    }
+
+                    // Scroll vers le bloc waitlist pour que la cliente voie le feedback
+                    const block = document.getElementById('waitlist-block');
+                    block && block.scrollIntoView({ behavior: 'smooth', block: 'center' });
+
+                    // Nettoie l'URL pour ne pas garder le param après reload
+                    const cleanUrl = window.location.pathname + window.location.hash;
+                    window.history.replaceState({}, document.title, cleanUrl);
+                  })();
+                </script>
               )
             }
           </div>

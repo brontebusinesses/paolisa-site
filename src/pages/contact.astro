@@ -9,10 +9,6 @@ import Header from '../components/Header.astro';
 import Footer from '../components/Footer.astro';
 import Input from '../components/Input.astro';
 import Button from '../components/Button.astro';
-
-const params = Astro.url.searchParams;
-const sent = params.get('envoye') === '1';
-const errorCode = params.get('erreur');
 ---
 
 <BaseLayout
@@ -81,30 +77,52 @@ const errorCode = params.get('erreur');
         </aside>
 
         {/* Colonne droite — formulaire */}
-        <div class="md:col-span-7 md:order-1">
-          {
-            sent && (
-              <div class="border border-line-subtle bg-bg-secondary p-6 mb-10" role="status">
-                <p class="mono-label text-ink-primary mb-2">— MESSAGE BIEN REÇU —</p>
-                <p class="body-l text-ink-secondary">
-                  Merci. Nous vous répondons sous 48h ouvrées à l'adresse que vous nous avez indiquée.
-                </p>
-              </div>
-            )
-          }
-          {
-            errorCode && (
-              <div class="border border-line-subtle bg-bg-secondary p-6 mb-10" role="alert">
-                <p class="mono-label text-ink-primary mb-2">— ERREUR D'ENVOI —</p>
-                <p class="body-l text-ink-secondary">
-                  {errorCode === 'email_invalide' && 'Votre adresse email semble invalide. Vérifiez et réessayez.'}
-                  {errorCode === 'message_manquant' && 'Le message est requis. Décrivez-nous brièvement votre demande.'}
-                  {errorCode !== 'email_invalide' && errorCode !== 'message_manquant' &&
-                    'Une erreur est survenue. Réessayez dans un instant ou écrivez-nous directement à bonjour@paolisa.eu.'}
-                </p>
-              </div>
-            )
-          }
+        <div class="md:col-span-7 md:order-1" id="contact-block">
+          {/* Feedback affiché en JS client après redirect ?envoye=1|erreur=... */}
+          <div data-contact-ok class="hidden border border-line-subtle bg-bg-secondary p-6 mb-10" role="status">
+            <p class="mono-label text-ink-primary mb-2">— MESSAGE BIEN REÇU —</p>
+            <p class="body-l text-ink-secondary">
+              Merci. Nous vous répondons sous 48h ouvrées à l'adresse que vous nous avez indiquée.
+            </p>
+          </div>
+          <div data-contact-error class="hidden border border-line-subtle bg-bg-secondary p-6 mb-10" role="alert">
+            <p class="mono-label text-ink-primary mb-2">— ERREUR D'ENVOI —</p>
+            <p class="body-l text-ink-secondary" data-contact-error-msg>
+              Une erreur est survenue. Réessayez dans un instant ou écrivez-nous directement à bonjour@paolisa.eu.
+            </p>
+          </div>
+
+          <script is:inline>
+            (function () {
+              const params = new URLSearchParams(window.location.search);
+              const sent = params.get('envoye') === '1';
+              const errorCode = params.get('erreur');
+
+              if (!sent && !errorCode) return;
+
+              if (sent) {
+                const ok = document.querySelector('[data-contact-ok]');
+                ok && ok.classList.remove('hidden');
+                const form = document.querySelector('[data-contact-form]');
+                form && form.classList.add('hidden');
+              } else if (errorCode) {
+                const err = document.querySelector('[data-contact-error]');
+                const msg = document.querySelector('[data-contact-error-msg]');
+                if (msg) {
+                  if (errorCode === 'email_invalide') msg.textContent = 'Votre adresse email semble invalide. Vérifiez et réessayez.';
+                  else if (errorCode === 'message_manquant') msg.textContent = 'Le message est requis. Décrivez-nous brièvement votre demande.';
+                }
+                err && err.classList.remove('hidden');
+              }
+
+              const block = document.getElementById('contact-block');
+              block && block.scrollIntoView({ behavior: 'smooth', block: 'start' });
+
+              const cleanUrl = window.location.pathname + window.location.hash;
+              window.history.replaceState({}, document.title, cleanUrl);
+            })();
+          </script>
+
           <form
             method="post"
             action="/api/contact"

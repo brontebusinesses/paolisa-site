@@ -23,7 +23,7 @@ import Button from './Button.astro';
       {/* Feedback inscription — lit ?newsletter=ok|erreur dans l'URL */}
       <div data-newsletter-feedback class="hidden max-w-md mx-auto mb-6">
         <p data-feedback-ok class="hidden caption text-ink-inverse border border-[#2A2A2D] py-3 px-4">
-          ✓ MERCI. UN EMAIL VIENT D'ARRIVER DANS VOTRE BOÎTE — CONFIRMEZ VOTRE INSCRIPTION POUR RECEVOIR LE PDF.
+          ✓ MERCI. VOUS ÊTES INSCRITE — VOUS RECEVREZ LE RITUEL ET LES PROCHAINES NOUVELLES.
         </p>
         <p data-feedback-erreur class="hidden caption text-ink-inverse border border-[#2A2A2D] py-3 px-4">
           ⚠ UNE ERREUR EST SURVENUE. ESSAYEZ ENCORE OU ÉCRIVEZ-NOUS À BONJOUR@PAOLISA.EU.
@@ -70,19 +70,31 @@ import Button from './Button.astro';
     });
 
     // Affiche le feedback si on revient avec ?newsletter=ok ou ?newsletter=erreur.
+    // Sauf si une autre page (PDP waitlist, contact) gère déjà le feedback —
+    // dans ce cas le footer reste silencieux pour ne pas dupliquer.
     const params = new URLSearchParams(window.location.search);
     const status = params.get('newsletter');
     if (status === 'ok' || status === 'erreur') {
-      const wrap = document.querySelector<HTMLElement>('[data-newsletter-feedback]');
-      const ok = document.querySelector<HTMLElement>('[data-feedback-ok]');
-      const erreur = document.querySelector<HTMLElement>('[data-feedback-erreur]');
-      wrap?.classList.remove('hidden');
-      if (status === 'ok') ok?.classList.remove('hidden');
-      else erreur?.classList.remove('hidden');
+      const path = window.location.pathname;
+      const handledByPage =
+        path.startsWith('/huile/') || // PDP a son propre feedback waitlist
+        path === '/contact';            // contact a son propre feedback
 
-      // Nettoie l'URL pour ne pas garder le paramètre après reload.
-      const cleanUrl = window.location.pathname + window.location.hash;
-      window.history.replaceState({}, document.title, cleanUrl);
+      if (!handledByPage) {
+        const wrap = document.querySelector<HTMLElement>('[data-newsletter-feedback]');
+        const ok = document.querySelector<HTMLElement>('[data-feedback-ok]');
+        const erreur = document.querySelector<HTMLElement>('[data-feedback-erreur]');
+        wrap?.classList.remove('hidden');
+        if (status === 'ok') ok?.classList.remove('hidden');
+        else erreur?.classList.remove('hidden');
+
+        // Scroll vers le feedback pour que la cliente le voie sans avoir à scroller.
+        wrap?.scrollIntoView({ behavior: 'smooth', block: 'center' });
+
+        // Nettoie l'URL pour ne pas garder le paramètre après reload.
+        const cleanUrl = window.location.pathname + window.location.hash;
+        window.history.replaceState({}, document.title, cleanUrl);
+      }
     }
   </script>
 
