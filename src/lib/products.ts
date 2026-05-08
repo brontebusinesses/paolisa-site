@@ -11,8 +11,8 @@ export interface Product {
   priceCents: number;    // 6400
   priceLabel: string;    // "€64"
   shortDescription: string;
-  /** Stripe price ID — défini via env var STRIPE_PRICE_NO01 en runtime. */
-  stripePriceEnv: string;
+  /** Shopify product handle (URL slug Shopify, ex. 'all-in-one-facial-oil'). */
+  shopifyHandle: string;
   available: boolean;
   status: string;        // "DISPONIBLE" / "Q3 / 2026"
   inci: string[];        // liste INCI complète
@@ -33,7 +33,7 @@ export const products: Record<string, Product> = {
     priceLabel: '€64',
     shortDescription:
       'Cinq huiles méditerranéennes, un seul geste, le matin. Certifié COSMOS Organic.',
-    stripePriceEnv: 'STRIPE_PRICE_NO01',
+    shopifyHandle: 'all-in-one-facial-oil',
     available: true,
     status: 'DISPONIBLE',
     inci: [

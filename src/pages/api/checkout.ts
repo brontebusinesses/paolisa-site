@@ -1,20 +1,19 @@
 /**
- * POST /api/checkout — crée une session Stripe Checkout et redirige.
+ * POST /api/checkout — crée un panier Shopify et redirige vers le checkout hosted.
  *
  * Body (form data) :
- *   productSlug : "no-01"
- *   quantity    : "1" .. "9"
+ *   productSlug : slug interne (ex. "no-01") — utilisé pour retrouver le shopifyHandle
+ *   quantity    : 1..9
  *
- * Réponse : 303 See Other → URL Stripe Checkout (paiement hosted).
+ * Réponse : 303 See Other → URL de checkout Shopify (paiement hosted).
  */
 import type { APIRoute } from 'astro';
-import { stripe, stripePriceFor } from '../../lib/stripe';
 import { getProduct } from '../../lib/products';
+import { getProductByHandle, createCart, isShopifyConfigured } from '../../lib/shopify';
 
-// API route à la demande (pas de pré-rendu).
 export const prerender = false;
 
-export const POST: APIRoute = async ({ request, redirect, url }) => {
+export const POST: APIRoute = async ({ request, redirect }) => {
   let formData: FormData;
   try {
     formData = await request.formData();
@@ -33,64 +32,48 @@ export const POST: APIRoute = async ({ request, redirect, url }) => {
   if (!product.available) {
     return new Response('Product not available', { status: 410 });
   }
+  if (!product.shopifyHandle) {
+    return new Response('Product not configured for Shopify', { status: 500 });
+  }
 
-  const priceId = stripePriceFor(productSlug);
-  if (!priceId || priceId === 'price_REPLACE_ME') {
+  if (!isShopifyConfigured()) {
     return new Response(
-      'Stripe price not configured. Set STRIPE_PRICE_NO01 in .env.local.',
+      'Shopify non configuré (SHOPIFY_STORE_DOMAIN ou SHOPIFY_STOREFRONT_TOKEN manquant).',
       { status: 500 }
     );
   }
 
-  const origin = import.meta.env.PUBLIC_SITE_URL || url.origin;
-
   try {
-    const session = await stripe.checkout.sessions.create({
-      mode: 'payment',
-      ui_mode: 'hosted',
-      line_items: [
-        {
-          price: priceId,
-          quantity,
-        },
-      ],
-      // Moyens de paiement EU — §8.2.
-      payment_method_types: ['card', 'bancontact', 'ideal', 'sepa_debit'],
-      // Stripe Tax — calcul TVA EU automatique. Suppose que le produit a
-      // une `tax_behavior` configurée dans le dashboard.
-      automatic_tax: { enabled: true },
-      // Frais de port — Stripe Shipping. Configuration en dashboard.
-      shipping_address_collection: {
-        allowed_countries: [
-          'BE', 'FR', 'LU', 'NL', 'DE', 'IT', 'ES', 'PT', 'AT', 'IE',
-          'DK', 'SE', 'FI', 'PL', 'CZ', 'GR',
-        ],
-      },
-      billing_address_collection: 'auto',
-      locale: 'fr',
-      // Codes promo (Stripe Coupons) activés.
-      allow_promotion_codes: true,
-      // Pages retour.
-      success_url: `${origin}/merci?session_id={CHECKOUT_SESSION_ID}`,
-      cancel_url: `${origin}/huile/${productSlug}?annule=1`,
-      // Métadonnées pour le suivi interne.
-      metadata: {
-        productSlug,
-        productNumber: product.number,
-      },
-    });
+    // 1. Récupère le produit Shopify pour obtenir la variant ID.
+    const shopifyProduct = await getProductByHandle(product.shopifyHandle);
 
-    if (!session.url) {
-      return new Response('Stripe did not return a checkout URL', { status: 500 });
+    if (!shopifyProduct) {
+      console.error('[api/checkout] Product not found in Shopify', product.shopifyHandle);
+      return new Response('Product not found in Shopify', { status: 404 });
     }
 
-    return redirect(session.url, 303);
+    if (!shopifyProduct.availableForSale) {
+      return new Response('Product not available for sale', { status: 410 });
+    }
+
+    // Pour v1 on prend le premier variant (un seul format 30ml).
+    const variant = shopifyProduct.variants.nodes.find((v) => v.availableForSale)
+      ?? shopifyProduct.variants.nodes[0];
+
+    if (!variant) {
+      return new Response('No variant available', { status: 500 });
+    }
+
+    // 2. Crée un panier avec la ligne demandée.
+    const cart = await createCart(variant.id, quantity);
+
+    // 3. Redirige vers le checkout Shopify hosted.
+    return redirect(cart.checkoutUrl, 303);
   } catch (err) {
-    const msg = err instanceof Error ? err.message : 'Unknown Stripe error';
+    const msg = err instanceof Error ? err.message : 'Unknown Shopify error';
     console.error('[api/checkout]', msg);
-    return new Response(`Checkout error: ${msg}`, { status: 500 });
+    return new Response(`Checkout error : ${msg}`, { status: 500 });
   }
 };
 
-// Bloque toute autre méthode HTTP.
 export const ALL: APIRoute = () => new Response('Method not allowed', { status: 405 });

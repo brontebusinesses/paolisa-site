@@ -1,11 +1,13 @@
 /// <reference path="../.astro/types.d.ts" />
 
 interface ImportMetaEnv {
-  readonly STRIPE_SECRET_KEY?: string;
-  readonly STRIPE_PUBLISHABLE_KEY?: string;
-  readonly STRIPE_PRICE_NO01?: string;
+  // Shopify Storefront API
+  readonly SHOPIFY_STORE_DOMAIN?: string;       // ex. "paolisa-studio.myshopify.com"
+  readonly SHOPIFY_STOREFRONT_TOKEN?: string;   // public storefront access token
+  // Klaviyo
   readonly KLAVIYO_API_KEY?: string;
   readonly KLAVIYO_LIST_ID?: string;
+  // Site
   readonly PUBLIC_SITE_URL?: string;
 }
 
