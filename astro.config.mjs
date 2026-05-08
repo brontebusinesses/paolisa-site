@@ -24,4 +24,12 @@ export default defineConfig({
   vite: {
     cacheDir: './node_modules/.cache/vite',
   },
+  // Désactive la vérif CSRF d'Astro pour les routes SSR.
+  // Sur Vercel, le host vu par la serverless function diffère de celui
+  // côté navigateur (alias public vs ID de déploiement), ce qui fait
+  // échouer le check Origin par défaut. On laisse Stripe gérer la
+  // validation côté serveur via priceId.
+  security: {
+    checkOrigin: false,
+  },
 });

@@ -6,7 +6,7 @@
  * à la règle « pas d'autre couleur ».
  */
 type Props = {
-  size?: 'nav' | 'sm' | 'md' | 'lg';
+  size?: 'sm' | 'md' | 'lg';
   inverse?: boolean;
   class?: string;
   as?: 'span' | 'h1' | 'div';
@@ -19,12 +19,10 @@ const {
   as = 'span',
 } = Astro.props as Props;
 
-// nav = taille header (réduite pour ne pas dominer la nav).
-// sm  = product cards, mentions secondaires.
-// md  = footer, menu overlay, présence marque.
-// lg  = grandes occurrences éditoriales.
+// sm = product cards, mentions secondaires.
+// md = header, footer, menu overlay, présence marque.
+// lg = grandes occurrences éditoriales.
 const sizeMap: Record<string, string> = {
-  nav: 'text-[16px] md:text-[18px]',
   sm: 'text-[15px] md:text-[17px]',
   md: 'text-[19px] md:text-[22px]',
   lg: 'text-[28px] md:text-[36px]',
