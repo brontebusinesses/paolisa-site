@@ -91,13 +91,16 @@ const storeOpen = isStoreOpen();
           href="/panier"
           aria-label="Panier"
           class:list={[
-            'mono-label inline-flex items-center gap-1 hover:opacity-70 transition-opacity duration-150 ease-in-out',
+            'mono-label inline-flex items-center gap-2 hover:opacity-70 transition-opacity duration-150 ease-in-out',
             transparent ? 'text-ink-inverse' : 'text-ink-primary',
           ]}
         >
-          <span>[</span>
-          <span data-cart-count>0</span>
-          <span>]</span>
+          <span>PANIER</span>
+          <span class="inline-flex items-center gap-1">
+            <span>[</span>
+            <span data-cart-count>0</span>
+            <span>]</span>
+          </span>
         </a>
       </div>
     </div>
