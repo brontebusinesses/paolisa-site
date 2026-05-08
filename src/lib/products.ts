@@ -8,8 +8,8 @@ export interface Product {
   ritual: string;        // "RITUEL MATIN"
   title: string;         // "Huile visage rituelle"
   format: string;        // "30 ml"
-  priceCents: number;    // 4800
-  priceLabel: string;    // "€48"
+  priceCents: number;    // 6400
+  priceLabel: string;    // "€64"
   shortDescription: string;
   /** Stripe price ID — défini via env var STRIPE_PRICE_NO01 en runtime. */
   stripePriceEnv: string;
@@ -29,8 +29,8 @@ export const products: Record<string, Product> = {
     ritual: 'RITUEL MATIN',
     title: 'Huile visage rituelle',
     format: '30 ml',
-    priceCents: 4800,
-    priceLabel: '€48',
+    priceCents: 6400,
+    priceLabel: '€64',
     shortDescription:
       'Cinq huiles méditerranéennes, un seul geste, le matin. Certifié COSMOS Organic.',
     stripePriceEnv: 'STRIPE_PRICE_NO01',
