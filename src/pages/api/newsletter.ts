@@ -32,14 +32,16 @@ export const POST: APIRoute = async ({ request, redirect }) => {
     return redirect(returnTo + '?newsletter=erreur', 303);
   }
 
-  const result = await subscribeNewsletter(
-    email,
-    source === 'article'
+  const sourceKey =
+    source === 'article' ? 'article' : source === 'waitlist' ? 'waitlist' : 'footer';
+  const sourceLabel =
+    sourceKey === 'article'
       ? 'Site paolisa.eu — fin d\'article journal'
-      : source === 'waitlist'
+      : sourceKey === 'waitlist'
         ? 'Site paolisa.eu — liste d\'attente N°01 (pré-lancement)'
-        : 'Site paolisa.eu — footer'
-  );
+        : 'Site paolisa.eu — footer';
+
+  const result = await subscribeNewsletter(email, sourceLabel, sourceKey);
 
   if (result.ok) {
     return redirect(returnTo + '?newsletter=ok', 303);

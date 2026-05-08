@@ -10,6 +10,7 @@
  * Comportement : transparent par défaut sur la home, scroll > 100px → opaque.
  */
 import Wordmark from './Wordmark.astro';
+import { isStoreOpen } from '../lib/store-status';
 
 interface Props {
   transparent?: boolean;
@@ -17,6 +18,7 @@ interface Props {
 }
 
 const { transparent = false, currentPath = '/' } = Astro.props;
+const storeOpen = isStoreOpen();
 ---
 
 <header
@@ -64,39 +66,41 @@ const { transparent = false, currentPath = '/' } = Astro.props;
         </a>
       </div>
 
-      {/* Right — Recherche / Compte / Panier */}
+      {/* Right — Recherche / Compte / Panier
+          - Recherche : caché tant qu'on n'a pas de fonctionnalité (1 produit, search inutile)
+          - Compte    : caché en pré-lancement (pas de comptes clients, pas d'achats)
+                        Au launch, pointera vers Shopify customer accounts
+          - Panier    : caché en pré-lancement (pas d'achat possible)
+                        Au launch, affichera le compte d'articles
+      */}
       <div class="flex items-center justify-end gap-4 md:gap-6">
-        <button
-          type="button"
-          aria-label="Rechercher"
-          class:list={[
-            'mono-label hidden md:inline-block hover:opacity-70 transition-opacity duration-150 ease-in-out',
-            transparent ? 'text-ink-inverse' : 'text-ink-primary',
-          ]}
-        >
-          RECHERCHE
-        </button>
-        <a
-          href="/compte"
-          class:list={[
-            'mono-label hidden md:inline-block hover:opacity-70 transition-opacity duration-150 ease-in-out',
-            transparent ? 'text-ink-inverse' : 'text-ink-primary',
-          ]}
-        >
-          COMPTE
-        </a>
-        <a
-          href="/panier"
-          aria-label="Panier"
-          class:list={[
-            'mono-label inline-flex items-center gap-1 hover:opacity-70 transition-opacity duration-150 ease-in-out',
-            transparent ? 'text-ink-inverse' : 'text-ink-primary',
-          ]}
-        >
-          <span>[</span>
-          <span data-cart-count>0</span>
-          <span>]</span>
-        </a>
+        {
+          storeOpen && (
+            <>
+              <a
+                href="/compte"
+                class:list={[
+                  'mono-label hidden md:inline-block hover:opacity-70 transition-opacity duration-150 ease-in-out',
+                  transparent ? 'text-ink-inverse' : 'text-ink-primary',
+                ]}
+              >
+                COMPTE
+              </a>
+              <a
+                href="/panier"
+                aria-label="Panier"
+                class:list={[
+                  'mono-label inline-flex items-center gap-1 hover:opacity-70 transition-opacity duration-150 ease-in-out',
+                  transparent ? 'text-ink-inverse' : 'text-ink-primary',
+                ]}
+              >
+                <span>[</span>
+                <span data-cart-count>0</span>
+                <span>]</span>
+              </a>
+            </>
+          )
+        }
       </div>
     </div>
   </div>
@@ -133,7 +137,6 @@ const { transparent = false, currentPath = '/' } = Astro.props;
       <div>
         <p class="mono-label mb-6">— EXPLORER —</p>
         <ul class="space-y-3">
-          <li><a href="/rituel" class="display-s hover:opacity-70 transition-opacity duration-150 ease-in-out">Le rituel</a></li>
           <li><a href="/origine" class="display-s hover:opacity-70 transition-opacity duration-150 ease-in-out">L'origine</a></li>
           <li><a href="/journal" class="display-s hover:opacity-70 transition-opacity duration-150 ease-in-out">Le journal</a></li>
           <li><a href="/contact" class="display-s hover:opacity-70 transition-opacity duration-150 ease-in-out">Contact</a></li>

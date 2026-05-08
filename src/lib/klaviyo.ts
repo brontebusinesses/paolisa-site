@@ -20,15 +20,23 @@ const baseHeaders = (): Record<string, string> => ({
 
 export const isKlaviyoConfigured = (): boolean => Boolean(apiKey && listId);
 
+export type NewsletterSourceKey = 'footer' | 'waitlist' | 'article';
+
 /**
- * Inscrit un email à la liste newsletter avec consentement double opt-in.
+ * Inscrit un email à la liste newsletter avec consentement.
  * Référence : https://developers.klaviyo.com/en/reference/subscribe_profiles
+ *
+ * En plus de l'inscription à la liste, déclenche un événement Klaviyo
+ * « Newsletter Signup » avec la source précise (footer/waitlist/article).
+ * Les événements s'accumulent (un par inscription), contrairement à $source
+ * qui s'écrase à chaque update — ce qui permet de segmenter durablement.
  *
  * Renvoie { ok: true } en succès, { ok: false, error } en cas d'échec.
  */
 export async function subscribeNewsletter(
   email: string,
-  source = 'Site paolisa.eu — formulaire footer'
+  source = 'Site paolisa.eu — formulaire footer',
+  sourceKey: NewsletterSourceKey = 'footer'
 ): Promise<{ ok: true } | { ok: false; error: string }> {
   if (!isKlaviyoConfigured()) {
     return { ok: false, error: 'KLAVIYO_API_KEY ou KLAVIYO_LIST_ID manquante.' };
@@ -79,6 +87,12 @@ export async function subscribeNewsletter(
     );
 
     if (res.status === 202 || res.status === 200) {
+      // Tracking événement source — ne bloque pas l'inscription si ça échoue.
+      try {
+        await trackNewsletterSignupEvent(email, sourceKey, source);
+      } catch (eventErr) {
+        console.error('[klaviyo] event tracking failed (non-blocking)', eventErr);
+      }
       return { ok: true };
     }
 
@@ -89,6 +103,56 @@ export async function subscribeNewsletter(
       ok: false,
       error: err instanceof Error ? err.message : 'Unknown Klaviyo error',
     };
+  }
+}
+
+/**
+ * Déclenche un événement « Newsletter Signup » sur le profil. Idéal pour
+ * segmenter par source d'inscription (waitlist vs footer vs article).
+ *
+ * Les événements Klaviyo s'accumulent (un par inscription), contrairement à
+ * $source qui s'écrase à chaque update.
+ */
+async function trackNewsletterSignupEvent(
+  email: string,
+  sourceKey: NewsletterSourceKey,
+  sourceLabel: string
+): Promise<void> {
+  const eventBody = {
+    data: {
+      type: 'event',
+      attributes: {
+        properties: {
+          source: sourceKey,
+          source_label: sourceLabel,
+          page: sourceKey === 'waitlist' ? '/huile/no-01' : '/',
+        },
+        time: new Date().toISOString(),
+        metric: {
+          data: {
+            type: 'metric',
+            attributes: { name: 'Newsletter Signup' },
+          },
+        },
+        profile: {
+          data: {
+            type: 'profile',
+            attributes: { email },
+          },
+        },
+      },
+    },
+  };
+
+  const res = await fetch(`${KLAVIYO_BASE}/events/`, {
+    method: 'POST',
+    headers: baseHeaders(),
+    body: JSON.stringify(eventBody),
+  });
+
+  if (res.status !== 202 && res.status !== 200) {
+    const text = await res.text();
+    throw new Error(`Klaviyo event ${res.status} : ${text.slice(0, 200)}`);
   }
 }
 
