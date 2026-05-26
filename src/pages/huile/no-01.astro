@@ -80,13 +80,22 @@ const avis = [
             {
               storeOpen ? (
                 <>
+                  {/*
+                    Formulaire ajout au panier — POST direct sur Shopify.
+                    Shopify ajoute la variante au panier puis redirige vers
+                    /checkout (return_to). La cliente quitte alors paolisa.eu
+                    pour passer sur paolisa-studio.myshopify.com pendant le
+                    checkout. Compromis assumé en attendant une migration
+                    headless ou Shopify Plus.
+                  */}
                   <form
                     method="post"
-                    action="/api/checkout"
+                    action="https://paolisa-studio.myshopify.com/cart/add"
                     class="mb-6"
                     data-add-to-cart-form
                   >
-                    <input type="hidden" name="productSlug" value={product.slug} />
+                    <input type="hidden" name="id" value="57483779768652" />
+                    <input type="hidden" name="return_to" value="/checkout" />
                     <div class="flex flex-col sm:flex-row sm:items-center gap-4 sm:gap-6 mb-6">
                       <span class="mono-label text-ink-tertiary">QUANTITÉ</span>
                       <QuantitySelector initial={1} max={9} name="quantity" />
