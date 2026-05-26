@@ -1,0 +1,88 @@
+---
+/**
+ * <AvisClients /> — Section avis clients (verbatim éditorial).
+ * Style : même grammaire visuelle que CompositionList / Accordion (§4.2) —
+ * header colonne gauche (col-span-4), contenu colonne droite (col-span-8),
+ * filets line-subtle, pas d'italique, pas d'ombre, terracotta réservé au wordmark.
+ *
+ * Chaque avis : un pull-quote serif optionnel, le corps en paragraphes,
+ * une dernière ligne accentuée optionnelle, puis l'attribution (prénom + âge).
+ */
+interface Review {
+  /** Phrase mise en avant en serif (sans guillemets : ils sont ajoutés). */
+  pullQuote?: string;
+  /** Paragraphes du corps de l'avis. */
+  body: string[];
+  /** Dernière ligne accentuée (ton plus fort, ink-primary). */
+  highlight?: string;
+  /** Prénom (ou prénom + initiale). */
+  author: string;
+  /** Métadonnée d'attribution : âge, statut, ville... ex. "28 ans". */
+  meta?: string;
+}
+
+interface Props {
+  eyebrow?: string; // ex. "— AVIS —"
+  title: string; // ex. "Premiers retours."
+  subEyebrow?: string; // ex. "N°01 / TESTEUSE"
+  reviews: Review[];
+  background?: 'primary' | 'secondary' | 'tertiary';
+}
+
+const {
+  eyebrow = '— AVIS —',
+  title,
+  subEyebrow,
+  reviews,
+  background = 'secondary',
+} = Astro.props;
+
+const bgMap: Record<string, string> = {
+  primary: 'bg-bg-primary',
+  secondary: 'bg-bg-secondary',
+  tertiary: 'bg-bg-tertiary',
+};
+---
+
+<section class:list={['section-y', bgMap[background]]}>
+  <div class="container-paolisa">
+    <div class="grid grid-cols-1 md:grid-cols-12 gap-8 md:gap-16 items-start">
+      {/* Header colonne gauche */}
+      <header class="md:col-span-4">
+        {eyebrow && <p class="mono-label mb-4">{eyebrow}</p>}
+        <h2 class="display-s mb-3">{title}</h2>
+        {subEyebrow && <p class="mono-label text-ink-tertiary">{subEyebrow}</p>}
+      </header>
+
+      {/* Avis colonne droite */}
+      <div class="md:col-span-8">
+        <ul class="border-t border-line-subtle">
+          {
+            reviews.map((review) => (
+              <li class="border-b border-line-subtle py-10 md:py-12 max-w-prose">
+                {review.pullQuote && (
+                  <p class="display-s text-ink-primary mb-8">
+                    «&nbsp;{review.pullQuote}&nbsp;»
+                  </p>
+                )}
+
+                {review.body.map((para) => (
+                  <p class="body-l text-ink-secondary mb-5 last:mb-0">{para}</p>
+                ))}
+
+                {review.highlight && (
+                  <p class="body-l text-ink-primary mt-6">{review.highlight}</p>
+                )}
+
+                <p class="mono-label text-ink-tertiary mt-8">
+                  — {review.author}
+                  {review.meta && <>, {review.meta}</>}
+                </p>
+              </li>
+            ))
+          }
+        </ul>
+      </div>
+    </div>
+  </div>
+</section>

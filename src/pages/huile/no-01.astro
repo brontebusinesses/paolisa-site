@@ -12,6 +12,7 @@ import Input from '../../components/Input.astro';
 import ProductGallery from '../../components/ProductGallery.astro';
 import QuantitySelector from '../../components/QuantitySelector.astro';
 import Accordion from '../../components/Accordion.astro';
+import AvisClients from '../../components/AvisClients.astro';
 import { getProduct } from '../../lib/products';
 import { buildPdpTabs } from '../../lib/pdp-tabs';
 import { isStoreOpen, LAUNCH_LABEL } from '../../lib/store-status';
@@ -28,6 +29,22 @@ const galleryImages = [
 ];
 
 const tabs = buildPdpTabs(product);
+
+// Avis clientes — verbatim recueillis pendant la phase de test (pré-lancement).
+const avis = [
+  {
+    pullQuote: 'Une huile sèche. Elle prend, et la peau boit.',
+    body: [
+      "Je l'ai testée quelques jours. Première chose : l'odeur. Une orange douce, fraîche — rien d'entêtant. Et la couleur est belle, elle va avec le flacon.",
+      "Ce qui m'a surprise, c'est la texture. Une huile sèche. Pas grasse du tout. Elle prend, et la peau boit.",
+      "Le premier matin, j'ai dosé timidement — deux gouttes. Trop peu pour moi seule, j'ai remis ma crème par-dessus. Le lendemain, trois points : une joue, l'autre, le front. Là, c'était juste. Je me suis maquillée dessus, et la peau était lumineuse en dessous.",
+    ],
+    highlight:
+      "Ce que j'aime le plus : un seul produit. Les matins pressés, c'est tout ce qu'il faut.",
+    author: 'Lara',
+    meta: '28 ans',
+  },
+];
 ---
 
 <BaseLayout
@@ -175,6 +192,15 @@ const tabs = buildPdpTabs(product);
         </div>
       </div>
     </section>
+
+    {/* Avis clientes — verbatim recueillis en phase de test */}
+    <AvisClients
+      eyebrow="— AVIS —"
+      title="Premiers retours."
+      subEyebrow="N°01 / TESTEUSE"
+      reviews={avis}
+      background="tertiary"
+    />
 
     {/* "Vous pourriez aussi aimer" — vide pour v1 (§4.2). À activer avec N°02. */}
     <section class="bg-bg-secondary section-y">
