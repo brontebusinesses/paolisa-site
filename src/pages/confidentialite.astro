@@ -1,0 +1,303 @@
+---
+/**
+ * Politique de confidentialité — §11.3
+ *
+ * Conforme au Règlement (UE) 2016/679 (RGPD) et à la loi belge du
+ * 30 juillet 2018 relative à la protection des personnes physiques à
+ * l'égard des traitements de données à caractère personnel.
+ *
+ * ⚠️ Relecture par un juriste belge / DPO recommandée avant le lancement.
+ */
+import BaseLayout from '../layouts/BaseLayout.astro';
+import NoticeBar from '../components/NoticeBar.astro';
+import Header from '../components/Header.astro';
+import Footer from '../components/Footer.astro';
+
+const sections = [
+  { id: 'responsable', label: 'Responsable du traitement' },
+  { id: 'donnees', label: 'Données collectées' },
+  { id: 'finalites', label: 'Finalités du traitement' },
+  { id: 'bases', label: 'Bases légales' },
+  { id: 'destinataires', label: 'Destinataires des données' },
+  { id: 'transferts', label: "Transferts hors Union européenne" },
+  { id: 'durees', label: 'Durées de conservation' },
+  { id: 'droits', label: 'Vos droits' },
+  { id: 'cookies', label: 'Cookies' },
+  { id: 'securite', label: 'Sécurité des données' },
+  { id: 'modifications', label: 'Modifications de la politique' },
+  { id: 'contact', label: 'Contact et réclamations' },
+];
+
+const lastUpdated = '26 mai 2026';
+---
+
+<BaseLayout
+  title="Politique de confidentialité — PAOLISA"
+  description="Politique de confidentialité du site paolisa.eu — collecte, traitement et protection des données personnelles conformément au RGPD."
+>
+  <NoticeBar message="FREE EU SHIPPING — €60+" />
+  <Header transparent={false} currentPath="/confidentialite" />
+
+  <main>
+    <section class="container-paolisa pt-12 md:pt-20 pb-20 md:pb-32">
+      {/* Hero compact */}
+      <header class="mb-12 md:mb-16 max-w-3xl">
+        <p class="mono-label mb-4">— POLITIQUE DE CONFIDENTIALITÉ —</p>
+        <h1 class="display-l mb-6">Politique de confidentialité.</h1>
+        <p class="body-l text-ink-secondary">
+          La protection de vos données personnelles est une priorité. La présente politique décrit, en application du Règlement (UE) 2016/679 (RGPD) et de la loi belge du 30 juillet 2018, comment paolisa.eu collecte, utilise et protège les informations que vous nous confiez.
+        </p>
+        <p class="mono-micro text-ink-tertiary mt-6">DERNIÈRE MISE À JOUR : {lastUpdated.toUpperCase()}</p>
+      </header>
+
+      {/* Sommaire ancres */}
+      <nav class="mb-16 md:mb-24" aria-label="Sommaire">
+        <p class="mono-label text-ink-tertiary mb-6">— SOMMAIRE —</p>
+        <ul class="grid grid-cols-1 md:grid-cols-2 gap-x-6 gap-y-3 border-t border-b border-line-subtle py-6">
+          {
+            sections.map((s, i) => (
+              <li>
+                <a
+                  href={`#${s.id}`}
+                  class="mono-label inline-flex items-baseline gap-3 hover:opacity-70 transition-opacity duration-150 ease-in-out"
+                >
+                  <span class="text-ink-tertiary">{String(i + 1).padStart(2, '0')}</span>
+                  <span>{s.label}</span>
+                </a>
+              </li>
+            ))
+          }
+        </ul>
+      </nav>
+
+      {/* Sections */}
+      <div class="space-y-16 md:space-y-20 max-w-prose">
+
+        <section id="responsable" class="scroll-mt-32">
+          <p class="mono-label text-ink-tertiary mb-4">— 01 —</p>
+          <h2 class="display-s mb-8">Responsable du traitement.</h2>
+          <div class="space-y-4 body-l text-ink-secondary">
+            <p>Le responsable du traitement des données personnelles collectées via le site paolisa.eu est :</p>
+            <ul class="space-y-2 body-l">
+              <li><strong class="text-ink-primary">Bronté Di Bella</strong></li>
+              <li>Indépendante personne physique</li>
+              <li>Rue des Déchanges 5C, 5170 Namur, Belgique</li>
+              <li>Numéro d'entreprise (BCE) : <strong class="text-ink-primary">0778.932.368</strong></li>
+              <li>Email de contact : <a href="mailto:contact@paolisa.eu" class="text-ink-primary border-b border-ink-primary hover:opacity-70 transition-opacity duration-150 ease-in-out">contact@paolisa.eu</a></li>
+            </ul>
+            <p class="mt-6">
+              Compte tenu de la taille et du volume d'activité du Vendeur, la désignation d'un délégué à la protection des données (DPO) n'est pas requise au sens de l'article 37 du RGPD. Toute question relative au traitement de vos données peut être adressée directement à l'adresse email ci-dessus.
+            </p>
+          </div>
+        </section>
+
+        <section id="donnees" class="scroll-mt-32">
+          <p class="mono-label text-ink-tertiary mb-4">— 02 —</p>
+          <h2 class="display-s mb-8">Données collectées.</h2>
+          <div class="space-y-4 body-l text-ink-secondary">
+            <p>
+              Nous collectons uniquement les données strictement nécessaires aux finalités définies à la section 3 ci-dessous. Selon votre interaction avec le site, les catégories de données suivantes peuvent être collectées :
+            </p>
+            <ul class="space-y-3 body-l list-none">
+              <li><strong class="text-ink-primary">Données d'identification :</strong> nom, prénom, civilité.</li>
+              <li><strong class="text-ink-primary">Coordonnées :</strong> adresse postale (livraison et facturation), email, numéro de téléphone (facultatif).</li>
+              <li><strong class="text-ink-primary">Données de transaction :</strong> historique des commandes, montants, dates, numéros de référence. Les données bancaires (numéro de carte) ne transitent pas par nos serveurs : elles sont collectées et traitées directement par notre prestataire de paiement Shopify Payments.</li>
+              <li><strong class="text-ink-primary">Données de communication :</strong> contenu des messages échangés avec le service client, réponses à nos enquêtes le cas échéant, préférences de communication.</li>
+              <li><strong class="text-ink-primary">Données de navigation :</strong> adresse IP, type de navigateur, pages consultées, durée de visite, source d'arrivée, informations relatives aux cookies (voir section 9).</li>
+            </ul>
+            <p class="mt-6">
+              Aucune donnée sensible au sens de l'article 9 du RGPD (origine raciale ou ethnique, opinions politiques, convictions religieuses, appartenance syndicale, données de santé, orientation sexuelle, données biométriques ou génétiques) n'est collectée par nos soins.
+            </p>
+          </div>
+        </section>
+
+        <section id="finalites" class="scroll-mt-32">
+          <p class="mono-label text-ink-tertiary mb-4">— 03 —</p>
+          <h2 class="display-s mb-8">Finalités du traitement.</h2>
+          <div class="space-y-4 body-l text-ink-secondary">
+            <p>Vos données personnelles sont collectées et traitées aux fins suivantes :</p>
+            <ul class="space-y-3 body-l list-none">
+              <li><strong class="text-ink-primary">Gestion des commandes :</strong> traitement, préparation, expédition et suivi des commandes, gestion des retours et des remboursements, service après-vente.</li>
+              <li><strong class="text-ink-primary">Facturation et obligations comptables :</strong> émission des factures, tenue de la comptabilité, conservation des justificatifs conformément aux obligations légales belges (Code de la TVA, Code des impôts sur les revenus).</li>
+              <li><strong class="text-ink-primary">Communication commerciale :</strong> envoi de newsletters, d'offres promotionnelles et d'informations sur les nouveautés, uniquement après recueil de votre consentement explicite.</li>
+              <li><strong class="text-ink-primary">Amélioration du site et des produits :</strong> mesures d'audience anonymisées, analyses de comportement agrégées, retours d'expérience.</li>
+              <li><strong class="text-ink-primary">Prévention de la fraude et sécurité :</strong> détection et prévention des tentatives de paiement frauduleuses, sécurisation du site et des transactions.</li>
+              <li><strong class="text-ink-primary">Respect des obligations légales :</strong> réponse aux demandes des autorités publiques, conservation des données dans les délais légaux applicables.</li>
+            </ul>
+          </div>
+        </section>
+
+        <section id="bases" class="scroll-mt-32">
+          <p class="mono-label text-ink-tertiary mb-4">— 04 —</p>
+          <h2 class="display-s mb-8">Bases légales du traitement.</h2>
+          <div class="space-y-4 body-l text-ink-secondary">
+            <p>Chaque traitement de données repose sur une base légale identifiée conformément à l'article 6 du RGPD :</p>
+            <ul class="space-y-3 body-l list-none">
+              <li><strong class="text-ink-primary">Exécution du contrat (art. 6.1.b RGPD) :</strong> traitement des commandes, livraison, gestion des retours, service client.</li>
+              <li><strong class="text-ink-primary">Obligation légale (art. 6.1.c RGPD) :</strong> facturation, conservation comptable, déclarations fiscales.</li>
+              <li><strong class="text-ink-primary">Consentement (art. 6.1.a RGPD) :</strong> envoi de communications marketing, dépôt de cookies non strictement nécessaires.</li>
+              <li><strong class="text-ink-primary">Intérêt légitime (art. 6.1.f RGPD) :</strong> sécurisation du site et prévention de la fraude, amélioration des services, mesure d'audience agrégée.</li>
+            </ul>
+          </div>
+        </section>
+
+        <section id="destinataires" class="scroll-mt-32">
+          <p class="mono-label text-ink-tertiary mb-4">— 05 —</p>
+          <h2 class="display-s mb-8">Destinataires des données.</h2>
+          <div class="space-y-4 body-l text-ink-secondary">
+            <p>
+              Vos données personnelles sont strictement réservées à un usage interne et ne sont jamais vendues à des tiers. Elles peuvent toutefois être transmises à des sous-traitants soigneusement sélectionnés, agissant exclusivement sur instruction du responsable du traitement et liés par un accord de traitement de données conforme à l'article 28 du RGPD :
+            </p>
+            <ul class="space-y-3 body-l list-none">
+              <li><strong class="text-ink-primary">Shopify International Limited</strong> (Dublin, Irlande) — gestion de la boutique en ligne, traitement des commandes et opération du panier.</li>
+              <li><strong class="text-ink-primary">Shopify Payments</strong> (sous-jacent Stripe Payments Europe Limited, Dublin, Irlande) — traitement sécurisé des paiements par carte et services de prévention de la fraude.</li>
+              <li><strong class="text-ink-primary">Klaviyo Inc.</strong> (Boston, Massachusetts, États-Unis) — gestion des emails transactionnels et marketing, mesure d'engagement.</li>
+              <li><strong class="text-ink-primary">Selfnamed</strong> (laboratoire et logistique partenaire) — préparation et expédition des colis.</li>
+              <li><strong class="text-ink-primary">Vercel Inc.</strong> (Covina, Californie, États-Unis) — hébergement du site internet et délivrance des contenus.</li>
+              <li><strong class="text-ink-primary">Transporteurs</strong> (Bpost, Mondial Relay, ou équivalents selon la destination) — acheminement des colis.</li>
+              <li><strong class="text-ink-primary">Comptable / expert-comptable</strong> — tenue de la comptabilité et déclarations fiscales.</li>
+            </ul>
+            <p class="mt-6">
+              Vos données pourront également être communiquées aux autorités publiques compétentes lorsqu'une telle communication est requise par la loi (notamment dans le cadre d'enquêtes judiciaires ou de contrôles fiscaux).
+            </p>
+          </div>
+        </section>
+
+        <section id="transferts" class="scroll-mt-32">
+          <p class="mono-label text-ink-tertiary mb-4">— 06 —</p>
+          <h2 class="display-s mb-8">Transferts hors Union européenne.</h2>
+          <div class="space-y-4 body-l text-ink-secondary">
+            <p>
+              Certains de nos sous-traitants (notamment Klaviyo et Vercel) sont établis aux États-Unis. Tout transfert de données vers ces destinataires est encadré par des garanties appropriées au sens des articles 44 à 49 du RGPD, à savoir :
+            </p>
+            <ul class="space-y-3 body-l list-none">
+              <li>· L'adhésion au cadre de protection des données <strong class="text-ink-primary">EU–U.S. Data Privacy Framework</strong> approuvé par la Commission européenne (décision d'adéquation du 10 juillet 2023) ;</li>
+              <li>· Et/ou la conclusion de <strong class="text-ink-primary">clauses contractuelles types</strong> (CCT) adoptées par la Commission européenne, complétées par des mesures techniques et organisationnelles renforçant la protection effective des données.</li>
+            </ul>
+            <p class="mt-6">
+              Vous pouvez à tout moment obtenir copie de ces garanties en nous écrivant à <a href="mailto:contact@paolisa.eu" class="text-ink-primary border-b border-ink-primary hover:opacity-70 transition-opacity duration-150 ease-in-out">contact@paolisa.eu</a>.
+            </p>
+          </div>
+        </section>
+
+        <section id="durees" class="scroll-mt-32">
+          <p class="mono-label text-ink-tertiary mb-4">— 07 —</p>
+          <h2 class="display-s mb-8">Durées de conservation.</h2>
+          <div class="space-y-4 body-l text-ink-secondary">
+            <p>Les données collectées sont conservées pour les durées suivantes :</p>
+            <ul class="space-y-3 body-l list-none">
+              <li><strong class="text-ink-primary">Données de commande et de facturation :</strong> dix (10) ans à compter de la clôture de l'exercice comptable, conformément à l'article III.86 du Code de droit économique belge et à la législation fiscale.</li>
+              <li><strong class="text-ink-primary">Données de compte client :</strong> aussi longtemps que le compte est actif, puis effacées dans un délai de trois (3) ans suivant la dernière interaction avec le service client.</li>
+              <li><strong class="text-ink-primary">Données de communication marketing :</strong> jusqu'au retrait du consentement, et dans un délai maximal de trois (3) ans à compter de la dernière interaction (ouverture d'email, clic).</li>
+              <li><strong class="text-ink-primary">Données de navigation et cookies :</strong> treize (13) mois maximum, conformément aux recommandations de l'APD belge.</li>
+              <li><strong class="text-ink-primary">Données de service client :</strong> trois (3) ans à compter de la clôture du dossier.</li>
+            </ul>
+            <p class="mt-6">
+              Au terme de ces durées, les données sont soit définitivement supprimées, soit anonymisées de manière irréversible à des fins statistiques.
+            </p>
+          </div>
+        </section>
+
+        <section id="droits" class="scroll-mt-32">
+          <p class="mono-label text-ink-tertiary mb-4">— 08 —</p>
+          <h2 class="display-s mb-8">Vos droits.</h2>
+          <div class="space-y-4 body-l text-ink-secondary">
+            <p>
+              Conformément aux articles 15 à 22 du RGPD, vous disposez à tout moment des droits suivants sur vos données personnelles :
+            </p>
+            <ul class="space-y-3 body-l list-none">
+              <li><strong class="text-ink-primary">Droit d'accès</strong> — obtenir la confirmation que des données vous concernant sont traitées et en recevoir une copie.</li>
+              <li><strong class="text-ink-primary">Droit de rectification</strong> — obtenir la correction de données inexactes ou incomplètes.</li>
+              <li><strong class="text-ink-primary">Droit à l'effacement (« droit à l'oubli »)</strong> — obtenir l'effacement de vos données, sous réserve de nos obligations légales de conservation.</li>
+              <li><strong class="text-ink-primary">Droit à la limitation du traitement</strong> — obtenir le gel temporaire du traitement de vos données dans certaines situations.</li>
+              <li><strong class="text-ink-primary">Droit à la portabilité</strong> — recevoir vos données dans un format structuré, couramment utilisé et lisible par machine, ou demander leur transmission directe à un autre responsable du traitement lorsque cela est techniquement possible.</li>
+              <li><strong class="text-ink-primary">Droit d'opposition</strong> — vous opposer, pour des raisons tenant à votre situation particulière, à un traitement fondé sur l'intérêt légitime. Vous pouvez en particulier vous opposer à tout moment et sans motif à un traitement à des fins de prospection commerciale.</li>
+              <li><strong class="text-ink-primary">Droit de retrait du consentement</strong> — retirer votre consentement à tout moment lorsqu'un traitement repose sur cette base, sans que ce retrait remette en cause la licéité du traitement effectué antérieurement.</li>
+              <li><strong class="text-ink-primary">Droit de définir des directives post-mortem</strong> — relatives à la conservation, à l'effacement et à la communication de vos données après votre décès.</li>
+            </ul>
+            <p class="mt-6">
+              Pour exercer l'un quelconque de ces droits, écrivez-nous à <a href="mailto:contact@paolisa.eu" class="text-ink-primary border-b border-ink-primary hover:opacity-70 transition-opacity duration-150 ease-in-out">contact@paolisa.eu</a> en précisant la nature de votre demande. Une réponse vous sera apportée dans un délai maximal d'un (1) mois, prolongeable de deux (2) mois en cas de demande complexe, conformément à l'article 12.3 du RGPD. Aucune justification d'identité supplémentaire ne vous sera demandée, sauf doute raisonnable sur l'identité du demandeur.
+            </p>
+          </div>
+        </section>
+
+        <section id="cookies" class="scroll-mt-32">
+          <p class="mono-label text-ink-tertiary mb-4">— 09 —</p>
+          <h2 class="display-s mb-8">Cookies.</h2>
+          <div class="space-y-4 body-l text-ink-secondary">
+            <p>
+              Un cookie est un petit fichier déposé sur votre terminal lors de la consultation du site, permettant notamment de mémoriser vos préférences, faciliter votre navigation et mesurer l'audience du site.
+            </p>
+            <p>Le site paolisa.eu utilise les catégories de cookies suivantes :</p>
+            <ul class="space-y-3 body-l list-none">
+              <li><strong class="text-ink-primary">Cookies strictement nécessaires</strong> — indispensables au fonctionnement du site (gestion de la session, contenu du panier, sécurisation des paiements). Ces cookies ne nécessitent pas votre consentement et ne peuvent être désactivés depuis nos interfaces.</li>
+              <li><strong class="text-ink-primary">Cookies de mesure d'audience</strong> — destinés à comprendre comment le site est utilisé, de manière agrégée et anonymisée, afin de l'améliorer. Soumis à votre consentement préalable.</li>
+              <li><strong class="text-ink-primary">Cookies de personnalisation marketing</strong> — destinés à adapter nos communications à vos centres d'intérêt et à mesurer la performance de nos campagnes. Soumis à votre consentement préalable.</li>
+            </ul>
+            <p class="mt-6">
+              Conformément à l'article 129 de la loi belge du 13 juin 2005 et aux recommandations de l'Autorité de protection des données, vous pouvez à tout moment accepter, refuser ou modifier vos préférences cookies via la bannière de consentement présente sur le site. Le retrait de votre consentement est aussi simple que son octroi.
+            </p>
+            <p>
+              Vous pouvez également paramétrer votre navigateur pour bloquer ou supprimer les cookies déjà installés. Notez toutefois que cette désactivation peut altérer le bon fonctionnement de certaines parties du site.
+            </p>
+          </div>
+        </section>
+
+        <section id="securite" class="scroll-mt-32">
+          <p class="mono-label text-ink-tertiary mb-4">— 10 —</p>
+          <h2 class="display-s mb-8">Sécurité des données.</h2>
+          <div class="space-y-4 body-l text-ink-secondary">
+            <p>
+              Nous mettons en œuvre les mesures techniques et organisationnelles appropriées pour préserver la confidentialité, l'intégrité et la disponibilité de vos données personnelles, et empêcher tout accès non autorisé, perte, destruction accidentelle, divulgation ou altération.
+            </p>
+            <p>
+              Ces mesures incluent notamment : le chiffrement des communications via le protocole TLS (HTTPS), le stockage sécurisé chez des sous-traitants certifiés (ISO 27001, SOC 2), des contrôles d'accès stricts limitant la consultation des données aux personnes habilitées, et la conservation séparée des données sensibles (paiements traités exclusivement par Shopify Payments / Stripe).
+            </p>
+            <p>
+              En cas de violation de données susceptible d'engendrer un risque élevé pour vos droits et libertés, vous en serez informé(e) sans délai injustifié, conformément à l'article 34 du RGPD, et l'Autorité de protection des données belge sera notifiée dans le délai de soixante-douze (72) heures prévu à l'article 33.
+            </p>
+          </div>
+        </section>
+
+        <section id="modifications" class="scroll-mt-32">
+          <p class="mono-label text-ink-tertiary mb-4">— 11 —</p>
+          <h2 class="display-s mb-8">Modifications de la politique.</h2>
+          <div class="space-y-4 body-l text-ink-secondary">
+            <p>
+              La présente politique peut être amenée à évoluer afin de refléter des changements dans nos pratiques de traitement, l'évolution de la réglementation ou l'ajout de nouveaux services. Toute modification substantielle vous sera signalée par un avis sur le site et, le cas échéant, par email aux personnes concernées.
+            </p>
+            <p>
+              La date de dernière mise à jour est indiquée en tête de cette page. Nous vous encourageons à la consulter régulièrement.
+            </p>
+          </div>
+        </section>
+
+        <section id="contact" class="scroll-mt-32">
+          <p class="mono-label text-ink-tertiary mb-4">— 12 —</p>
+          <h2 class="display-s mb-8">Contact et réclamations.</h2>
+          <div class="space-y-4 body-l text-ink-secondary">
+            <p>
+              Pour toute question relative à la présente politique ou au traitement de vos données, écrivez-nous à <a href="mailto:contact@paolisa.eu" class="text-ink-primary border-b border-ink-primary hover:opacity-70 transition-opacity duration-150 ease-in-out">contact@paolisa.eu</a>.
+            </p>
+            <p>
+              Si vous estimez que le traitement de vos données ne respecte pas la réglementation applicable, après avoir tenté de trouver une solution avec nous, vous avez le droit d'introduire une réclamation auprès de l'autorité de contrôle compétente. En Belgique, l'autorité compétente est :
+            </p>
+            <ul class="space-y-2 body-l">
+              <li><strong class="text-ink-primary">Autorité de protection des données (APD)</strong></li>
+              <li>Rue de la Presse 35, 1000 Bruxelles, Belgique</li>
+              <li>Téléphone : +32 (0)2 274 48 00</li>
+              <li>Site : <a href="https://www.autoriteprotectiondonnees.be" rel="noopener noreferrer" target="_blank" class="text-ink-primary border-b border-ink-primary hover:opacity-70 transition-opacity duration-150 ease-in-out">autoriteprotectiondonnees.be</a></li>
+              <li>Email : <a href="mailto:contact@apd-gba.be" class="text-ink-primary border-b border-ink-primary hover:opacity-70 transition-opacity duration-150 ease-in-out">contact@apd-gba.be</a></li>
+            </ul>
+            <p class="mt-6">
+              Vous conservez également la possibilité d'introduire une réclamation auprès de l'autorité de contrôle de votre lieu de résidence ou de travail, si celui-ci se situe dans un autre État membre de l'Union européenne.
+            </p>
+          </div>
+        </section>
+
+      </div>
+    </section>
+  </main>
+
+  <Footer />
+</BaseLayout>

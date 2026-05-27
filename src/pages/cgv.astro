@@ -1,0 +1,395 @@
+---
+/**
+ * Conditions Générales de Vente — §11.2
+ *
+ * CGV e-commerce cosmétique, droit belge.
+ *
+ * Bases juridiques principales :
+ *   - Livre VI du Code de droit économique belge (pratiques du marché et
+ *     protection du consommateur)
+ *   - Articles VI.47 à VI.53 (droit de rétractation et exceptions)
+ *   - Articles 1641 et suivants du Code civil (garantie des vices cachés)
+ *   - Articles VI.65 et 1649bis et suivants du Code civil (garantie légale
+ *     de conformité, 2 ans)
+ *   - Règlement (CE) n°1223/2009 sur les produits cosmétiques
+ *   - RGPD (UE) 2016/679
+ *
+ * ⚠️ Relecture par un juriste belge recommandée avant le lancement.
+ */
+import BaseLayout from '../layouts/BaseLayout.astro';
+import NoticeBar from '../components/NoticeBar.astro';
+import Header from '../components/Header.astro';
+import Footer from '../components/Footer.astro';
+
+const sections = [
+  { id: 'objet', label: "Objet et champ d'application" },
+  { id: 'vendeur', label: 'Identification du vendeur' },
+  { id: 'produits', label: 'Produits — description et disponibilité' },
+  { id: 'prix', label: 'Prix et taxes' },
+  { id: 'commande', label: 'Commande' },
+  { id: 'paiement', label: 'Paiement' },
+  { id: 'livraison', label: 'Livraison' },
+  { id: 'retractation', label: 'Droit de rétractation' },
+  { id: 'garantie', label: 'Garantie légale de conformité' },
+  { id: 'responsabilite', label: 'Responsabilité' },
+  { id: 'donnees', label: 'Données personnelles' },
+  { id: 'reclamations', label: 'Service client et réclamations' },
+  { id: 'mediation', label: 'Médiation et règlement des litiges' },
+  { id: 'droit', label: 'Droit applicable et juridiction' },
+  { id: 'acceptation', label: 'Acceptation des CGV' },
+];
+
+const lastUpdated = '26 mai 2026';
+---
+
+<BaseLayout
+  title="Conditions Générales de Vente — PAOLISA"
+  description="Conditions Générales de Vente applicables à toute commande passée sur le site paolisa.eu, conformément au droit belge et européen."
+>
+  <NoticeBar message="FREE EU SHIPPING — €60+" />
+  <Header transparent={false} currentPath="/cgv" />
+
+  <main>
+    <section class="container-paolisa pt-12 md:pt-20 pb-20 md:pb-32">
+      {/* Hero compact */}
+      <header class="mb-12 md:mb-16 max-w-3xl">
+        <p class="mono-label mb-4">— CONDITIONS GÉNÉRALES DE VENTE —</p>
+        <h1 class="display-l mb-6">Conditions Générales de Vente.</h1>
+        <p class="body-l text-ink-secondary">
+          Les présentes Conditions Générales de Vente régissent l'ensemble des relations contractuelles entre Bronté Di Bella, indépendante établie en Belgique, et les utilisateurs du site paolisa.eu agissant en qualité de consommateurs.
+        </p>
+        <p class="mono-micro text-ink-tertiary mt-6">DERNIÈRE MISE À JOUR : {lastUpdated.toUpperCase()}</p>
+      </header>
+
+      {/* Sommaire ancres */}
+      <nav class="mb-16 md:mb-24" aria-label="Sommaire">
+        <p class="mono-label text-ink-tertiary mb-6">— SOMMAIRE —</p>
+        <ul class="grid grid-cols-1 md:grid-cols-2 gap-x-6 gap-y-3 border-t border-b border-line-subtle py-6">
+          {
+            sections.map((s, i) => (
+              <li>
+                <a
+                  href={`#${s.id}`}
+                  class="mono-label inline-flex items-baseline gap-3 hover:opacity-70 transition-opacity duration-150 ease-in-out"
+                >
+                  <span class="text-ink-tertiary">{String(i + 1).padStart(2, '0')}</span>
+                  <span>{s.label}</span>
+                </a>
+              </li>
+            ))
+          }
+        </ul>
+      </nav>
+
+      {/* Sections */}
+      <div class="space-y-16 md:space-y-20 max-w-prose">
+
+        <section id="objet" class="scroll-mt-32">
+          <p class="mono-label text-ink-tertiary mb-4">— 01 —</p>
+          <h2 class="display-s mb-8">Objet et champ d'application.</h2>
+          <div class="space-y-4 body-l text-ink-secondary">
+            <p>
+              Les présentes Conditions Générales de Vente (ci-après « CGV ») ont pour objet de définir les droits et obligations des parties dans le cadre de la vente, à distance et via le site internet <a href="https://paolisa.eu" class="text-ink-primary border-b border-ink-primary hover:opacity-70 transition-opacity duration-150 ease-in-out">paolisa.eu</a>, des produits cosmétiques proposés par Bronté Di Bella (ci-après « le Vendeur ») à toute personne physique majeure agissant à des fins exclusivement personnelles, non professionnelles (ci-après « le Client »).
+            </p>
+            <p>
+              Toute commande passée sur le site implique l'acceptation pleine et entière des présentes CGV par le Client. Le Vendeur se réserve le droit de modifier les présentes CGV à tout moment ; les conditions applicables à une commande sont celles en vigueur au jour de la validation de cette commande.
+            </p>
+            <p>
+              Les présentes CGV s'appliquent à l'exclusion de toutes autres conditions, notamment celles applicables pour d'autres canaux de vente ou en magasin physique. Le fait pour le Vendeur de ne pas se prévaloir, à un moment donné, de l'une quelconque des dispositions des présentes ne peut être interprété comme valant renonciation à se prévaloir ultérieurement de l'une quelconque de ces dispositions.
+            </p>
+          </div>
+        </section>
+
+        <section id="vendeur" class="scroll-mt-32">
+          <p class="mono-label text-ink-tertiary mb-4">— 02 —</p>
+          <h2 class="display-s mb-8">Identification du vendeur.</h2>
+          <div class="space-y-4 body-l text-ink-secondary">
+            <p>Les produits proposés à la vente sur paolisa.eu sont commercialisés par :</p>
+            <ul class="space-y-2 body-l">
+              <li><strong class="text-ink-primary">Bronté Di Bella</strong></li>
+              <li>Indépendante personne physique</li>
+              <li>Rue des Déchanges 5C, 5170 Namur, Belgique</li>
+              <li>Numéro d'entreprise (BCE) : <strong class="text-ink-primary">0778.932.368</strong></li>
+              <li>Numéro de TVA : <strong class="text-ink-primary">BE0778932368</strong></li>
+              <li>Email de contact : <a href="mailto:contact@paolisa.eu" class="text-ink-primary border-b border-ink-primary hover:opacity-70 transition-opacity duration-150 ease-in-out">contact@paolisa.eu</a></li>
+            </ul>
+          </div>
+        </section>
+
+        <section id="produits" class="scroll-mt-32">
+          <p class="mono-label text-ink-tertiary mb-4">— 03 —</p>
+          <h2 class="display-s mb-8">Produits — description et disponibilité.</h2>
+          <div class="space-y-4 body-l text-ink-secondary">
+            <p>
+              Les produits proposés à la vente sont des préparations cosmétiques destinées à un usage externe sur le corps humain, conformes au Règlement (CE) n°1223/2009 du Parlement européen et du Conseil du 30 novembre 2009 relatif aux produits cosmétiques.
+            </p>
+            <p>
+              Chaque produit fait l'objet d'une fiche descriptive accessible depuis le site paolisa.eu, mentionnant notamment sa composition (INCI complet), son format, son prix, ses certifications, ses conditions d'usage et de conservation. Le Vendeur s'efforce de présenter les produits avec la plus grande exactitude possible. Toutefois, des écarts mineurs peuvent exister entre la photographie d'un produit et le produit livré (notamment en termes de couleur ou de rendu d'impression), sans que ces écarts puissent engager la responsabilité du Vendeur ni constituer un motif d'annulation.
+            </p>
+            <p>
+              Les produits proposés sont vendus dans la limite des stocks disponibles. En cas d'indisponibilité d'un produit après passation de la commande, le Vendeur en informera le Client dans les meilleurs délais. La commande sera automatiquement annulée pour le produit indisponible et le Client remboursé dans un délai maximal de quatorze (14) jours.
+            </p>
+            <p>
+              Les revendications cosmétiques associées aux produits (hydratation, éclat, confort) sont conformes au Règlement (UE) n°655/2013 établissant des critères communs auxquels les allégations relatives aux produits cosmétiques doivent répondre pour pouvoir être utilisées.
+            </p>
+          </div>
+        </section>
+
+        <section id="prix" class="scroll-mt-32">
+          <p class="mono-label text-ink-tertiary mb-4">— 04 —</p>
+          <h2 class="display-s mb-8">Prix et taxes.</h2>
+          <div class="space-y-4 body-l text-ink-secondary">
+            <p>
+              Les prix des produits sont indiqués en euros (€), toutes taxes comprises (TVA belge applicable au taux de 21% incluse), hors frais de livraison. Les frais de livraison sont indiqués séparément et précisés au Client avant la validation définitive de sa commande.
+            </p>
+            <p>
+              Le Vendeur se réserve le droit de modifier ses prix à tout moment. Toutefois, les produits seront facturés sur la base des tarifs en vigueur au moment de la validation de la commande, sous réserve de disponibilité.
+            </p>
+            <p>
+              Pour toute livraison hors de l'Union européenne, le Client peut être soumis à des droits de douane et taxes d'importation prélevés à l'arrivée du colis dans le pays de destination. Ces frais relèvent de la responsabilité exclusive du Client et ne sont pas inclus dans le prix affiché.
+            </p>
+          </div>
+        </section>
+
+        <section id="commande" class="scroll-mt-32">
+          <p class="mono-label text-ink-tertiary mb-4">— 05 —</p>
+          <h2 class="display-s mb-8">Commande.</h2>
+          <div class="space-y-4 body-l text-ink-secondary">
+            <p>
+              Le Client passe sa commande en ligne, depuis le catalogue accessible sur paolisa.eu, selon le processus suivant :
+            </p>
+            <ol class="space-y-3 body-l list-none">
+              <li><span class="mono-label text-ink-tertiary mr-3">01</span>Sélection du produit et ajout au panier.</li>
+              <li><span class="mono-label text-ink-tertiary mr-3">02</span>Vérification du contenu du panier (quantité, prix, total).</li>
+              <li><span class="mono-label text-ink-tertiary mr-3">03</span>Saisie des informations de livraison et de facturation.</li>
+              <li><span class="mono-label text-ink-tertiary mr-3">04</span>Acceptation des présentes CGV.</li>
+              <li><span class="mono-label text-ink-tertiary mr-3">05</span>Choix du mode de paiement et règlement.</li>
+              <li><span class="mono-label text-ink-tertiary mr-3">06</span>Réception d'une confirmation de commande par email.</li>
+            </ol>
+            <p class="mt-6">
+              Toute commande validée vaut acceptation des prix et descriptions des produits disponibles à la vente, et formation du contrat de vente entre le Client et le Vendeur. Le contrat est conclu à l'instant de la confirmation par email envoyée par le Vendeur.
+            </p>
+            <p>
+              Le Vendeur se réserve le droit de refuser ou d'annuler toute commande qui présenterait un caractère anormal, notamment en cas de litige antérieur avec le Client, de fraude présumée, ou de défaut manifeste de paiement.
+            </p>
+          </div>
+        </section>
+
+        <section id="paiement" class="scroll-mt-32">
+          <p class="mono-label text-ink-tertiary mb-4">— 06 —</p>
+          <h2 class="display-s mb-8">Paiement.</h2>
+          <div class="space-y-4 body-l text-ink-secondary">
+            <p>
+              Le paiement des commandes s'effectue exclusivement en ligne, au moment de la commande, par les moyens suivants :
+            </p>
+            <ul class="space-y-2 body-l list-none">
+              <li>· Carte bancaire (Visa, Mastercard, American Express)</li>
+              <li>· Bancontact (Belgique)</li>
+              <li>· iDEAL (Pays-Bas)</li>
+              <li>· Apple Pay / Google Pay</li>
+              <li>· Shop Pay</li>
+            </ul>
+            <p class="mt-6">
+              Les transactions de paiement sont opérées par la société <strong class="text-ink-primary">Shopify Payments</strong> (Shopify International Limited, Dublin, Irlande), prestataire de services de paiement agréé en application de la Directive (UE) 2015/2366 sur les services de paiement (DSP2). Aucune donnée bancaire du Client n'est conservée ni traitée par le Vendeur.
+            </p>
+            <p>
+              Le débit du compte du Client est effectué à la validation de la commande. En cas de refus de paiement, la commande est automatiquement annulée et le Client en est informé.
+            </p>
+            <p>
+              Conformément à la règlementation européenne, le Client peut être amené à confirmer son identité dans le cadre de l'authentification forte du client (SCA), notamment via un code envoyé par sa banque (3D-Secure).
+            </p>
+          </div>
+        </section>
+
+        <section id="livraison" class="scroll-mt-32">
+          <p class="mono-label text-ink-tertiary mb-4">— 07 —</p>
+          <h2 class="display-s mb-8">Livraison.</h2>
+          <div class="space-y-4 body-l text-ink-secondary">
+            <p>
+              Les produits sont expédiés à l'adresse de livraison indiquée par le Client lors de la commande. Les commandes sont préparées et expédiées dans un délai de un (1) à trois (3) jours ouvrés à compter de la validation du paiement.
+            </p>
+            <p>Les délais de livraison estimatifs sont les suivants :</p>
+            <ul class="space-y-2 body-l list-none">
+              <li>· Belgique : 2 à 3 jours ouvrés</li>
+              <li>· France, Luxembourg, Pays-Bas, Allemagne : 3 à 5 jours ouvrés</li>
+              <li>· Reste de l'Union européenne : 5 à 7 jours ouvrés</li>
+            </ul>
+            <p class="mt-6">
+              Ces délais sont communiqués à titre indicatif et ne constituent pas un engagement ferme du Vendeur. Tout dépassement raisonnable ne saurait donner lieu à des dommages et intérêts, à une retenue, ni à l'annulation de la commande, à moins que ce dépassement ne soit imputable à une faute lourde ou intentionnelle du Vendeur.
+            </p>
+            <p>
+              Conformément à l'article VI.43 du Code de droit économique, à défaut de livraison dans un délai supplémentaire raisonnable convenu entre les parties, le Client est en droit de résoudre le contrat et d'obtenir le remboursement intégral des sommes versées, dans les quatorze (14) jours suivant cette résolution.
+            </p>
+            <p>
+              Les frais de livraison s'élèvent à 5,90 € pour toute commande inférieure à 60 € livrée dans l'Union européenne. La livraison est offerte pour toute commande égale ou supérieure à 60 € livrée dans l'Union européenne.
+            </p>
+            <p>
+              Le transfert des risques liés au produit s'opère à la remise effective du produit au Client (ou à toute personne désignée par lui), conformément à l'article VI.44 du Code de droit économique.
+            </p>
+            <p>
+              En cas de colis manifestement endommagé à la livraison, il appartient au Client d'émettre des réserves écrites auprès du transporteur lors de la remise du colis, et d'en informer le Vendeur dans les meilleurs délais à l'adresse <a href="mailto:contact@paolisa.eu" class="text-ink-primary border-b border-ink-primary hover:opacity-70 transition-opacity duration-150 ease-in-out">contact@paolisa.eu</a>.
+            </p>
+          </div>
+        </section>
+
+        <section id="retractation" class="scroll-mt-32">
+          <p class="mono-label text-ink-tertiary mb-4">— 08 —</p>
+          <h2 class="display-s mb-8">Droit de rétractation.</h2>
+          <div class="space-y-4 body-l text-ink-secondary">
+            <p>
+              Conformément aux articles VI.47 et suivants du Code de droit économique belge, le Client consommateur dispose d'un délai de quatorze (14) jours calendaires à compter de la réception du produit pour exercer son droit de rétractation, sans avoir à justifier de motif ni à payer de pénalité.
+            </p>
+            <p>
+              Pour exercer ce droit, le Client doit notifier sa décision de se rétracter au Vendeur par une déclaration dénuée d'ambiguïté, transmise par email à <a href="mailto:contact@paolisa.eu" class="text-ink-primary border-b border-ink-primary hover:opacity-70 transition-opacity duration-150 ease-in-out">contact@paolisa.eu</a>. Le Client peut utiliser à cet effet le formulaire-type de rétractation prévu à l'Annexe 2 du Livre VI du Code de droit économique, sans obligation toutefois.
+            </p>
+            <p>
+              Les produits doivent être retournés <strong class="text-ink-primary">non descellés, non ouverts, non utilisés</strong>, dans leur emballage d'origine, dans un délai maximal de quatorze (14) jours calendaires à compter de la communication de la décision de rétractation. Les frais directs de retour sont à la charge du Client, sauf si le Vendeur en a expressément accepté la prise en charge.
+            </p>
+            <p>
+              <strong class="text-ink-primary">Exception au droit de rétractation — produits descellés.</strong> Conformément à l'article VI.53, 5° du Code de droit économique, le droit de rétractation <em class="not-italic">ne peut être exercé</em> pour la fourniture de biens scellés ne pouvant être renvoyés pour des raisons de protection de la santé ou d'hygiène et qui ont été descellés après la livraison. À ce titre, les produits cosmétiques dont l'opercule de sécurité a été retiré ou dont le flacon a été ouvert ne peuvent faire l'objet d'une rétractation.
+            </p>
+            <p>
+              En cas de rétractation valable, le Vendeur procède au remboursement de toutes les sommes versées par le Client, y compris les frais de livraison initiaux (à l'exception des frais supplémentaires découlant du choix par le Client d'un mode de livraison autre que celui, moins coûteux, proposé par le Vendeur), dans un délai de quatorze (14) jours calendaires à compter de la date à laquelle le Vendeur est informé de la décision de rétractation. Le remboursement est effectué via le moyen de paiement utilisé lors de la commande initiale.
+            </p>
+            <p>
+              Le Vendeur se réserve le droit de différer le remboursement jusqu'à réception effective du produit retourné ou jusqu'à fourniture d'une preuve d'expédition par le Client.
+            </p>
+            <p>
+              La responsabilité du Client est engagée à l'égard de la dépréciation du produit résultant de manipulations autres que celles strictement nécessaires pour établir la nature, les caractéristiques et le bon fonctionnement du produit.
+            </p>
+          </div>
+        </section>
+
+        <section id="garantie" class="scroll-mt-32">
+          <p class="mono-label text-ink-tertiary mb-4">— 09 —</p>
+          <h2 class="display-s mb-8">Garantie légale de conformité.</h2>
+          <div class="space-y-4 body-l text-ink-secondary">
+            <p>
+              Tous les produits vendus bénéficient de la garantie légale de conformité prévue par les articles 1649bis à 1649octies du Code civil belge ainsi que par les articles VI.65 et suivants du Code de droit économique, d'une durée de deux (2) ans à compter de la délivrance du bien.
+            </p>
+            <p>
+              Au titre de cette garantie, le Vendeur est tenu de livrer un produit conforme à la description qui en a été faite et présentant les qualités usuelles d'un bien similaire. En cas de défaut de conformité constaté, le Client peut, à son choix, exiger la réparation ou le remplacement du produit, sauf impossibilité ou coût manifestement disproportionné. À défaut, il peut prétendre à une réduction de prix ou à la résolution du contrat.
+            </p>
+            <p>
+              Tout défaut apparent dans les six (6) mois suivant la délivrance est, sauf preuve contraire apportée par le Vendeur, présumé exister au moment de la livraison.
+            </p>
+            <p>
+              Le Client est invité à signaler tout défaut au Vendeur dans un délai raisonnable à compter de la date à laquelle il l'a constaté, par email à <a href="mailto:contact@paolisa.eu" class="text-ink-primary border-b border-ink-primary hover:opacity-70 transition-opacity duration-150 ease-in-out">contact@paolisa.eu</a>, en joignant le numéro de commande, une description du défaut et toute photographie utile.
+            </p>
+            <p>
+              La garantie légale ne s'applique pas aux défauts résultant d'une utilisation non conforme aux conditions d'usage indiquées sur le produit, d'une conservation inadaptée, d'une altération volontaire, ou d'une usure normale liée au temps écoulé depuis l'ouverture.
+            </p>
+            <p>
+              Les dispositions de la garantie légale demeurent applicables indépendamment de toute garantie commerciale éventuellement accordée.
+            </p>
+          </div>
+        </section>
+
+        <section id="responsabilite" class="scroll-mt-32">
+          <p class="mono-label text-ink-tertiary mb-4">— 10 —</p>
+          <h2 class="display-s mb-8">Responsabilité.</h2>
+          <div class="space-y-4 body-l text-ink-secondary">
+            <p>
+              Le Vendeur s'engage à mettre en œuvre les diligences raisonnables pour assurer la qualité des produits proposés et la fiabilité des informations communiquées sur le site. Sa responsabilité ne peut toutefois être engagée :
+            </p>
+            <ul class="space-y-3 body-l list-none">
+              <li>· Pour tout dommage résultant d'un usage non conforme aux indications figurant sur le produit ou dans sa notice (notamment usage interne, application sur les muqueuses, contact avec les yeux).</li>
+              <li>· En cas de réaction allergique imprévisible imputable à une sensibilité individuelle aux ingrédients listés sur l'emballage et accessibles via la fiche produit. Le Client est invité à effectuer un test de tolérance préalable au creux du coude en cas de peau réactive.</li>
+              <li>· Pour toute interruption d'accès au site paolisa.eu pour des raisons techniques indépendantes de la volonté du Vendeur.</li>
+              <li>· En cas de force majeure ou d'événement extérieur empêchant l'exécution normale de ses obligations.</li>
+            </ul>
+            <p class="mt-6">
+              En tout état de cause, la responsabilité du Vendeur, si elle venait à être retenue, serait limitée au montant total de la commande concernée.
+            </p>
+            <p>
+              Aucune des dispositions des présentes ne saurait avoir pour effet de limiter ou d'exclure la responsabilité du Vendeur en cas de dol, de faute lourde ou de manquement à une obligation essentielle, ni de priver le Client des droits impératifs qui lui sont reconnus par la loi.
+            </p>
+          </div>
+        </section>
+
+        <section id="donnees" class="scroll-mt-32">
+          <p class="mono-label text-ink-tertiary mb-4">— 11 —</p>
+          <h2 class="display-s mb-8">Données personnelles.</h2>
+          <div class="space-y-4 body-l text-ink-secondary">
+            <p>
+              Les données personnelles collectées dans le cadre des commandes (nom, prénom, adresse postale, email, téléphone le cas échéant) sont traitées conformément au Règlement (UE) 2016/679 (RGPD) et à la loi belge du 30 juillet 2018.
+            </p>
+            <p>
+              Ces données sont nécessaires à l'exécution du contrat (traitement de la commande, expédition, service client, facturation), à l'exécution d'obligations légales (comptabilité, conservation des factures) ou, le cas échéant, à des fins de communication marketing avec le consentement préalable du Client.
+            </p>
+            <p>
+              Les modalités complètes de traitement, les destinataires des données, les durées de conservation et les droits du Client (accès, rectification, effacement, opposition, portabilité, limitation) sont détaillés dans la <a href="/confidentialite" class="text-ink-primary border-b border-ink-primary hover:opacity-70 transition-opacity duration-150 ease-in-out">Politique de confidentialité</a>.
+            </p>
+          </div>
+        </section>
+
+        <section id="reclamations" class="scroll-mt-32">
+          <p class="mono-label text-ink-tertiary mb-4">— 12 —</p>
+          <h2 class="display-s mb-8">Service client et réclamations.</h2>
+          <div class="space-y-4 body-l text-ink-secondary">
+            <p>
+              Toute réclamation, demande d'information ou question relative à une commande peut être adressée au service client par email à <a href="mailto:contact@paolisa.eu" class="text-ink-primary border-b border-ink-primary hover:opacity-70 transition-opacity duration-150 ease-in-out">contact@paolisa.eu</a>.
+            </p>
+            <p>
+              Le Vendeur s'efforce d'apporter une réponse à toute demande dans un délai de quarante-huit (48) heures ouvrées. En cas de période de forte activité ou de congés, ce délai peut être prolongé sans excéder dix (10) jours ouvrés.
+            </p>
+          </div>
+        </section>
+
+        <section id="mediation" class="scroll-mt-32">
+          <p class="mono-label text-ink-tertiary mb-4">— 13 —</p>
+          <h2 class="display-s mb-8">Médiation et règlement des litiges.</h2>
+          <div class="space-y-4 body-l text-ink-secondary">
+            <p>
+              Conformément à l'article XVI.1 et suivants du Code de droit économique belge, en cas de litige avec le Vendeur, le Client est invité à rechercher en premier lieu une solution amiable en contactant directement le service client à <a href="mailto:contact@paolisa.eu" class="text-ink-primary border-b border-ink-primary hover:opacity-70 transition-opacity duration-150 ease-in-out">contact@paolisa.eu</a>.
+            </p>
+            <p>
+              À défaut d'accord amiable, le Client peut recourir gratuitement aux services du Service de Médiation pour le Consommateur belge, dont les coordonnées sont les suivantes :
+            </p>
+            <ul class="space-y-2 body-l">
+              <li><strong class="text-ink-primary">Service de Médiation pour le Consommateur</strong></li>
+              <li>Boulevard du Roi Albert II 8, Boîte 1, 1000 Bruxelles</li>
+              <li>Téléphone : +32 (0)2 702 52 00</li>
+              <li>Site : <a href="https://mediationconsommateur.be" rel="noopener noreferrer" target="_blank" class="text-ink-primary border-b border-ink-primary hover:opacity-70 transition-opacity duration-150 ease-in-out">mediationconsommateur.be</a></li>
+            </ul>
+            <p class="mt-6">
+              Le Client résidant dans l'Union européenne peut également recourir à la plateforme européenne de règlement en ligne des litiges (RLL), accessible à l'adresse : <a href="https://ec.europa.eu/consumers/odr" rel="noopener noreferrer" target="_blank" class="text-ink-primary border-b border-ink-primary hover:opacity-70 transition-opacity duration-150 ease-in-out">ec.europa.eu/consumers/odr</a>.
+            </p>
+          </div>
+        </section>
+
+        <section id="droit" class="scroll-mt-32">
+          <p class="mono-label text-ink-tertiary mb-4">— 14 —</p>
+          <h2 class="display-s mb-8">Droit applicable et juridiction.</h2>
+          <div class="space-y-4 body-l text-ink-secondary">
+            <p>
+              Les présentes CGV sont régies par le droit belge. Tout litige relatif à leur formation, leur interprétation ou leur exécution sera porté devant les tribunaux compétents de l'arrondissement judiciaire de Namur, Belgique, sauf disposition légale impérative contraire applicable au consommateur.
+            </p>
+            <p>
+              Le Client consommateur résidant dans un autre État membre de l'Union européenne conserve, conformément à l'article 17 du Règlement (UE) n°1215/2012, la faculté de saisir les juridictions de son État de résidence.
+            </p>
+          </div>
+        </section>
+
+        <section id="acceptation" class="scroll-mt-32">
+          <p class="mono-label text-ink-tertiary mb-4">— 15 —</p>
+          <h2 class="display-s mb-8">Acceptation des CGV.</h2>
+          <div class="space-y-4 body-l text-ink-secondary">
+            <p>
+              Le Client reconnaît avoir pris connaissance des présentes CGV préalablement à la passation de sa commande et en accepter expressément l'ensemble des dispositions. Cette acceptation est matérialisée par la validation de la commande sur le site paolisa.eu.
+            </p>
+            <p>
+              Si l'une quelconque des dispositions des présentes CGV venait à être déclarée invalide, illégale ou inapplicable par une décision de justice, les autres dispositions resteraient pleinement en vigueur, sauf si l'esprit général des CGV s'en trouvait substantiellement affecté.
+            </p>
+            <p>
+              Les présentes CGV sont rédigées en français. En cas de traduction dans une autre langue à des fins informatives, seule la version française fait foi.
+            </p>
+          </div>
+        </section>
+
+      </div>
+    </section>
+  </main>
+
+  <Footer />
+</BaseLayout>

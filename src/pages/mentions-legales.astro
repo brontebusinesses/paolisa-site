@@ -1,0 +1,221 @@
+---
+/**
+ * Mentions légales — §11.1
+ *
+ * Information légale obligatoire pour tout site e-commerce belge :
+ * éditeur, hébergeur, propriété intellectuelle, conditions d'utilisation.
+ *
+ * Base juridique : Livre VI du Code de droit économique belge,
+ * Article VI.7 et VI.45 (informations obligatoires e-commerce).
+ *
+ * ⚠️ Relecture par un juriste belge recommandée avant le lancement.
+ */
+import BaseLayout from '../layouts/BaseLayout.astro';
+import NoticeBar from '../components/NoticeBar.astro';
+import Header from '../components/Header.astro';
+import Footer from '../components/Footer.astro';
+
+const sections = [
+  { id: 'editeur', label: 'Éditeur du site' },
+  { id: 'hebergement', label: 'Hébergement' },
+  { id: 'propriete', label: 'Propriété intellectuelle' },
+  { id: 'donnees', label: 'Données personnelles' },
+  { id: 'cookies', label: 'Cookies' },
+  { id: 'responsabilite', label: 'Responsabilité' },
+  { id: 'droit', label: 'Droit applicable' },
+  { id: 'contact', label: 'Contact' },
+];
+
+const lastUpdated = '26 mai 2026';
+---
+
+<BaseLayout
+  title="Mentions légales — PAOLISA"
+  description="Mentions légales du site paolisa.eu — éditeur, hébergement, propriété intellectuelle, conformité belge et européenne."
+>
+  <NoticeBar message="FREE EU SHIPPING — €60+" />
+  <Header transparent={false} currentPath="/mentions-legales" />
+
+  <main>
+    <section class="container-paolisa pt-12 md:pt-20 pb-20 md:pb-32">
+      {/* Hero compact */}
+      <header class="mb-12 md:mb-16 max-w-3xl">
+        <p class="mono-label mb-4">— MENTIONS LÉGALES —</p>
+        <h1 class="display-l mb-6">Mentions légales.</h1>
+        <p class="body-l text-ink-secondary">
+          Information légale obligatoire relative au site paolisa.eu, conformément aux dispositions du Code de droit économique belge.
+        </p>
+        <p class="mono-micro text-ink-tertiary mt-6">DERNIÈRE MISE À JOUR : {lastUpdated.toUpperCase()}</p>
+      </header>
+
+      {/* Sommaire ancres */}
+      <nav class="mb-16 md:mb-24" aria-label="Sommaire">
+        <p class="mono-label text-ink-tertiary mb-6">— SOMMAIRE —</p>
+        <ul class="grid grid-cols-1 md:grid-cols-2 gap-x-6 gap-y-3 border-t border-b border-line-subtle py-6">
+          {
+            sections.map((s, i) => (
+              <li>
+                <a
+                  href={`#${s.id}`}
+                  class="mono-label inline-flex items-baseline gap-3 hover:opacity-70 transition-opacity duration-150 ease-in-out"
+                >
+                  <span class="text-ink-tertiary">{String(i + 1).padStart(2, '0')}</span>
+                  <span>{s.label}</span>
+                </a>
+              </li>
+            ))
+          }
+        </ul>
+      </nav>
+
+      {/* Sections */}
+      <div class="space-y-16 md:space-y-20 max-w-prose">
+
+        <section id="editeur" class="scroll-mt-32">
+          <p class="mono-label text-ink-tertiary mb-4">— 01 —</p>
+          <h2 class="display-s mb-8">Éditeur du site.</h2>
+          <div class="space-y-4 body-l text-ink-secondary">
+            <p>Le site paolisa.eu est édité par :</p>
+            <ul class="space-y-2 body-l">
+              <li><strong class="text-ink-primary">Bronté Di Bella</strong></li>
+              <li>Indépendante personne physique</li>
+              <li>Rue des Déchanges 5C, 5170 Namur, Belgique</li>
+              <li>Numéro d'entreprise (BCE) : <strong class="text-ink-primary">0778.932.368</strong></li>
+              <li>Numéro de TVA : <strong class="text-ink-primary">BE0778932368</strong></li>
+              <li>Email de contact : <a href="mailto:contact@paolisa.eu" class="text-ink-primary border-b border-ink-primary hover:opacity-70 transition-opacity duration-150 ease-in-out">contact@paolisa.eu</a></li>
+            </ul>
+            <p class="mt-6">Directrice de la publication : <strong class="text-ink-primary">Bronté Di Bella</strong>.</p>
+          </div>
+        </section>
+
+        <section id="hebergement" class="scroll-mt-32">
+          <p class="mono-label text-ink-tertiary mb-4">— 02 —</p>
+          <h2 class="display-s mb-8">Hébergement.</h2>
+          <div class="space-y-4 body-l text-ink-secondary">
+            <p>Le site paolisa.eu est hébergé par :</p>
+            <ul class="space-y-2 body-l">
+              <li><strong class="text-ink-primary">Vercel Inc.</strong></li>
+              <li>440 N Barranca Ave #4133, Covina, CA 91723, États-Unis</li>
+              <li>Site internet : <a href="https://vercel.com" rel="noopener noreferrer" target="_blank" class="text-ink-primary border-b border-ink-primary hover:opacity-70 transition-opacity duration-150 ease-in-out">vercel.com</a></li>
+            </ul>
+            <p class="mt-6">Les opérations de commande, paiement et expédition sont opérées via la plateforme :</p>
+            <ul class="space-y-2 body-l">
+              <li><strong class="text-ink-primary">Shopify International Limited</strong></li>
+              <li>Victoria Buildings, 2nd Floor, 1-2 Haddington Road, Dublin 4, D04 XN32, Irlande</li>
+              <li>Site internet : <a href="https://shopify.com" rel="noopener noreferrer" target="_blank" class="text-ink-primary border-b border-ink-primary hover:opacity-70 transition-opacity duration-150 ease-in-out">shopify.com</a></li>
+            </ul>
+            <p class="mt-6">Les emails transactionnels et marketing sont opérés via :</p>
+            <ul class="space-y-2 body-l">
+              <li><strong class="text-ink-primary">Klaviyo Inc.</strong></li>
+              <li>125 Summer Street, Floor 6, Boston, MA 02110, États-Unis</li>
+            </ul>
+          </div>
+        </section>
+
+        <section id="propriete" class="scroll-mt-32">
+          <p class="mono-label text-ink-tertiary mb-4">— 03 —</p>
+          <h2 class="display-s mb-8">Propriété intellectuelle.</h2>
+          <div class="space-y-4 body-l text-ink-secondary">
+            <p>
+              L'ensemble du contenu présent sur le site paolisa.eu — incluant sans limitation les textes éditoriaux, photographies, illustrations, logo, charte graphique, vidéos, signes distinctifs, données techniques et code source — est la propriété exclusive de Bronté Di Bella ou est utilisé avec l'autorisation de ses ayants droit.
+            </p>
+            <p>
+              Ces éléments sont protégés par le droit d'auteur belge (loi du 30 juin 1994 relative au droit d'auteur et aux droits voisins, intégrée au Code de droit économique, Livre XI), ainsi que par les conventions internationales applicables.
+            </p>
+            <p>
+              Toute reproduction, représentation, modification, publication, transmission ou exploitation, totale ou partielle, du site ou de l'un quelconque de ses éléments, par quelque procédé que ce soit et sur quelque support que ce soit, est strictement interdite sans autorisation écrite préalable de l'éditeur.
+            </p>
+            <p>
+              La marque <strong class="text-ink-primary">PAOLISA</strong> ainsi que les noms de produits associés (notamment N°01) constituent des éléments distinctifs protégés. Tout usage non autorisé est susceptible de constituer un acte de contrefaçon, sanctionné par les articles XV.103 et suivants du Code de droit économique belge.
+            </p>
+          </div>
+        </section>
+
+        <section id="donnees" class="scroll-mt-32">
+          <p class="mono-label text-ink-tertiary mb-4">— 04 —</p>
+          <h2 class="display-s mb-8">Données personnelles.</h2>
+          <div class="space-y-4 body-l text-ink-secondary">
+            <p>
+              Le traitement des données personnelles collectées via le site paolisa.eu est régi par le Règlement (UE) 2016/679 du Parlement européen et du Conseil du 27 avril 2016 (RGPD) ainsi que par la loi belge du 30 juillet 2018 relative à la protection des personnes physiques à l'égard des traitements de données à caractère personnel.
+            </p>
+            <p>
+              Les modalités complètes de collecte, d'utilisation et de protection des données personnelles sont détaillées dans notre <a href="/confidentialite" class="text-ink-primary border-b border-ink-primary hover:opacity-70 transition-opacity duration-150 ease-in-out">Politique de confidentialité</a>.
+            </p>
+            <p>
+              Conformément à l'article 15 et suivants du RGPD, toute personne dont les données sont collectées dispose d'un droit d'accès, de rectification, d'effacement, de limitation du traitement, de portabilité et d'opposition. Ces droits peuvent être exercés à tout moment en écrivant à <a href="mailto:contact@paolisa.eu" class="text-ink-primary border-b border-ink-primary hover:opacity-70 transition-opacity duration-150 ease-in-out">contact@paolisa.eu</a>.
+            </p>
+            <p>
+              En cas de désaccord persistant, toute personne concernée peut introduire une réclamation auprès de l'Autorité de protection des données belge (APD) : Rue de la Presse 35, 1000 Bruxelles — <a href="https://www.autoriteprotectiondonnees.be" rel="noopener noreferrer" target="_blank" class="text-ink-primary border-b border-ink-primary hover:opacity-70 transition-opacity duration-150 ease-in-out">autoriteprotectiondonnees.be</a>.
+            </p>
+          </div>
+        </section>
+
+        <section id="cookies" class="scroll-mt-32">
+          <p class="mono-label text-ink-tertiary mb-4">— 05 —</p>
+          <h2 class="display-s mb-8">Cookies.</h2>
+          <div class="space-y-4 body-l text-ink-secondary">
+            <p>
+              Le site paolisa.eu utilise des cookies strictement nécessaires à son fonctionnement (session, panier, sécurité) ainsi que des cookies optionnels destinés à la mesure d'audience et à la personnalisation des communications marketing.
+            </p>
+            <p>
+              Le dépôt des cookies non strictement nécessaires est subordonné à votre consentement préalable, conformément à l'article 129 de la loi belge du 13 juin 2005 relative aux communications électroniques. Vous pouvez à tout moment modifier vos préférences depuis la bannière de consentement présente en bas de page.
+            </p>
+            <p>
+              Les détails relatifs à chaque cookie déposé sont disponibles dans notre <a href="/confidentialite" class="text-ink-primary border-b border-ink-primary hover:opacity-70 transition-opacity duration-150 ease-in-out">Politique de confidentialité</a>.
+            </p>
+          </div>
+        </section>
+
+        <section id="responsabilite" class="scroll-mt-32">
+          <p class="mono-label text-ink-tertiary mb-4">— 06 —</p>
+          <h2 class="display-s mb-8">Responsabilité.</h2>
+          <div class="space-y-4 body-l text-ink-secondary">
+            <p>
+              L'éditeur s'efforce d'assurer au mieux de ses possibilités l'exactitude et la mise à jour des informations diffusées sur le site paolisa.eu, dont il se réserve le droit de modifier le contenu, à tout moment et sans préavis. L'éditeur ne peut toutefois garantir l'exactitude, la précision ou l'exhaustivité des informations mises à disposition.
+            </p>
+            <p>
+              En conséquence, l'éditeur décline toute responsabilité :
+            </p>
+            <ul class="space-y-3 body-l list-none">
+              <li>· Pour toute imprécision, inexactitude ou omission portant sur des informations disponibles sur le site.</li>
+              <li>· Pour tous dommages, directs ou indirects, résultant de l'accès au site ou de son utilisation, y compris l'inaccessibilité, les pertes de données, détériorations, destructions ou virus pouvant affecter l'équipement informatique de l'utilisateur.</li>
+              <li>· Pour le contenu des sites tiers vers lesquels paolisa.eu propose des liens hypertextes. Ces liens sont fournis à titre informatif et ne constituent en aucune façon une approbation des contenus accessibles via ces liens.</li>
+            </ul>
+            <p class="mt-6">
+              L'utilisateur reconnaît utiliser les informations et outils mis à disposition sur le site sous sa responsabilité exclusive.
+            </p>
+          </div>
+        </section>
+
+        <section id="droit" class="scroll-mt-32">
+          <p class="mono-label text-ink-tertiary mb-4">— 07 —</p>
+          <h2 class="display-s mb-8">Droit applicable et juridiction.</h2>
+          <div class="space-y-4 body-l text-ink-secondary">
+            <p>
+              Les présentes mentions légales sont régies par le droit belge. Tout litige relatif à l'interprétation ou à l'exécution des présentes relève de la compétence exclusive des tribunaux de l'arrondissement judiciaire de Namur, Belgique, sauf disposition légale impérative contraire applicable au consommateur.
+            </p>
+            <p>
+              Conformément à l'article 14, paragraphe 1, du Règlement (UE) n°524/2013, les consommateurs résidant dans l'Union européenne peuvent recourir à la plateforme européenne de règlement en ligne des litiges (RLL), accessible à l'adresse suivante : <a href="https://ec.europa.eu/consumers/odr" rel="noopener noreferrer" target="_blank" class="text-ink-primary border-b border-ink-primary hover:opacity-70 transition-opacity duration-150 ease-in-out">ec.europa.eu/consumers/odr</a>.
+            </p>
+          </div>
+        </section>
+
+        <section id="contact" class="scroll-mt-32">
+          <p class="mono-label text-ink-tertiary mb-4">— 08 —</p>
+          <h2 class="display-s mb-8">Contact.</h2>
+          <div class="space-y-4 body-l text-ink-secondary">
+            <p>
+              Pour toute question relative aux présentes mentions légales, ou pour signaler un contenu susceptible de porter atteinte à vos droits, vous pouvez nous écrire à : <a href="mailto:contact@paolisa.eu" class="text-ink-primary border-b border-ink-primary hover:opacity-70 transition-opacity duration-150 ease-in-out">contact@paolisa.eu</a>.
+            </p>
+            <p>
+              Nous nous engageons à répondre à toute demande légitime dans un délai raisonnable, et au plus tard dans les 30 jours ouvrés.
+            </p>
+          </div>
+        </section>
+
+      </div>
+    </section>
+  </main>
+
+  <Footer />
+</BaseLayout>
