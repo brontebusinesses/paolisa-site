@@ -47,12 +47,12 @@ export const products: Record<string, Product> = {
       'Linalool**, Limonene**, Citral**',
     ],
     ingredients: [
-      { index: '01', name: 'OLIVE',    origin: 'Italie',   note: 'Pression à froid, Toscane.' },
-      { index: '02', name: 'AMANDE',   origin: 'Sicile',   note: 'Producteur familial, vallée de l\'Etna.' },
-      { index: '03', name: 'ABRICOT',  origin: 'Provence', note: 'Noyaux issus du verger biologique du Vaucluse.' },
-      { index: '04', name: 'AVOCAT',   origin: 'Espagne',  note: 'Andalousie, agriculture régénérative.' },
-      { index: '05', name: 'ROSEHIP',  origin: 'Chili',    note: 'Patagonie, récolte sauvage certifiée.' },
-      { index: '06', name: 'aroma · mandarine florale', origin: '—', note: 'Composition exclusive, dosage discret.' },
+      { index: '01', name: 'OLIVE',    origin: 'Pression à froid', note: 'Restaure la barrière cutanée.' },
+      { index: '02', name: 'AMANDE',   origin: 'Pression à froid', note: 'Apaise les peaux sensibles.' },
+      { index: '03', name: 'ABRICOT',  origin: 'Pression à froid', note: 'Donne l\'éclat, texture sèche.' },
+      { index: '04', name: 'AVOCAT',   origin: 'Pression à froid', note: 'Nourrit en profondeur.' },
+      { index: '05', name: 'ROSEHIP',  origin: 'Pression à froid', note: 'Régénère, acides gras essentiels.' },
+      { index: '06', name: 'aroma · mandarine florale', origin: '—', note: 'Issue d\'huiles essentielles naturelles.' },
     ],
     certifications: [
       'COSMOS Organic',

@@ -3,7 +3,8 @@ title: 'Olive, amande, abricot — un terroir'
 excerpt: 'Cinq huiles, cinq géographies. Une hiérarchie sensorielle pensée comme une partition.'
 date: 2026-04-20
 readingTime: '6 MIN'
-imageAlt: 'Oliveraie en Toscane sous lumière du soir'
+imageAlt: 'Oliveraie sous lumière du soir'
+draft: true
 ---
 
 Choisir une huile végétale, c'est choisir un terroir. L'olive de Toscane n'est pas l'olive d'Andalousie. L'amande de Sicile n'est pas l'amande de Californie. Et la composition d'une huile de soin, c'est avant tout une géographie.
