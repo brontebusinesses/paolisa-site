@@ -1,8 +1,9 @@
 ---
 /**
  * <ProductGallery /> — galerie PDP (§4.2)
- * Desktop : photos empilées, sticky.
+ * Desktop : photos empilées, sticky, encadrées d'un filet fin.
  * Mobile : carousel horizontal avec scroll-snap.
+ * Sert WebP en priorité, JPG en fallback.
  * Chaque image conserve son ratio naturel (pas de crop).
  */
 interface Image {
@@ -16,6 +17,9 @@ interface Props {
 }
 
 const { images } = Astro.props;
+
+/** Convertit `/produit/no-01/1-face.jpg` → `/produit/no-01/1-face.webp` */
+const webp = (src: string) => src.replace(/\.(jpe?g|png)$/i, '.webp');
 ---
 
 <div class="md:sticky md:top-[120px]">
@@ -25,12 +29,15 @@ const { images } = Astro.props;
       images.map((img) => (
         <div class="snap-start shrink-0 w-full px-5">
           {img.src ? (
-            <img
-              src={img.src}
-              alt={img.alt}
-              class="w-full h-auto block bg-line-faint"
-              loading="lazy"
-            />
+            <picture>
+              <source srcset={webp(img.src)} type="image/webp" />
+              <img
+                src={img.src}
+                alt={img.alt}
+                class="w-full h-auto block bg-line-faint"
+                loading="lazy"
+              />
+            </picture>
           ) : (
             <div class="w-full aspect-[3/4] bg-line-faint flex items-center justify-center">
               <span class="mono-micro text-ink-tertiary">— PHOTO À VENIR —</span>
@@ -41,25 +48,34 @@ const { images } = Astro.props;
     }
   </div>
 
-  {/* Desktop : photos empilées */}
-  <div class="hidden md:block space-y-6">
+  {/* Desktop : photos empilées avec filet fin éditorial */}
+  <div class="hidden md:block space-y-10">
     {
       images.map((img, i) => (
         <figure>
           {img.src ? (
-            <img
-              src={img.src}
-              alt={img.alt}
-              class="w-full h-auto block bg-line-faint"
-              loading={i === 0 ? 'eager' : 'lazy'}
-            />
+            <div class="relative">
+              <picture>
+                <source srcset={webp(img.src)} type="image/webp" />
+                <img
+                  src={img.src}
+                  alt={img.alt}
+                  class="w-full h-auto block bg-line-faint"
+                  loading={i === 0 ? 'eager' : 'lazy'}
+                />
+              </picture>
+              {/* Filet fin éditorial — par-dessus, pas de gain de taille */}
+              <div class="pointer-events-none absolute inset-0 ring-1 ring-line-faint" />
+            </div>
           ) : (
             <div class="w-full aspect-square bg-line-faint flex items-center justify-center">
               <span class="mono-micro text-ink-tertiary">— PHOTO À VENIR —</span>
             </div>
           )}
           {img.caption && (
-            <figcaption class="mono-micro mt-3">{img.caption}</figcaption>
+            <figcaption class="mono-micro mt-4 text-ink-tertiary tracking-[0.12em]">
+              {img.caption}
+            </figcaption>
           )}
         </figure>
       ))
