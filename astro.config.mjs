@@ -20,9 +20,14 @@ export default defineConfig({
     format: 'directory',
   },
   trailingSlash: 'never',
-  cacheDir: './node_modules/.cache/astro',
+  // Cache HORS de node_modules : Vercel restaure node_modules depuis son
+  // cache de dépendances (que « redeploy sans build cache » ne vide pas).
+  // Quand le cache Vite y vivait, Vite croyait que rien n'avait changé et
+  // NE ré-émettait PAS le bundle CSS /_astro/*.css → site servi sans style.
+  // On le met dans /tmp (éphémère sur Vercel) pour forcer un build CSS propre.
+  cacheDir: '/tmp/paolisa-astro-cache',
   vite: {
-    cacheDir: './node_modules/.cache/vite',
+    cacheDir: '/tmp/paolisa-vite-cache',
   },
   // Désactive la vérif CSRF d'Astro pour les routes SSR.
   // Sur Vercel, le host vu par la serverless function diffère de celui
