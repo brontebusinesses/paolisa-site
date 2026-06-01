@@ -15,6 +15,9 @@ const chapters = [
     name: 'Paolo',
     role: 'Le Nonno',
     line: 'Italie · 1932 — 2018',
+    photo: 'https://images.unsplash.com/photo-1454875392665-2ac2c85e8d3e?q=85&w=1000&h=1250&fit=crop&auto=format&fm=jpg',
+    alt: 'Main posée dans une lumière douce — évocation du geste qui ne s\'oublie pas.',
+    credit: 'Danie Franco / Unsplash',
     title: 'Le vélo, la fenêtre, la mémoire qui s\'efface.',
     body: [
       'Paolo réparait des vélos dans un atelier à l\'ouest de Trieste. Le geste de la main qui tourne la clé, la lumière qui passait entre deux maisons à dix heures du matin, la peau qu\'on lave à l\'huile d\'olive parce qu\'il n\'y a rien d\'autre.',
@@ -26,6 +29,9 @@ const chapters = [
     name: 'Isabelle',
     role: 'La mère',
     line: 'Bruxelles · 1968',
+    photo: 'https://images.unsplash.com/photo-1560521166-117ca72366bd?q=85&w=1000&h=1250&fit=crop&auto=format&fm=jpg',
+    alt: 'Goutte d\'eau claire — la fraîcheur et la simplicité d\'un soin réduit à l\'essentiel.',
+    credit: 'Kelly Sikkema / Unsplash',
     title: 'Deux gestes maximum. La simplicité, c\'est aussi du soin.',
     body: [
       'Maman ne s\'est jamais maquillée. Elle se lavait le visage à l\'eau froide, mettait une huile, et c\'était tout. Quand on lui demandait son secret, elle haussait les épaules : « Il n\'y a pas de secret. »',
@@ -37,6 +43,9 @@ const chapters = [
     name: 'Lisa',
     role: 'La petite sœur',
     line: 'Bruxelles · 1998',
+    photo: 'https://images.unsplash.com/photo-1515377905703-c4788e51af15?q=85&w=1000&h=1250&fit=crop&auto=format&fm=jpg',
+    alt: 'Flacon ambré tenu dans la main — le geste de l\'huile, transmis sans un mot.',
+    credit: 'Christin Hume / Unsplash',
     title: 'La passion du soin, transmise sans qu\'on s\'en aperçoive.',
     body: [
       'Lisa a grandi en regardant. Elle a appris la consistance d\'une huile entre les doigts, la lumière qu\'il faut pour bien voir sa peau, l\'heure du matin qui change tout.',
@@ -44,6 +53,15 @@ const chapters = [
     ],
   },
 ];
+
+const heroPhoto = {
+  src: 'https://images.unsplash.com/photo-1593030019566-d681b01e877f?q=85&w=1600&h=900&fit=crop&auto=format&fm=jpg',
+  alt: 'Drap de lin près d\'une fenêtre, baigné de lumière du matin.',
+  credit: 'Sarah Brown / Unsplash',
+};
+
+/** Sert le WebP en priorité (le CDN Unsplash transcode via fm=webp), JPG en fallback. */
+const webp = (src: string) => src.replace('fm=jpg', 'fm=webp');
 ---
 
 <BaseLayout
@@ -61,13 +79,21 @@ const chapters = [
         <h1 class="display-l max-w-prose mx-auto">
           Trois prénoms.<br />Trois générations.<br />Une conviction.
         </h1>
-        <div class="mt-12 max-w-3xl mx-auto">
+        <figure class="mt-12 max-w-3xl mx-auto">
           <div class="relative w-full aspect-[16/9] bg-line-faint">
-            <div class="absolute inset-0 flex items-center justify-center">
-              <span class="mono-micro text-ink-tertiary">— PHOTO MOOD : LIN, FENÊTRE, SILHOUETTE —</span>
-            </div>
+            <picture>
+              <source srcset={webp(heroPhoto.src)} type="image/webp" />
+              <img
+                src={heroPhoto.src}
+                alt={heroPhoto.alt}
+                class="absolute inset-0 w-full h-full object-cover"
+                loading="eager"
+              />
+            </picture>
+            <div class="pointer-events-none absolute inset-0 ring-1 ring-line-faint"></div>
           </div>
-        </div>
+          <figcaption class="mono-micro mt-3 text-ink-tertiary tracking-[0.12em]">© {heroPhoto.credit}</figcaption>
+        </figure>
       </div>
     </section>
 
@@ -85,11 +111,21 @@ const chapters = [
             ]}>
               {/* Photo */}
               <div class="md:col-span-6">
-                <div class="relative w-full aspect-[4/5] bg-line-faint">
-                  <div class="absolute inset-0 flex items-center justify-center">
-                    <span class="mono-micro text-ink-tertiary">— PORTRAIT {ch.code} —</span>
+                <figure>
+                  <div class="relative w-full aspect-[4/5] bg-line-faint">
+                    <picture>
+                      <source srcset={webp(ch.photo)} type="image/webp" />
+                      <img
+                        src={ch.photo}
+                        alt={ch.alt}
+                        class="absolute inset-0 w-full h-full object-cover"
+                        loading="lazy"
+                      />
+                    </picture>
+                    <div class="pointer-events-none absolute inset-0 ring-1 ring-line-faint"></div>
                   </div>
-                </div>
+                  <figcaption class="mono-micro mt-3 text-ink-tertiary tracking-[0.12em]">© {ch.credit}</figcaption>
+                </figure>
               </div>
 
               {/* Texte */}
