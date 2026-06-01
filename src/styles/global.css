@@ -16,6 +16,9 @@
 
 @layer base {
   :root {
+    /* Révision d'asset — modifier ce nombre force un nouveau hash de bundle CSS
+       (contourne un éventuel 404 mis en cache par le CDN sur l'ancienne URL). */
+    --asset-rev: 1;
     --bg-primary: #FFFFFF;
     --bg-secondary: #FAFAF8;
     --bg-tertiary: #F4F4F0;
