@@ -15,6 +15,7 @@
     "@astrojs/compiler": "^4.0.0",
     "@astrojs/tailwind": "^5.1.2",
     "@astrojs/vercel": "^8.0.0",
+    "@vercel/analytics": "^2.0.1",
     "astro": "^5.0.0",
     "shiki": "^4.0.2",
     "tailwindcss": "^3.4.14",
