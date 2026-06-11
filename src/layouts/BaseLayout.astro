@@ -5,6 +5,7 @@
  * font-display: swap — §8.7 Performance.
  */
 import '../styles/global.css';
+import Analytics from '@vercel/analytics/astro';
 
 interface Props {
   title: string;
@@ -62,5 +63,6 @@ const canonicalURL = new URL(Astro.url.pathname, Astro.site ?? 'https://paolisa.
   </head>
   <body data-hero-overlay={heroOverlay ? 'true' : 'false'}>
     <slot />
+    <Analytics />
   </body>
 </html>

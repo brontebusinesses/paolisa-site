@@ -1,20 +1,21 @@
 /**
- * Mode pré-lancement (teasing) vs ouvert.
+ * Mode boutique ouverte vs pré-lancement (teasing).
  *
- * Contrôlé par la variable d'environnement PUBLIC_STORE_OPEN :
- *   - PUBLIC_STORE_OPEN=true  → boutique ouverte, panier actif, achats possibles
- *   - PUBLIC_STORE_OPEN=false (ou non définie) → mode teasing, waitlist Klaviyo à la place du panier
+ * Depuis le lancement officiel (11 juin 2026), la boutique est OUVERTE par
+ * défaut : panier actif, achats possibles. Le mode teasing (waitlist Klaviyo)
+ * ne s'active plus que si on le demande explicitement.
+ *
+ * Kill-switch via la variable d'environnement PUBLIC_STORE_OPEN :
+ *   - non définie ou "true" → boutique ouverte (comportement par défaut)
+ *   - "false"             → repasse en mode teasing / waitlist Klaviyo
  *
  * Le préfixe `PUBLIC_` est requis pour qu'Astro/Vite expose la variable
- * via `import.meta.env`. Sans ce préfixe, la valeur reste undefined au build
- * et le site affiche toujours le mode teasing.
- *
- * Pour ouvrir la boutique le jour du lancement :
- *   - Vercel → Settings → Environments → Production → PUBLIC_STORE_OPEN → "true"
- *   - Redeploy (sans cache la première fois pour être sûr)
+ * via `import.meta.env`. Pour fermer temporairement la boutique :
+ *   - Vercel → Settings → Environments → Production → PUBLIC_STORE_OPEN → "false"
+ *   - Redeploy. Repasser à "true" (ou supprimer la variable) pour rouvrir.
  */
 export function isStoreOpen(): boolean {
-  return import.meta.env.PUBLIC_STORE_OPEN === 'true';
+  return import.meta.env.PUBLIC_STORE_OPEN !== 'false';
 }
 
 /**
