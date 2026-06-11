@@ -3,6 +3,7 @@ title: 'Le rituel des trois gestes'
 excerpt: 'Réchauffer. Presser. Attendre. Trois gestes, dans cet ordre, et rien d''autre.'
 date: 2026-04-05
 readingTime: '3 MIN'
+image: '/journal/cover-le-rituel-des-trois-gestes.jpg'
 imageAlt: 'Main qui tient un flacon Paolisa devant une fenêtre'
 ---
 

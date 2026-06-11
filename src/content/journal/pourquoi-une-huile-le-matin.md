@@ -3,6 +3,7 @@ title: 'Pourquoi une huile, le matin'
 excerpt: 'Trois gouttes, qu''on réchauffe entre les paumes. Une pression devant la fenêtre. Trente secondes.'
 date: 2026-05-07
 readingTime: '4 MIN'
+image: '/journal/cover-pourquoi-une-huile-le-matin.jpg'
 imageAlt: 'Lumière du matin sur une fenêtre'
 ---
 

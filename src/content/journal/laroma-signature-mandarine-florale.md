@@ -3,6 +3,7 @@ title: 'L''aroma signature : mandarine florale'
 excerpt: 'Pourquoi un parfum dans une huile de soin — et pourquoi celui-là, dosé comme ça.'
 date: 2026-03-12
 readingTime: '5 MIN'
+image: '/journal/cover-laroma-signature-mandarine-florale.jpg'
 imageAlt: 'Mandarines coupées sur une table en marbre'
 ---
 

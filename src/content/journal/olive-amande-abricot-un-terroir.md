@@ -3,6 +3,7 @@ title: 'Olive, amande, abricot — un terroir'
 excerpt: 'Cinq huiles, cinq géographies. Une hiérarchie sensorielle pensée comme une partition.'
 date: 2026-04-20
 readingTime: '6 MIN'
+image: '/journal/cover-olive-amande-abricot-un-terroir.jpg'
 imageAlt: 'Oliveraie sous lumière du soir'
 draft: true
 ---

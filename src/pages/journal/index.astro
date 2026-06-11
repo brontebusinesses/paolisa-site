@@ -40,6 +40,7 @@ const formatDate = (d: Date) =>
           entries.map((entry) => (
             <EditorialCard
               href={`/journal/${entry.slug}`}
+              image={entry.data.image}
               imageAlt={entry.data.imageAlt}
               title={entry.data.title}
               excerpt={entry.data.excerpt}
