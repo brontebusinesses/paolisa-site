@@ -29,8 +29,8 @@ export const products: Record<string, Product> = {
     ritual: 'RITUEL MATIN',
     title: 'Huile visage rituelle',
     format: '30 ml',
-    priceCents: 6400,
-    priceLabel: '€64',
+    priceCents: 4500,
+    priceLabel: '€45',
     shortDescription:
       'Cinq huiles méditerranéennes, un seul geste, le matin. Certifié COSMOS Organic.',
     shopifyHandle: 'all-in-one-facial-oil',
