@@ -3,7 +3,7 @@
  *
  * Bronté reçoit l'info dans Klaviyo (Profiles → filtre événement
  * "Contact form submitted") et peut configurer un Flow pour s'auto-notifier
- * par email à contact@paolisa.eu.
+ * par email à hello@paolisa.eu.
  *
  * Form fields : name, email, subject, message
  * Réponse : 303 redirect /contact?envoye=1 ou ?erreur=...
