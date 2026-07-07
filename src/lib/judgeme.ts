@@ -16,7 +16,7 @@ export const JUDGEME_PUBLIC_TOKEN =
 /** slug produit (products.ts) → ID produit Shopify numérique (data-id Judge.me). */
 const IDS: Record<string, string> = {
   'serum': '15840699154764',
-  'contour-yeux': '15882178068812',
+  'contour-yeux': '15882279190860',
   'no-01': '15840284606796',
   'creme': '15840333791564',
   'solaire-teinte': '15855525757260',

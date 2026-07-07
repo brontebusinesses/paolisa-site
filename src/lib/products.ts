@@ -124,12 +124,12 @@ export const products: Record<string, Product> = {
     accentName: 'Jaune',
     accentDarkText: true,
     images: [
-      `${CDN}/vLSfojHfTbXMrvyFA3ahT4zFlHWtKVnJ.jpg?v=1783437724`,
-      `${CDN}/iu1rSP2_OocACYlVdjzhhPupxwLZTTgp.jpg?v=1783437724`,
-      `${CDN}/xUyn4iJWgPln-GewCVwSLoiyFm8AdXpa.jpg?v=1783437723`,
+      `${CDN}/MeRC2BjJ6Zb8Jgxj1PLRlq41mdi_v2j5.jpg?v=1783442493`,
+      `${CDN}/6cm5N1ScGRn0d7qzUZMvXW1_cY9El4pH.jpg?v=1783442494`,
+      `${CDN}/y4--P1doq2b9gLs2aYJ1arkBL2YBYugh.jpg?v=1783442493`,
     ],
-    shopifyHandle: 'retinol-alternative-eye-serum-1',
-    shopifyVariantId: '58003852722508',
+    shopifyHandle: 'retinol-alternative-eye-serum',
+    shopifyVariantId: '58004997833036',
     available: true,
     status: 'DISPONIBLE',
     actives: [
