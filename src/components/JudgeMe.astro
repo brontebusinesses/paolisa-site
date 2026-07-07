@@ -1,0 +1,22 @@
+---
+/**
+ * <JudgeMe /> — config + preloader Judge.me, rendu UNE fois dans BaseLayout.
+ * Chargé seulement si PUBLIC_JUDGEME_TOKEN est défini (env Vercel).
+ */
+import { JUDGEME_SHOP_DOMAIN } from '../lib/judgeme';
+const token = import.meta.env.PUBLIC_JUDGEME_TOKEN;
+---
+
+{
+  token && (
+    <>
+      <script define:vars={{ token, shop: JUDGEME_SHOP_DOMAIN }}>
+        window.jdgm = window.jdgm || {};
+        window.jdgm.SHOP_DOMAIN = shop;
+        window.jdgm.PLATFORM = 'shopify';
+        window.jdgm.PUBLIC_TOKEN = token;
+      </script>
+      <script is:inline async src="https://cdn.judge.me/widget_preloader.js"></script>
+    </>
+  )
+}

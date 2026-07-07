@@ -1,7 +1,7 @@
 ---
 /**
  * PDP — N°03 Huile visage (fiche crafted, garde l'URL historique /huile/no-01)
- * Galerie photos éditoriales locales + bloc info + tabs + cross-sell.
+ * Galerie photos éditoriales locales + bloc info + tabs + avis (éditorial + Judge.me) + cross-sell.
  */
 import BaseLayout from '../../layouts/BaseLayout.astro';
 import NoticeBar from '../../components/NoticeBar.astro';
@@ -14,13 +14,16 @@ import QuantitySelector from '../../components/QuantitySelector.astro';
 import Accordion from '../../components/Accordion.astro';
 import AvisClients from '../../components/AvisClients.astro';
 import ProductCard from '../../components/ProductCard.astro';
+import JudgeMeReviews from '../../components/JudgeMeReviews.astro';
 import { getProduct, productList, productLabel } from '../../lib/products';
+import { judgemeProductId } from '../../lib/judgeme';
 import { buildPdpTabs } from '../../lib/pdp-tabs';
 import { isStoreOpen, LAUNCH_LABEL } from '../../lib/store-status';
 
 const product = getProduct('no-01')!;
 const storeOpen = isStoreOpen();
 const label = productLabel(product);
+const jmId = judgemeProductId('no-01');
 
 const galleryImages = [
   { src: '/produit/no-01/1-face.jpg', alt: 'Flacon Paolisa Huile visage sur fond crème', caption: '01 — Flacon de face' },
@@ -70,7 +73,9 @@ const avis = [
             <p class="mono-label mb-4">{label} / {product.category}</p>
             <h1 class="display-m mb-1">{product.title}</h1>
             <p class="body-m text-ink-tertiary mb-4">{product.subtitle}</p>
-            <p class="mono-label text-ink-tertiary mb-6">{product.format}</p>
+            <p class="mono-label text-ink-tertiary mb-4">{product.format}</p>
+
+            {jmId && <a href="#avis" class="jdgm-widget jdgm-preview-badge block mb-6" data-id={jmId}></a>}
 
             <p class="font-mono text-[18px] tracking-[0.05em] text-ink-primary mb-8">
               {product.priceLabel}
@@ -192,7 +197,7 @@ const avis = [
       </div>
     </section>
 
-    {/* Avis clientes */}
+    {/* Avis clientes — verbatim éditorial recueilli en phase de test */}
     <AvisClients
       eyebrow="— AVIS —"
       title="Premiers retours."
@@ -200,6 +205,10 @@ const avis = [
       reviews={avis}
       background="tertiary"
     />
+
+    {/* Avis Judge.me (vérifiés) */}
+    <div id="avis"></div>
+    <JudgeMeReviews productId={jmId} />
 
     {/* Compléter le rituel */}
     <section class="bg-bg-secondary section-y">

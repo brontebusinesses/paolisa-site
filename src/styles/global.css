@@ -108,8 +108,7 @@
 }
 
 @layer components {
-  /* Wordmark — §2.2 (révisé) : Raleway, point ● noir (suit la couleur du texte).
-   * Le terracotta n'est plus utilisé sur le site. */
+  /* Wordmark — §2.2 (révisé) : Raleway, point ● noir (suit la couleur du texte). */
   .wordmark {
     @apply font-wordmark font-medium text-ink-primary;
     letter-spacing: 0.2em;
@@ -117,7 +116,6 @@
   }
 
   .wordmark-dot {
-    /* Le point suit la couleur du wordmark : noir sur fond clair, écru sur fond sombre. */
     color: currentColor;
     display: inline-block;
     margin-left: 0.12em;
@@ -241,4 +239,42 @@
       padding-bottom: 6rem;
     }
   }
+}
+
+/* --------------------------------------------------------------------------
+ * Judge.me — alignement charte Paolisa (accent encre, coins droits, pas de teal)
+ * Overrides prudents ; à affiner une fois le widget visible avec des avis.
+ * -------------------------------------------------------------------------- */
+.jdgm-widget,
+.jdgm-widget * {
+  font-family: 'Inter', system-ui, sans-serif;
+}
+.jdgm-widget .jdgm-star.jdgm--on,
+.jdgm-widget .jdgm-star.jdgm--half {
+  color: var(--ink-primary) !important;
+}
+.jdgm-widget .jdgm-star.jdgm--off {
+  color: var(--line-subtle) !important;
+}
+.jdgm-widget .jdgm-rev-widg__header,
+.jdgm-widget .jdgm-rev-widg__title {
+  text-transform: uppercase;
+  letter-spacing: -0.01em;
+  font-weight: 500;
+}
+.jdgm-widget .jdgm-write-rev-link,
+.jdgm-widget .jdgm-btn,
+.jdgm-widget .jdgm-paginate__page.jdgm-curr {
+  background: var(--ink-primary) !important;
+  border: 1px solid var(--ink-primary) !important;
+  color: var(--ink-inverse) !important;
+  border-radius: 0 !important;
+  text-transform: uppercase;
+  letter-spacing: 0.14em;
+}
+.jdgm-widget a {
+  color: var(--ink-primary);
+}
+.jdgm-prev-badge__stars .jdgm-star.jdgm--on {
+  color: var(--ink-primary) !important;
 }

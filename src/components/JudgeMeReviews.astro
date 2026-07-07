@@ -1,0 +1,23 @@
+---
+/**
+ * <JudgeMeReviews /> — bloc « avis vérifiés » sur une fiche produit.
+ * Rend le widget d'avis Judge.me (liste + formulaire) pour l'ID produit donné.
+ * Ne s'affiche pas si aucun ID (produit non mappé).
+ */
+interface Props { productId?: string; }
+const { productId } = Astro.props;
+---
+
+{
+  productId && (
+    <section class="bg-bg-primary section-y" aria-label="Avis clients vérifiés">
+      <div class="container-paolisa">
+        <div class="flex items-center gap-4 mb-8">
+          <p class="mono-label whitespace-nowrap text-ink-primary">— AVIS VÉRIFIÉS</p>
+          <span class="flex-1 border-t border-line-subtle" />
+        </div>
+        <div class="jdgm-widget jdgm-review-widget" data-id={productId} />
+      </div>
+    </section>
+  )
+}

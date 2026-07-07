@@ -2,7 +2,7 @@
 /**
  * PDP dynamique — les 5 produits de la gamme hors N°03 Huile (qui garde sa
  * fiche crafted /huile/no-01). Galerie photos Shopify + bloc achat + onglets +
- * cross-sell « compléter le rituel ». Pas de couleur (photos produit).
+ * avis Judge.me + cross-sell « compléter le rituel ».
  */
 import BaseLayout from '../../layouts/BaseLayout.astro';
 import NoticeBar from '../../components/NoticeBar.astro';
@@ -12,7 +12,9 @@ import Button from '../../components/Button.astro';
 import QuantitySelector from '../../components/QuantitySelector.astro';
 import Accordion from '../../components/Accordion.astro';
 import ProductCard from '../../components/ProductCard.astro';
+import JudgeMeReviews from '../../components/JudgeMeReviews.astro';
 import { getProduct, productList, productLabel } from '../../lib/products';
+import { judgemeProductId } from '../../lib/judgeme';
 import { buildPdpTabs } from '../../lib/pdp-tabs';
 import { isStoreOpen } from '../../lib/store-status';
 
@@ -27,6 +29,7 @@ const product = getProduct(slug!)!;
 const storeOpen = isStoreOpen();
 const tabs = buildPdpTabs(product);
 const label = productLabel(product);
+const jmId = judgemeProductId(product.slug);
 
 const related = productList().filter((p) => p.slug !== product.slug).slice(0, 3);
 ---
@@ -67,7 +70,10 @@ const related = productList().filter((p) => p.slug !== product.slug).slice(0, 3)
             <p class="mono-label mb-4">{label} / {product.category}</p>
             <h1 class="display-m mb-1">{product.title}</h1>
             <p class="body-m text-ink-tertiary mb-4">{product.subtitle}</p>
-            <p class="mono-label text-ink-tertiary mb-6">{product.format}</p>
+            <p class="mono-label text-ink-tertiary mb-4">{product.format}</p>
+
+            {/* Étoiles Judge.me — lien vers le bloc avis en bas */}
+            {jmId && <a href="#avis" class="jdgm-widget jdgm-preview-badge block mb-6" data-id={jmId}></a>}
 
             <p class="font-mono text-[18px] tracking-[0.05em] text-ink-primary mb-8">
               {product.priceLabel}
@@ -128,6 +134,10 @@ const related = productList().filter((p) => p.slug !== product.slug).slice(0, 3)
         </div>
       </div>
     </section>
+
+    {/* Avis Judge.me */}
+    <div id="avis"></div>
+    <JudgeMeReviews productId={jmId} />
 
     {/* Cross-sell — compléter le rituel */}
     <section class="bg-bg-secondary section-y">
