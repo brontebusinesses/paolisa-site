@@ -1,0 +1,55 @@
+---
+/**
+ * <HeroGamme /> — hero d'accueil « composition gamme » (juillet 2026).
+ * Grand titre + les 6 flacons (photos Shopify) en rangée d'arches, sans couleur
+ * (le code couleur ne vit plus que sur le packaging). Fond crème, header opaque.
+ */
+import Button from './Button.astro';
+import { productList, productLabel } from '../lib/products';
+
+interface Cta { label: string; href: string; }
+interface Props {
+  eyebrow: string;
+  headlineLine1: string;
+  headlineLine2?: string;
+  sub?: string;
+  cta1: Cta;
+  cta2?: Cta;
+}
+
+const { eyebrow, headlineLine1, headlineLine2, sub, cta1, cta2 } = Astro.props;
+const gamme = productList();
+---
+
+<section class="bg-bg-secondary" aria-label="Hero — la gamme">
+  <div class="container-paolisa pt-8 md:pt-14">
+    <p class="mono-label mb-6">{eyebrow}</p>
+    <h1 class="font-sans uppercase font-medium tracking-[-0.02em] text-ink-primary leading-[0.98] text-[38px] sm:text-[48px] md:text-[60px] mb-6">
+      {headlineLine1}{headlineLine2 && <><br />{headlineLine2}</>}
+    </h1>
+    {sub && <p class="body-l text-ink-secondary max-w-prose mb-8">{sub}</p>}
+    <div class="flex flex-col sm:flex-row gap-4 sm:gap-6 mb-12 md:mb-16">
+      <Button variant="primary" href={cta1.href}>{cta1.label}</Button>
+      {cta2 && <Button variant="secondary" href={cta2.href}>{cta2.label}</Button>}
+    </div>
+  </div>
+
+  <div class="container-paolisa">
+    <ul class="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-6 border-t border-line-subtle">
+      {
+        gamme.map((p) => (
+          <li class="border-b sm:border-b-0 border-r border-line-subtle">
+            <a href={p.href} class="block px-3 md:px-4 pt-5 pb-6 hover:bg-bg-tertiary transition-colors duration-200 ease-in-out">
+              <div class="relative w-full aspect-[3/4] overflow-hidden bg-bg-primary" style="border-radius:120px 120px 3px 3px">
+                <img src={p.images[0]} alt={p.title} class="absolute inset-0 w-full h-full object-cover" loading="lazy" />
+              </div>
+              <p class="mono-micro text-ink-tertiary mt-4">{p.number ? productLabel(p) : 'SOLAIRE'}</p>
+              <p class="display-s mt-1">{p.title}</p>
+              <p class="font-mono text-[12px] text-ink-secondary mt-2 tracking-[0.05em]">{p.priceLabel}</p>
+            </a>
+          </li>
+        ))
+      }
+    </ul>
+  </div>
+</section>

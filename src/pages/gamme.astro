@@ -2,7 +2,7 @@
 /**
  * Page « La gamme » — l'inventaire complet (6 produits) en deux niveaux :
  *   Les Essentiels (numérotés, ordre du rituel) · Les Solaires (non numérotés).
- * Code couleur par flacon via ProductCard (accentColor issu de products.ts).
+ * Cartes = photos des flacons (le code couleur ne vit plus que sur le packaging).
  */
 import BaseLayout from '../layouts/BaseLayout.astro';
 import NoticeBar from '../components/NoticeBar.astro';
@@ -24,7 +24,6 @@ const solaireProducts = solaires();
 
   <main>
     <section class="container-paolisa pt-8 md:pt-12 pb-16 md:pb-24">
-      {/* Intro */}
       <div class="flex items-baseline justify-between flex-wrap gap-4 mb-12 md:mb-16">
         <div class="max-w-2xl">
           <p class="mono-label mb-4">— L'INVENTAIRE —</p>
@@ -32,7 +31,7 @@ const solaireProducts = solaires();
           <p class="body-l text-ink-secondary max-w-prose">
             Le rituel se lit dans l'ordre. Un numéro par geste — le sérum d'abord,
             puis le regard, puis le soin. Les solaires, eux, s'ajoutent au gré des
-            saisons. Le point ● terracotta tient le tout.
+            saisons. Chaque produit trouve sa place dans le geste du matin.
           </p>
         </div>
         <p class="mono-label">[ 06 PRODUITS ]</p>
@@ -48,14 +47,13 @@ const solaireProducts = solaires();
           essentiels.map((p) => (
             <ProductCard
               href={p.href}
+              image={p.images[0]}
+              imageAlt={p.title}
               eyebrow={`${productLabel(p)} / ${p.category}`}
               title={p.title}
               subtitle={p.subtitle}
               price={p.priceLabel}
               status={p.status}
-              accentColor={p.accentColor}
-              accentInverted={p.accentInverted}
-              accentDarkText={p.accentDarkText}
             />
           ))
         }
@@ -74,14 +72,13 @@ const solaireProducts = solaires();
           solaireProducts.map((p) => (
             <ProductCard
               href={p.href}
+              image={p.images[0]}
+              imageAlt={p.title}
               eyebrow={`SOLAIRE / ${p.format}`}
               title={p.title}
               subtitle={p.subtitle}
               price={p.priceLabel}
               status={p.status}
-              accentColor={p.accentColor}
-              accentInverted={p.accentInverted}
-              accentDarkText={p.accentDarkText}
             />
           ))
         }

@@ -1,7 +1,7 @@
 ---
 /**
  * PDP — N°03 Huile visage (fiche crafted, garde l'URL historique /huile/no-01)
- * Layout : galerie photos à gauche (sticky desktop) + bloc info à droite + tabs.
+ * Galerie photos éditoriales locales + bloc info + tabs + cross-sell.
  */
 import BaseLayout from '../../layouts/BaseLayout.astro';
 import NoticeBar from '../../components/NoticeBar.astro';
@@ -31,10 +31,8 @@ const galleryImages = [
 ];
 
 const tabs = buildPdpTabs(product);
-
 const related = productList().filter((p) => p.slug !== 'no-01').slice(0, 3);
 
-// Avis clientes — verbatim recueillis pendant la phase de test (pré-lancement).
 const avis = [
   {
     pullQuote: 'Une huile sèche. Elle prend, et la peau boit.',
@@ -69,7 +67,6 @@ const avis = [
         {/* Bloc info — sticky desktop */}
         <aside class="md:col-span-5">
           <div class="md:sticky md:top-[120px] md:max-w-md">
-            <div class="h-[3px] w-12 mb-6" style={`background:${product.accentColor}`}></div>
             <p class="mono-label mb-4">{label} / {product.category}</p>
             <h1 class="display-m mb-1">{product.title}</h1>
             <p class="body-m text-ink-tertiary mb-4">{product.subtitle}</p>
@@ -195,7 +192,7 @@ const avis = [
       </div>
     </section>
 
-    {/* Avis clientes — verbatim recueillis en phase de test */}
+    {/* Avis clientes */}
     <AvisClients
       eyebrow="— AVIS —"
       title="Premiers retours."
@@ -217,14 +214,13 @@ const avis = [
             related.map((p) => (
               <ProductCard
                 href={p.href}
+                image={p.images[0]}
+                imageAlt={p.title}
                 eyebrow={`${productLabel(p)} / ${p.category}`}
                 title={p.title}
                 subtitle={p.subtitle}
                 price={p.priceLabel}
                 status={p.status}
-                accentColor={p.accentColor}
-                accentInverted={p.accentInverted}
-                accentDarkText={p.accentDarkText}
               />
             ))
           }

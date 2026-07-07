@@ -9,16 +9,14 @@
 @tailwind utilities;
 
 /* --------------------------------------------------------------------------
- * Fonts — §2.2 stack v1
- * Cormorant Garamond (wordmark) · Inter (display + body) · JetBrains Mono (labels)
- * Loaded via Google Fonts <link> in Layout.astro with font-display: swap.
+ * Fonts — §2.2 (révisé juillet 2026)
+ * Raleway (wordmark, aligné packaging) · Inter (display + body) · JetBrains Mono (labels)
+ * Loaded via Google Fonts <link> in BaseLayout.astro with font-display: swap.
  * -------------------------------------------------------------------------- */
 
 @layer base {
   :root {
-    /* Révision d'asset — modifier ce nombre force un nouveau hash de bundle CSS
-       (contourne un éventuel 404 mis en cache par le CDN sur l'ancienne URL). */
-    --asset-rev: 1;
+    --asset-rev: 2;
     --bg-primary: #FFFFFF;
     --bg-secondary: #FAFAF8;
     --bg-tertiary: #F4F4F0;
@@ -45,7 +43,6 @@
     @apply bg-bg-primary text-ink-primary font-sans;
     font-size: 0.9375rem;
     line-height: 1.75;
-    /* §4.1 — NoticeBar 36px sticky top, Header 64-72px en dessous. */
     --notice-bar-height: 36px;
     --header-height: 64px;
   }
@@ -56,8 +53,6 @@
     }
   }
 
-  /* Pages sans hero full-bleed : on pousse le main pour ne pas être masqué
-     par la NoticeBar fixe (36px) + le Header fixe (64-72px). */
   body[data-hero-overlay='false'] main {
     padding-top: calc(var(--notice-bar-height) + var(--header-height));
   }
@@ -72,12 +67,10 @@
     border-radius: 0;
   }
 
-  /* Re-allow border-radius on explicitly-arched elements only. */
   .arch {
     border-radius: 200px 200px 4px 4px;
   }
 
-  /* Default border colour matches §2.4 — 0.5px solid #DDDDDA. */
   *, *::before, *::after {
     border-color: var(--line-subtle);
   }
@@ -87,13 +80,11 @@
     color: var(--ink-inverse);
   }
 
-  /* Headings inherit display tokens — utilities applied per-component. */
   h1, h2, h3, h4, h5, h6 {
     font-weight: 500;
     color: var(--ink-primary);
   }
 
-  /* Links: minimal underline, transition only on hover. §2.5 */
   a {
     color: inherit;
     text-decoration: none;
@@ -110,7 +101,6 @@
     transition: background-color 0.2s ease, color 0.2s ease, border-color 0.2s ease;
   }
 
-  /* Focus ring — minimal, ink-primary, no glow. */
   :focus-visible {
     outline: 1px solid var(--ink-primary);
     outline-offset: 2px;
@@ -118,20 +108,21 @@
 }
 
 @layer components {
-  /* Wordmark — §2.2 : Cormorant Garamond avec point ● terracotta réservé.
-   * Use this class on the brand mark only. */
+  /* Wordmark — §2.2 (révisé) : Raleway, point ● noir (suit la couleur du texte).
+   * Le terracotta n'est plus utilisé sur le site. */
   .wordmark {
-    @apply font-wordmark font-normal tracking-tight text-ink-primary;
-    font-feature-settings: 'liga' 1, 'kern' 1;
+    @apply font-wordmark font-medium text-ink-primary;
+    letter-spacing: 0.2em;
+    font-feature-settings: 'kern' 1;
   }
 
   .wordmark-dot {
-    color: var(--terracotta);
+    /* Le point suit la couleur du wordmark : noir sur fond clair, écru sur fond sombre. */
+    color: currentColor;
     display: inline-block;
-    margin-left: 0.15em;
+    margin-left: 0.12em;
   }
 
-  /* Mono labels — §2.2 — uppercase, generous tracking. */
   .mono-label {
     @apply font-mono uppercase text-ink-tertiary;
     font-size: 0.625rem;
@@ -144,7 +135,6 @@
     letter-spacing: 0.22em;
   }
 
-  /* Display headings — §2.2 — Inter 500, negative tracking, uppercase. */
   .display-l {
     @apply font-sans uppercase text-ink-primary;
     font-weight: 500;
@@ -187,7 +177,6 @@
     }
   }
 
-  /* Body sizes. */
   .body-l {
     @apply font-sans text-ink-primary;
     font-weight: 400;
@@ -227,7 +216,6 @@
     }
   }
 
-  /* Container — §2.3 max-width 1200px, padding latéral 32px desktop / 20px mobile. */
   .container-paolisa {
     @apply mx-auto;
     max-width: 1200px;
@@ -242,7 +230,6 @@
     }
   }
 
-  /* Section vertical rhythm — §2.3 : sections principales 4-6rem. */
   .section-y {
     padding-top: 4rem;
     padding-bottom: 4rem;

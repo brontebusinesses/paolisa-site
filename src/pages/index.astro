@@ -1,24 +1,20 @@
 ---
 /**
- * Home — § 4.1 (mise à jour gamme 6 produits, juillet 2026)
- * NoticeBar → Header (transparent) → Hero → TrioBar → La gamme → Manifesto → CompositionList → Footer.
+ * Home — hero « composition gamme » (juillet 2026).
+ * NoticeBar → Header (opaque) → HeroGamme → TrioBar → Manifesto → CompositionList → Footer.
  */
 import BaseLayout from '../layouts/BaseLayout.astro';
 import NoticeBar from '../components/NoticeBar.astro';
 import Header from '../components/Header.astro';
-import Hero from '../components/Hero.astro';
+import HeroGamme from '../components/HeroGamme.astro';
 import TrioBar from '../components/TrioBar.astro';
 import Manifesto from '../components/Manifesto.astro';
 import CompositionList from '../components/CompositionList.astro';
-import ProductCard from '../components/ProductCard.astro';
 import Footer from '../components/Footer.astro';
 import { isStoreOpen } from '../lib/store-status';
-import { productList, essentials, solaires, productLabel } from '../lib/products';
 
 const storeOpen = isStoreOpen();
-const gamme = productList();
 
-// § 6.1 — Trio bar items (gamme)
 const trioItems = [
   { label: 'LA GAMME', status: '[ 06 PRODUITS ]', href: '/gamme' },
   {
@@ -29,7 +25,6 @@ const trioItems = [
   { label: 'JOURNAL', status: '[ 04 ENTRÉES ]', href: '/journal' },
 ];
 
-// § 6.1 — Composition (huile N°03, hero de marque)
 const ingredients = [
   { index: '01', name: 'OLIVE',    origin: 'Pression à froid' },
   { index: '02', name: 'AMANDE',   origin: 'Pression à froid' },
@@ -42,54 +37,23 @@ const ingredients = [
 
 <BaseLayout
   title="PAOLISA — Le rituel du matin, au complet."
-  description="La gamme Paolisa : sérum éclat, contour des yeux, huile ou crème, protection solaire. Six gestes, un rituel. Fabriqué avec Selfnamed, conditionné en Belgique."
-  heroOverlay
+  description="La gamme Paolisa : sérum éclat, contour des yeux, huile ou crème, protection solaire. Six gestes, un rituel."
 >
   <NoticeBar message="LIVRAISON UNION EUROPÉENNE · RETOURS SOUS 30 JOURS" />
 
-  <Header transparent currentPath="/" />
+  <Header transparent={false} currentPath="/" />
 
   <main>
-    <Hero
-      image="/hero/no-01.png"
-      imageAlt="Flacon Paolisa avec une goutte d'huile en suspension, lumière chaude méditerranéenne"
-      eyebrow="LE RITUEL DU MATIN / 6 PRODUITS"
-      headlineLine1="Le matin —"
-      headlineLine2="Vous appartient."
+    <HeroGamme
+      eyebrow="LA GAMME / 6 PRODUITS"
+      headlineLine1="Six gestes."
+      headlineLine2="Un rituel."
+      sub="Le sérum, le regard, le soin — huile ou crème — et la protection. Trouvez le vôtre."
       cta1={{ label: 'DÉCOUVRIR LA GAMME →', href: '/gamme' }}
-      cta2={{ label: 'ORIGINE', href: '/origine' }}
+      cta2={{ label: "L'ORIGINE", href: '/origine' }}
     />
 
     <TrioBar items={trioItems} />
-
-    {/* La gamme — 6 produits, code couleur */}
-    <section class="section-y">
-      <div class="container-paolisa">
-        <div class="flex items-baseline justify-between flex-wrap gap-4 mb-10">
-          <div>
-            <p class="mono-label mb-3">— LA GAMME —</p>
-            <h2 class="display-l">Six gestes, un rituel.</h2>
-          </div>
-          <a href="/gamme" class="mono-label hover:opacity-70">TOUT VOIR →</a>
-        </div>
-        <div class="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-6 gap-px bg-line-faint border border-line-faint">
-          {
-            gamme.map((p) => (
-              <ProductCard
-                href={p.href}
-                eyebrow={p.number ? productLabel(p) : 'SOLAIRE'}
-                title={p.title}
-                price={p.priceLabel}
-                status={p.status}
-                accentColor={p.accentColor}
-                accentInverted={p.accentInverted}
-                accentDarkText={p.accentDarkText}
-              />
-            ))
-          }
-        </div>
-      </div>
-    </section>
 
     <Manifesto
       eyebrow="— MANIFESTE —"
