@@ -3,12 +3,15 @@
  * Le site Astro/Vercel n'est pas servi par le thème Shopify, donc on utilise
  * le widget Judge.me « custom platform » : preloader JS + PUBLIC_TOKEN, et des
  * <div class="jdgm-widget …" data-id="<ID produit Shopify>"> sur les fiches.
- *
- * TOKEN : à mettre dans la variable d'environnement Vercel PUBLIC_JUDGEME_TOKEN
- * (Judge.me → Settings → Judge.me API → « Public token »). Sans elle, le
- * preloader n'est pas chargé (les widgets restent inertes, aucune erreur).
  */
 export const JUDGEME_SHOP_DOMAIN = 'paolisa-studio.myshopify.com';
+
+/**
+ * Public token Judge.me (Settings → Intégrations). Public par nature (exposé
+ * côté client). Surchargeable via la variable d'env Vercel PUBLIC_JUDGEME_TOKEN.
+ */
+export const JUDGEME_PUBLIC_TOKEN =
+  import.meta.env.PUBLIC_JUDGEME_TOKEN ?? 'j-qt8o_pLVC4rS5R33Cc719MFN4';
 
 /** slug produit (products.ts) → ID produit Shopify numérique (data-id Judge.me). */
 const IDS: Record<string, string> = {

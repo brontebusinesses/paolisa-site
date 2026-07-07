@@ -1,10 +1,9 @@
 ---
 /**
  * <JudgeMe /> — config + preloader Judge.me, rendu UNE fois dans BaseLayout.
- * Chargé seulement si PUBLIC_JUDGEME_TOKEN est défini (env Vercel).
  */
-import { JUDGEME_SHOP_DOMAIN } from '../lib/judgeme';
-const token = import.meta.env.PUBLIC_JUDGEME_TOKEN;
+import { JUDGEME_SHOP_DOMAIN, JUDGEME_PUBLIC_TOKEN } from '../lib/judgeme';
+const token = JUDGEME_PUBLIC_TOKEN;
 ---
 
 {
