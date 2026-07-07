@@ -2,8 +2,8 @@
 /**
  * <JudgeMe /> — config + preloader Judge.me, rendu UNE fois dans BaseLayout.
  */
-import { JUDGEME_SHOP_DOMAIN, JUDGEME_PUBLIC_TOKEN } from '../lib/judgeme';
-const token = JUDGEME_PUBLIC_TOKEN;
+import { JUDGEME_SHOP_DOMAIN, JUDGEME_PUBLIC_TOKEN, JUDGEME_ENABLED } from '../lib/judgeme';
+const token = JUDGEME_ENABLED ? JUDGEME_PUBLIC_TOKEN : undefined;
 ---
 
 {

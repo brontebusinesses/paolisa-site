@@ -23,4 +23,13 @@ const IDS: Record<string, string> = {
   'stick-solaire': '15840718946636',
 };
 
-export const judgemeProductId = (slug: string): string | undefined => IDS[slug];
+/**
+ * Interrupteur. Judge.me en headless nécessite l'option « Platform-independent
+ * widgets » (payante) — tant qu'elle n'est pas activée, le widget renvoie
+ * « Shop not found » et le bloc reste vide. On masque donc tout Judge.me.
+ * → Repasser à `true` (une ligne) le jour où l'option est activée : tout revient.
+ */
+export const JUDGEME_ENABLED = false;
+
+export const judgemeProductId = (slug: string): string | undefined =>
+  JUDGEME_ENABLED ? IDS[slug] : undefined;
