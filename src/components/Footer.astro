@@ -1,32 +1,36 @@
 ---
 /**
  * <Footer /> — §5.3
- * Trois zones : newsletter (haut centré), 4 colonnes liens, mentions (bas).
+ * Trois zones : offre de bienvenue (haut centré), 4 colonnes liens, mentions (bas).
  * Toujours fond #18181B, texte #FAFAF8.
- *
- * Copy §6.4.
  */
 import Wordmark from './Wordmark.astro';
 import Input from './Input.astro';
 import Button from './Button.astro';
+import { essentials } from '../lib/products';
+
+const essentiels = essentials();
 ---
 
 <footer class="bg-bg-dark text-ink-inverse">
-  {/* Newsletter — §6.4 */}
+  {/* Offre de bienvenue / newsletter */}
   <div class="border-b border-[#2A2A2D]">
     <div class="container-paolisa section-y text-center">
-      <p class="mono-label text-ink-tertiary mb-4">— RECEVEZ LE RITUEL —</p>
-      <h2 class="display-m text-ink-inverse mb-8 max-w-prose mx-auto">
-        Un PDF, six emails, l'accès en avant-première.
+      <p class="mono-label text-ink-tertiary mb-4">— OFFRE DE BIENVENUE —</p>
+      <h2 class="display-m text-ink-inverse mb-4 max-w-prose mx-auto">
+        &minus;10 % sur votre première commande.
       </h2>
+      <p class="body-m text-ink-tertiary mb-8 max-w-prose mx-auto">
+        Inscrivez-vous : on vous envoie votre code, puis le journal et les nouveautés de la gamme.
+      </p>
 
       {/* Feedback inscription — lit ?newsletter=ok|erreur dans l'URL */}
       <div data-newsletter-feedback class="hidden max-w-md mx-auto mb-6">
         <p data-feedback-ok class="hidden caption text-ink-inverse border border-[#2A2A2D] py-3 px-4">
-          ✓ MERCI. VOUS ÊTES INSCRITE — VOUS RECEVREZ LE RITUEL ET LES PROCHAINES NOUVELLES.
+          ✓ MERCI. VOTRE CODE DE BIENVENUE ARRIVE DANS VOTRE BOÎTE MAIL.
         </p>
         <p data-feedback-erreur class="hidden caption text-ink-inverse border border-[#2A2A2D] py-3 px-4">
-          ⚠ UNE ERREUR EST SURVENUE. ESSAYEZ ENCORE OU ÉCRIVEZ-NOUS À BONJOUR@PAOLISA.EU.
+          ⚠ UNE ERREUR EST SURVENUE. ESSAYEZ ENCORE OU ÉCRIVEZ-NOUS À HELLO@PAOLISA.EU.
         </p>
       </div>
 
@@ -62,23 +66,18 @@ import Button from './Button.astro';
   </div>
 
   <script>
-    // Reflète la page actuelle dans le champ caché « return » pour que le
-    // backend redirige sur la même page après inscription.
     const returnInputs = document.querySelectorAll<HTMLInputElement>('[data-return-input]');
     returnInputs.forEach((el) => {
       el.value = window.location.pathname || '/';
     });
 
-    // Affiche le feedback si on revient avec ?newsletter=ok ou ?newsletter=erreur.
-    // Sauf si une autre page (PDP waitlist, contact) gère déjà le feedback —
-    // dans ce cas le footer reste silencieux pour ne pas dupliquer.
     const params = new URLSearchParams(window.location.search);
     const status = params.get('newsletter');
     if (status === 'ok' || status === 'erreur') {
       const path = window.location.pathname;
       const handledByPage =
-        path.startsWith('/huile/') || // PDP a son propre feedback waitlist
-        path === '/contact';            // contact a son propre feedback
+        path.startsWith('/huile/') ||
+        path === '/contact';
 
       if (!handledByPage) {
         const wrap = document.querySelector<HTMLElement>('[data-newsletter-feedback]');
@@ -88,17 +87,15 @@ import Button from './Button.astro';
         if (status === 'ok') ok?.classList.remove('hidden');
         else erreur?.classList.remove('hidden');
 
-        // Scroll vers le feedback pour que la cliente le voie sans avoir à scroller.
         wrap?.scrollIntoView({ behavior: 'smooth', block: 'center' });
 
-        // Nettoie l'URL pour ne pas garder le paramètre après reload.
         const cleanUrl = window.location.pathname + window.location.hash;
         window.history.replaceState({}, document.title, cleanUrl);
       }
     }
   </script>
 
-  {/* 4 colonnes de liens — §6.4 */}
+  {/* 4 colonnes de liens */}
   <div class="container-paolisa py-12 md:py-16">
     <div class="grid grid-cols-2 md:grid-cols-5 gap-8 md:gap-12">
       <div class="col-span-2 md:col-span-1">
@@ -118,11 +115,19 @@ import Button from './Button.astro';
       </div>
 
       <div>
-        <h3 class="mono-label text-ink-tertiary mb-5">— BOUTIQUE —</h3>
+        <h3 class="mono-label text-ink-tertiary mb-5">— LA GAMME —</h3>
         <ul class="space-y-3">
-          <li><a href="/huile/no-01" class="body-m text-ink-inverse hover:opacity-70 transition-opacity duration-150 ease-in-out">N°01 Huile matin</a></li>
-          <li><span class="body-m text-ink-tertiary">N°02 Soir (bientôt)</span></li>
-          <li><span class="body-m text-ink-tertiary">Carte cadeau (futur)</span></li>
+          <li><a href="/gamme" class="body-m text-ink-inverse hover:opacity-70 transition-opacity duration-150 ease-in-out">Toute la gamme</a></li>
+          {
+            essentiels.map((p) => (
+              <li>
+                <a href={p.href} class="body-m text-ink-inverse hover:opacity-70 transition-opacity duration-150 ease-in-out">
+                  {p.title}
+                </a>
+              </li>
+            ))
+          }
+          <li><a href="/gamme" class="body-m text-ink-inverse hover:opacity-70 transition-opacity duration-150 ease-in-out">Les solaires</a></li>
         </ul>
       </div>
 
@@ -148,7 +153,7 @@ import Button from './Button.astro';
     </div>
   </div>
 
-  {/* Mentions bas — §6.4 */}
+  {/* Mentions bas */}
   <div class="border-t border-[#2A2A2D]">
     <div class="container-paolisa py-6">
       <div class="flex flex-col md:flex-row md:items-center md:justify-between gap-4">

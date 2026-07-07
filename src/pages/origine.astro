@@ -1,7 +1,7 @@
 ---
 /**
  * Origine — §4.3
- * Hero éditorial + 3 sections (PA / ISA / LISA) + manifeste long + CTA discret.
+ * Hero éditorial + 3 sections (PA / ISA / LISA) + manifeste long + CTA gamme.
  */
 import BaseLayout from '../layouts/BaseLayout.astro';
 import NoticeBar from '../components/NoticeBar.astro';
@@ -32,10 +32,10 @@ const chapters = [
     photo: 'https://images.unsplash.com/photo-1560521166-117ca72366bd?q=85&w=1000&h=1250&fit=crop&auto=format&fm=jpg',
     alt: 'Goutte d\'eau claire — la fraîcheur et la simplicité d\'un soin réduit à l\'essentiel.',
     credit: 'Kelly Sikkema / Unsplash',
-    title: 'Deux gestes maximum. La simplicité, c\'est aussi du soin.',
+    title: 'Le juste nécessaire. La simplicité, c\'est aussi du soin.',
     body: [
       'Maman ne s\'est jamais maquillée. Elle se lavait le visage à l\'eau froide, mettait une huile, et c\'était tout. Quand on lui demandait son secret, elle haussait les épaules : « Il n\'y a pas de secret. »',
-      'C\'est la rigueur d\'un soin réduit à son essentiel. Pas une pauvreté de moyens — un choix. Plutôt deux gestes parfaits que dix gestes approximatifs.',
+      'C\'est la rigueur d\'un soin réduit à son essentiel. Pas une pauvreté de moyens — un choix. Plutôt quelques gestes parfaits que dix gestes approximatifs.',
     ],
   },
   {
@@ -60,7 +60,6 @@ const heroPhoto = {
   credit: 'Sarah Brown / Unsplash',
 };
 
-/** Sert le WebP en priorité (le CDN Unsplash transcode via fm=webp), JPG en fallback. */
 const webp = (src: string) => src.replace('fm=jpg', 'fm=webp');
 ---
 
@@ -68,7 +67,7 @@ const webp = (src: string) => src.replace('fm=jpg', 'fm=webp');
   title="L'origine — PAOLISA"
   description="Trois prénoms. Trois générations. Une conviction. L'histoire familiale derrière Paolisa, marque-famille italo-belge de soin du visage."
 >
-  <NoticeBar message="EU SHIPPING · 30-DAY RETURNS" />
+  <NoticeBar message="LIVRAISON UNION EUROPÉENNE · RETOURS SOUS 30 JOURS" />
   <Header transparent={false} currentPath="/origine" />
 
   <main>
@@ -154,23 +153,28 @@ const webp = (src: string) => src.replace('fm=jpg', 'fm=webp');
             On a fait Paolisa parce qu'on en avait assez de l'inflation cosmétique — assez des routines à sept étapes, des sérums qui multiplient, des actifs qu'on ajoute pour faire long sur l'étiquette.
           </p>
           <p class="body-l text-ink-secondary mb-6">
-            Une huile, le matin, c'est tout ce dont la peau a besoin pour démarrer la journée. Cinq végétaux purs, un aroma discret, et trente secondes de temps pour soi devant une fenêtre.
+            Un rituel court, pas une routine à rallonge. Quelques gestes choisis — un sérum, un contour, un soin (huile ou crème), une protection — dans le bon ordre, et rien de superflu.
           </p>
           <p class="body-l text-ink-secondary">
-            On préfère un seul produit qu'on aime à dix produits qu'on tolère.
+            On préfère quelques produits qu'on aime à dix qu'on tolère.
           </p>
         </div>
       </div>
     </section>
 
-    {/* CTA discret */}
+    {/* CTA — de l'huile à la gamme */}
     <section class="section-y">
       <div class="container-paolisa text-center">
         <p class="mono-label mb-4">— DÉCOUVRIR —</p>
-        <h2 class="display-s mb-8">L'huile qui a donné son nom à tout ça.</h2>
-        <Button variant="primary" href="/huile/no-01">
-          DÉCOUVRIR L'HUILE →
-        </Button>
+        <h2 class="display-s mb-8 max-w-prose mx-auto">L'huile a donné son nom à tout ça. Aujourd'hui, elle a une famille.</h2>
+        <div class="flex flex-col sm:flex-row gap-4 sm:gap-6 justify-center">
+          <Button variant="primary" href="/gamme">
+            DÉCOUVRIR LA GAMME →
+          </Button>
+          <Button variant="secondary" href="/huile/no-01">
+            L'HUILE N°03
+          </Button>
+        </div>
       </div>
     </section>
   </main>
