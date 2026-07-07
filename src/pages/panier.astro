@@ -1,9 +1,8 @@
 ---
 /**
- * Panier — §4.8
- * V1 : un seul produit, pas de gestion de panier multi-items.
- * Le bouton AJOUTER AU PANIER de la PDP fait directement /api/checkout.
- * Cette page sert de fallback si quelqu'un arrive ici directement.
+ * Panier — rendu côté client depuis le panier local (localStorage).
+ * Boutons : « Poursuivre mes achats » (→ /gamme) et « Passer au paiement »
+ * (permalink Shopify → checkout).
  */
 import BaseLayout from '../layouts/BaseLayout.astro';
 import NoticeBar from '../components/NoticeBar.astro';
@@ -12,32 +11,118 @@ import Footer from '../components/Footer.astro';
 import Button from '../components/Button.astro';
 ---
 
-<BaseLayout
-  title="Panier — PAOLISA"
-  description="Votre panier."
-  noindex
->
-  <NoticeBar message="EU SHIPPING · 30-DAY RETURNS" />
+<BaseLayout title="Panier — PAOLISA" description="Votre panier." noindex>
+  <NoticeBar message="LIVRAISON UNION EUROPÉENNE · RETOURS SOUS 30 JOURS" />
   <Header transparent={false} currentPath="/panier" />
 
   <main>
-    <section class="container-paolisa pt-12 md:pt-20 pb-20 md:pb-32">
-      <header class="mb-12">
+    <section class="container-paolisa pt-8 md:pt-12 pb-20 md:pb-32">
+      <header class="mb-10">
         <p class="mono-label mb-4">— PANIER —</p>
         <h1 class="display-l">Votre panier.</h1>
       </header>
 
-      <div class="border-t border-line-subtle py-12 text-center">
-        <p class="body-l text-ink-secondary mb-2">Votre panier est vide.</p>
-        <p class="mono-micro text-ink-tertiary mb-10">
-          AU LANCEMENT, UN SEUL PRODUIT. AJOUTEZ-LE DEPUIS LA FICHE PRODUIT.
-        </p>
-        <Button variant="primary" href="/huile/no-01">
-          DÉCOUVRIR L'HUILE →
-        </Button>
+      {/* Vide */}
+      <div data-cart-empty class="hidden border-t border-line-subtle py-16 text-center">
+        <p class="body-l text-ink-secondary mb-8">Votre panier est vide.</p>
+        <Button variant="primary" href="/gamme">POURSUIVRE MES ACHATS →</Button>
+      </div>
+
+      {/* Rempli */}
+      <div data-cart-full class="hidden grid grid-cols-1 md:grid-cols-12 gap-10 md:gap-16">
+        <div class="md:col-span-8">
+          <ul data-cart-lines class="border-t border-line-subtle"></ul>
+        </div>
+
+        <aside class="md:col-span-4">
+          <div class="md:sticky md:top-[120px] border border-line-subtle p-6 md:p-8">
+            <p class="mono-label mb-6">— RÉCAPITULATIF —</p>
+            <div class="flex items-baseline justify-between mb-3">
+              <span class="body-l text-ink-secondary">Sous-total</span>
+              <span data-cart-subtotal class="font-mono text-[15px] tracking-[0.05em]"></span>
+            </div>
+            <div class="flex items-baseline justify-between mb-6">
+              <span class="body-l text-ink-secondary">Livraison</span>
+              <span class="font-mono text-[13px] tracking-[0.05em] text-ink-tertiary">OFFERTE</span>
+            </div>
+            <a data-cart-checkout href="#" class="block text-center bg-bg-dark text-ink-inverse font-mono uppercase tracking-[0.14em] text-[11px] py-4 mb-3 hover:bg-ink-secondary transition-colors">
+              PASSER AU PAIEMENT →
+            </a>
+            <a href="/gamme" class="block text-center mono-label py-2 hover:opacity-70 transition-opacity">POURSUIVRE MES ACHATS →</a>
+            <p class="mono-micro text-ink-tertiary mt-6 text-center">PAIEMENT SÉCURISÉ · RETOURS SOUS 30 JOURS</p>
+          </div>
+        </aside>
       </div>
     </section>
   </main>
 
   <Footer />
 </BaseLayout>
+
+<script>
+  import { getCart, setQty, removeItem, subtotalCents, checkoutUrl, money } from '../lib/cart-client';
+
+  const empty = document.querySelector<HTMLElement>('[data-cart-empty]');
+  const full = document.querySelector<HTMLElement>('[data-cart-full]');
+  const lines = document.querySelector<HTMLElement>('[data-cart-lines]');
+  const subtotalEl = document.querySelector<HTMLElement>('[data-cart-subtotal]');
+  const checkoutEl = document.querySelector<HTMLAnchorElement>('[data-cart-checkout]');
+
+  function render() {
+    const cart = getCart();
+    if (!cart.length) {
+      empty?.classList.remove('hidden');
+      full?.classList.add('hidden');
+      full?.classList.remove('grid');
+      return;
+    }
+    empty?.classList.add('hidden');
+    full?.classList.remove('hidden');
+    full?.classList.add('grid');
+
+    if (lines) {
+      lines.innerHTML = cart
+        .map(
+          (l) => `
+        <li class="flex gap-4 md:gap-6 py-6 border-b border-line-subtle">
+          <a href="${l.href}" class="w-24 h-28 bg-bg-tertiary overflow-hidden shrink-0">
+            <img src="${l.image}" alt="${l.title}" class="w-full h-full object-cover" />
+          </a>
+          <div class="flex-1 min-w-0">
+            <a href="${l.href}" class="display-s hover:opacity-70">${l.title}</a>
+            <p class="font-mono text-[13px] text-ink-tertiary mt-1 tracking-[0.05em]">${money(l.priceCents)}</p>
+            <div class="flex items-center justify-between mt-4">
+              <div class="inline-flex items-stretch border border-ink-primary" data-line="${l.variantId}">
+                <button type="button" data-dec aria-label="Diminuer" class="w-10 h-10 mono-label flex items-center justify-center hover:bg-ink-primary hover:text-ink-inverse transition-colors">−</button>
+                <span class="w-10 h-10 flex items-center justify-center font-mono text-[13px] border-l border-r border-ink-primary">${l.qty}</span>
+                <button type="button" data-inc aria-label="Augmenter" class="w-10 h-10 mono-label flex items-center justify-center hover:bg-ink-primary hover:text-ink-inverse transition-colors">+</button>
+              </div>
+              <button type="button" data-remove="${l.variantId}" class="mono-micro text-ink-tertiary hover:text-ink-primary underline underline-offset-4">RETIRER</button>
+            </div>
+          </div>
+          <div class="font-mono text-[14px] tracking-[0.05em] shrink-0">${money(l.priceCents * l.qty)}</div>
+        </li>`
+        )
+        .join('');
+    }
+    if (subtotalEl) subtotalEl.textContent = money(subtotalCents());
+    if (checkoutEl) checkoutEl.href = checkoutUrl();
+  }
+
+  document.addEventListener('cart:change', render);
+  document.addEventListener('click', (e) => {
+    const t = e.target as HTMLElement;
+    const dec = t.closest('[data-dec]');
+    const inc = t.closest('[data-inc]');
+    const rem = t.closest('[data-remove]');
+    if (dec || inc) {
+      const wrap = t.closest('[data-line]') as HTMLElement;
+      const id = wrap?.dataset.line!;
+      const cur = getCart().find((l) => l.variantId === id);
+      if (cur) setQty(id, cur.qty + (inc ? 1 : -1));
+    } else if (rem) {
+      removeItem((rem as HTMLElement).dataset.remove!);
+    }
+  });
+  render();
+</script>

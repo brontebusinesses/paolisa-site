@@ -1,12 +1,11 @@
 ---
 /**
- * BaseLayout — chargement fonts (§2.2 révisé) + CSS global.
- * Raleway (wordmark) · Inter (display + body) · JetBrains Mono (mono).
- * font-display: swap — §8.7 Performance.
+ * BaseLayout — fonts (Raleway/Inter/JetBrains Mono) + CSS global + panier + Judge.me.
  */
 import '../styles/global.css';
 import Analytics from '@vercel/analytics/astro';
 import JudgeMe from '../components/JudgeMe.astro';
+import Cart from '../components/Cart.astro';
 
 interface Props {
   title: string;
@@ -39,14 +38,12 @@ const canonicalURL = new URL(Astro.url.pathname, Astro.site ?? 'https://paolisa.
     <link rel="canonical" href={canonicalURL} />
     {noindex && <meta name="robots" content="noindex,nofollow" />}
 
-    {/* Open Graph */}
     <meta property="og:title" content={title} />
     <meta property="og:description" content={description} />
     <meta property="og:type" content="website" />
     <meta property="og:url" content={canonicalURL} />
     {ogImage && <meta property="og:image" content={ogImage} />}
 
-    {/* Fonts — Raleway, Inter, JetBrains Mono — font-display: swap */}
     <link rel="preconnect" href="https://fonts.googleapis.com" />
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
     <link
@@ -58,6 +55,7 @@ const canonicalURL = new URL(Astro.url.pathname, Astro.site ?? 'https://paolisa.
   </head>
   <body data-hero-overlay={heroOverlay ? 'true' : 'false'}>
     <slot />
+    <Cart />
     <Analytics />
     <JudgeMe />
   </body>

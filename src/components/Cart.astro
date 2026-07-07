@@ -1,0 +1,86 @@
+---
+/**
+ * <Cart /> — logique panier site-wide (rendu dans BaseLayout) :
+ *  - met à jour le badge [data-cart-count] du header
+ *  - intercepte les formulaires [data-add-to-cart] (ajout sans redirection)
+ *  - affiche un mini-panier (toast) quelques secondes après l'ajout
+ */
+---
+
+<div
+  data-cart-toast
+  class="fixed z-[60] top-[104px] right-4 md:right-6 w-[calc(100%-2rem)] max-w-[350px] bg-bg-primary border border-line-subtle hidden"
+  role="status"
+  aria-live="polite"
+>
+  <div class="p-5">
+    <div class="flex items-center justify-between mb-4">
+      <p class="mono-label text-ink-primary">— AJOUTÉ AU PANIER —</p>
+      <button type="button" data-cart-toast-close aria-label="Fermer" class="mono-label text-ink-tertiary hover:text-ink-primary">×</button>
+    </div>
+    <div class="flex gap-4 items-center mb-4">
+      <div class="w-16 h-16 bg-bg-tertiary overflow-hidden shrink-0">
+        <img data-toast-img alt="" class="w-full h-full object-cover" />
+      </div>
+      <div class="min-w-0">
+        <p data-toast-title class="display-s truncate"></p>
+        <p data-toast-meta class="body-m text-ink-tertiary"></p>
+      </div>
+    </div>
+    <div class="flex items-center justify-between mb-4 pt-3 border-t border-line-subtle">
+      <span class="mono-label">SOUS-TOTAL</span>
+      <span data-toast-subtotal class="font-mono text-[14px] tracking-[0.05em]"></span>
+    </div>
+    <a data-toast-checkout href="#" class="block text-center bg-bg-dark text-ink-inverse font-mono uppercase tracking-[0.14em] text-[11px] py-4 mb-2 hover:bg-ink-secondary transition-colors">
+      PASSER AU PAIEMENT →
+    </a>
+    <a href="/panier" class="block text-center mono-label py-2 hover:opacity-70 transition-opacity">VOIR LE PANIER →</a>
+  </div>
+</div>
+
+<script>
+  import { addItem, count, subtotalCents, checkoutUrl, money } from '../lib/cart-client';
+
+  const updateBadge = () => {
+    document.querySelectorAll<HTMLElement>('[data-cart-count]').forEach((el) => {
+      el.textContent = String(count());
+    });
+  };
+  updateBadge();
+  document.addEventListener('cart:change', updateBadge);
+  window.addEventListener('storage', updateBadge);
+
+  const toast = document.querySelector<HTMLElement>('[data-cart-toast]');
+  let timer: number | undefined;
+  const show = (line: any) => {
+    if (!toast) return;
+    (toast.querySelector('[data-toast-img]') as HTMLImageElement).src = line.image;
+    toast.querySelector('[data-toast-title]')!.textContent = line.title;
+    toast.querySelector('[data-toast-meta]')!.textContent = `Quantité ${line.qty} · ${money(line.priceCents * line.qty)}`;
+    toast.querySelector('[data-toast-subtotal]')!.textContent = money(subtotalCents());
+    (toast.querySelector('[data-toast-checkout]') as HTMLAnchorElement).href = checkoutUrl();
+    toast.classList.remove('hidden');
+    if (timer) clearTimeout(timer);
+    timer = window.setTimeout(() => toast.classList.add('hidden'), 6000);
+  };
+  toast?.querySelector('[data-cart-toast-close]')?.addEventListener('click', () => toast.classList.add('hidden'));
+
+  document.querySelectorAll<HTMLFormElement>('[data-add-to-cart]').forEach((form) => {
+    form.addEventListener('submit', (e) => {
+      e.preventDefault();
+      const qtyInput = form.querySelector<HTMLInputElement>('[data-qty-input]');
+      const qty = Math.max(1, Number(qtyInput?.value || 1));
+      const line = {
+        variantId: form.dataset.variant!,
+        slug: form.dataset.slug!,
+        title: form.dataset.title!,
+        priceCents: Number(form.dataset.price),
+        qty,
+        image: form.dataset.image!,
+        href: form.dataset.href!,
+      };
+      addItem(line);
+      show(line);
+    });
+  });
+</script>
