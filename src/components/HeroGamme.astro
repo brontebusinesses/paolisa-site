@@ -41,7 +41,7 @@ const gamme = productList();
           <li class="border-b sm:border-b-0 border-r border-line-subtle">
             <a href={p.href} class="block px-3 md:px-4 pt-5 pb-6 hover:bg-bg-tertiary transition-colors duration-200 ease-in-out">
               <div class="relative w-full aspect-[3/4] overflow-hidden bg-bg-primary" style="border-radius:120px 120px 3px 3px">
-                <img src={p.images[0]} alt={p.title} class="absolute inset-0 w-full h-full object-cover" loading="lazy" />
+                <img src={p.cardImage} alt={p.title} class="absolute inset-0 w-full h-full object-cover" loading="lazy" />
               </div>
               <p class="mono-micro text-ink-tertiary mt-4">{p.number ? productLabel(p) : 'SOLAIRE'}</p>
               <p class="display-s mt-1">{p.title}</p>

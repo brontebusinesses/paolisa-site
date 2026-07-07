@@ -1,26 +1,19 @@
 /**
  * Catalogue produits — source unique pour la gamme, les fiches (PDP), le panier.
  *
- * Système « rituel numéroté » (juillet 2026, passage 1 → 6 produits) :
- *   Les Essentiels (numérotés, dans l'ordre du geste) :
- *     N°01 Sérum → N°02 Contour des yeux → N°03 Soin (Huile OU Crème, 2 textures)
- *   Les Solaires (non numérotés, occasionnels) : Voile teinté SPF30, Stick SPF50
+ * Système « rituel numéroté » : N°01 Sérum → N°02 Contour → N°03 Huile/Crème,
+ * puis Les Solaires (non numérotés).
  *
- * COULEURS : chaque flacon porte une couleur (façon Nespresso). Définies dans
- * `accentColor` — pour en corriger une, changer la valeur hex à UN seul endroit.
- * Confirmées : Sérum = rose, Yeux = jaune. Proposées : Huile = vert, Crème =
- * corail, Solaires = bleu (le stick en « étiquette inversée »).
+ * IMAGES — deux usages distincts :
+ *   • `cardImage` = vignette STUDIO (fond gris uniforme, flacon seul) → utilisée
+ *     sur les CARTES (home, page gamme, cross-sell).
+ *   • `images[]`  = photos SHOPIFY (plusieurs vues) → utilisées sur les FICHES (PDP).
  *
- * IMAGES : URLs du CDN Shopify (publiques, stables). Utilisées sur les fiches.
- * La gamme (grille) montre les arches colorées (système de marque), pas les photos.
- *
- * PANIER : `shopifyVariantId` = variante postée sur /cart/add. Prix/variants
- * vérifiés sur la boutique PAOLISA le 07/07/2026.
+ * PANIER : `shopifyVariantId` = variante postée sur /cart/add. Vérifié 07/07/2026.
  */
 
 export type Tier = 'essentiel' | 'solaire';
 
-/** Palette gamme. Le terracotta reste réservé au point ●. */
 export const ACCENTS = {
   vert: '#1FA85C',
   bleu: '#159BD4',
@@ -51,7 +44,9 @@ export interface Product {
   accentName: string;
   accentInverted?: boolean;
   accentDarkText?: boolean;
-  /** Photos produit (CDN Shopify). La première est l'image principale. */
+  /** Vignette studio (fond gris) — cartes / home. */
+  cardImage: string;
+  /** Photos Shopify (plusieurs vues) — fiche produit (PDP). */
   images: string[];
   shopifyHandle: string;
   shopifyVariantId: string;
@@ -68,7 +63,6 @@ export interface Product {
 export const products: Record<string, Product> = {
   /* ===================== LES ESSENTIELS ===================== */
 
-  // N°01 — Sérum éclat
   'serum': {
     slug: 'serum',
     href: '/produit/serum',
@@ -87,7 +81,11 @@ export const products: Record<string, Product> = {
       "Le geste qui ouvre le rituel, sur peau propre. Une texture fluide, sans parfum, qui pénètre vite. Les exosomes soutiennent le microbiome, la niacinamide affine le grain et ravive l'éclat, l'acide hyaluronique repulpe. Convient à toutes les peaux, même sensibles.",
     accentColor: ACCENTS.rose,
     accentName: 'Rose',
-    images: ['/hero/hero-serum.jpg'],
+    cardImage: '/hero/hero-serum.jpg',
+    images: [
+      `${CDN}/RoFp4XusXuF8b2Y5tBhTelrKXFjNz5OC.jpg?v=1783437957`,
+      `${CDN}/MqYtRQgqkc_g_9d91kdpmEGXLy-OQvhf.jpg?v=1783437957`,
+    ],
     shopifyHandle: 'exosome-niacinamide-serum',
     shopifyVariantId: '57882087883084',
     available: true,
@@ -100,7 +98,6 @@ export const products: Record<string, Product> = {
     ],
   },
 
-  // N°02 — Contour des yeux
   'contour-yeux': {
     slug: 'contour-yeux',
     href: '/produit/contour-yeux',
@@ -120,8 +117,13 @@ export const products: Record<string, Product> = {
     accentColor: ACCENTS.jaune,
     accentName: 'Jaune',
     accentDarkText: true,
-    images: ['/hero/hero-contour-yeux.jpg'],
-    shopifyHandle: 'retinol-alternative-eye-serum',
+    cardImage: '/hero/hero-contour-yeux.jpg',
+    images: [
+      `${CDN}/MeRC2BjJ6Zb8Jgxj1PLRlq41mdi_v2j5.jpg?v=1783442493`,
+      `${CDN}/6cm5N1ScGRn0d7qzUZMvXW1_cY9El4pH.jpg?v=1783442494`,
+      `${CDN}/y4--P1doq2b9gLs2aYJ1arkBL2YBYugh.jpg?v=1783442493`,
+    ],
+    shopifyHandle: 'retinol-alternative-eye-serum-1',
     shopifyVariantId: '58004997833036',
     available: true,
     status: 'DISPONIBLE',
@@ -133,7 +135,6 @@ export const products: Record<string, Product> = {
     ],
   },
 
-  // N°03 · Huile — Huile visage (fiche crafted : /huile/no-01)
   'no-01': {
     slug: 'no-01',
     href: '/huile/no-01',
@@ -153,7 +154,12 @@ export const products: Record<string, Product> = {
       "Le soin hydratant du rituel, version huile — pour les peaux qui aiment le gras nourrissant. Une huile sèche qui pénètre vite : olive, amande, abricot, avocat, églantier, complétés de jojoba, onagre, argousier et framboise.",
     accentColor: ACCENTS.vert,
     accentName: 'Vert',
-    images: ['/hero/hero-huile.jpg'],
+    cardImage: '/hero/hero-huile.jpg',
+    images: [
+      `${CDN}/QCaRgeWSatPMk_ALohJEVB4tGk8tBcWC.jpg?v=1783438123`,
+      `${CDN}/dh10BtaU3z7-cZHhEKD_v-ib3xqQ_TIQ.jpg?v=1783438123`,
+      `${CDN}/IqP-jOPER55aKuhok-syhSO6JCHrcWWE.jpg?v=1783438123`,
+    ],
     shopifyHandle: 'all-in-one-facial-oil',
     shopifyVariantId: '57879675568460',
     available: true,
@@ -199,7 +205,6 @@ export const products: Record<string, Product> = {
     ],
   },
 
-  // N°03 · Crème — Crème lissante
   'creme': {
     slug: 'creme',
     href: '/produit/creme',
@@ -219,7 +224,12 @@ export const products: Record<string, Product> = {
       "La même étape que l'huile, texture crème. Soyeuse, à absorption rapide, elle mise sur une alternative naturelle au rétinol (Bidens Pilosa 2 %) avec vitamines C et E et acide hyaluronique pour lisser les ridules et repulper — sans irritation.",
     accentColor: ACCENTS.corail,
     accentName: 'Corail',
-    images: ['/hero/hero-creme.jpg'],
+    cardImage: '/hero/hero-creme.jpg',
+    images: [
+      `${CDN}/pIQfWAaB0Cd-47QqEBERPjuf-Mr3wZsR.jpg?v=1783438067`,
+      `${CDN}/2uacT2WToKOUhuJiZkTiPa3NDidAEVDW.jpg?v=1783438067`,
+      `${CDN}/1xKHb8VkFMLdSepKaAmEkXg8n_xEgqNA.jpg?v=1783438067`,
+    ],
     shopifyHandle: 'retinol-alternative-moisturiser',
     shopifyVariantId: '57879856972108',
     available: true,
@@ -234,7 +244,6 @@ export const products: Record<string, Product> = {
 
   /* ===================== LES SOLAIRES ===================== */
 
-  // Voile solaire teinté SPF30
   'solaire-teinte': {
     slug: 'solaire-teinte',
     href: '/produit/solaire-teinte',
@@ -253,7 +262,11 @@ export const products: Record<string, Product> = {
       "Protection solaire teintée à filtres minéraux, SPF30. Fini naturel embellisseur, sans film blanc. Enrichie en argousier et acide hyaluronique pour ne pas dessécher. Le geste qui clôt le rituel les jours de lumière.",
     accentColor: ACCENTS.bleu,
     accentName: 'Bleu',
-    images: ['/hero/hero-solaire-teinte.jpg'],
+    cardImage: '/hero/hero-solaire-teinte.jpg',
+    images: [
+      `${CDN}/ybSYPTcTamRoE2WtnOYgMkz7ctRTor5j.jpg?v=1783438332`,
+      `${CDN}/DTOjjlJpdI0oVAkDbrc-6wCz_a2G23dj.jpg?v=1783438331`,
+    ],
     shopifyHandle: 'sunscreen-spf30-with-tint',
     shopifyVariantId: '57937479860556',
     available: true,
@@ -266,7 +279,6 @@ export const products: Record<string, Product> = {
     ],
   },
 
-  // Stick solaire SPF50 (étiquette inversée)
   'stick-solaire': {
     slug: 'stick-solaire',
     href: '/produit/stick-solaire',
@@ -286,7 +298,12 @@ export const products: Record<string, Product> = {
     accentColor: ACCENTS.bleu,
     accentName: 'Bleu (inversé)',
     accentInverted: true,
-    images: ['/hero/hero-stick-solaire.jpg'],
+    cardImage: '/hero/hero-stick-solaire.jpg',
+    images: [
+      `${CDN}/jkDaYg-_3OJcAxBzWvGDfVj8_lZPegGb.jpg?v=1783438212`,
+      `${CDN}/AqNF9Hw1W4eZR6lZLt84n5NgMlxYZKmF.jpg?v=1783438212`,
+      `${CDN}/IpJKYRawa0JV8sbOT6zOoTERQ2R9OCBN.jpg?v=1783438212`,
+    ],
     shopifyHandle: 'sun-protection-spf50-stick-no-tint',
     shopifyVariantId: '57882125926732',
     available: true,
@@ -300,20 +317,12 @@ export const products: Record<string, Product> = {
   },
 };
 
-/** Ordre d'affichage de la gamme (rituel puis solaires). */
 const ORDER = ['serum', 'contour-yeux', 'no-01', 'creme', 'solaire-teinte', 'stick-solaire'];
 
 export const getProduct = (slug: string): Product | undefined => products[slug];
+export const productList = (): Product[] => ORDER.map((s) => products[s]).filter(Boolean);
+export const essentials = (): Product[] => productList().filter((p) => p.tier === 'essentiel');
+export const solaires = (): Product[] => productList().filter((p) => p.tier === 'solaire');
 
-export const productList = (): Product[] =>
-  ORDER.map((s) => products[s]).filter(Boolean);
-
-export const essentials = (): Product[] =>
-  productList().filter((p) => p.tier === 'essentiel');
-
-export const solaires = (): Product[] =>
-  productList().filter((p) => p.tier === 'solaire');
-
-/** Étiquette N° + texture pour l'affichage, ex. "N°03 · Huile". */
 export const productLabel = (p: Product): string =>
   p.number ? (p.texture ? `${p.number} · ${p.texture}` : p.number) : 'SOLAIRE';

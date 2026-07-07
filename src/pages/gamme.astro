@@ -47,7 +47,7 @@ const solaireProducts = solaires();
           essentiels.map((p) => (
             <ProductCard
               href={p.href}
-              image={p.images[0]}
+              image={p.cardImage}
               imageAlt={p.title}
               eyebrow={`${productLabel(p)} / ${p.category}`}
               title={p.title}
@@ -72,7 +72,7 @@ const solaireProducts = solaires();
           solaireProducts.map((p) => (
             <ProductCard
               href={p.href}
-              image={p.images[0]}
+              image={p.cardImage}
               imageAlt={p.title}
               eyebrow={`SOLAIRE / ${p.format}`}
               title={p.title}

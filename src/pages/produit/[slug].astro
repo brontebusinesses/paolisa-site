@@ -152,7 +152,7 @@ const related = productList().filter((p) => p.slug !== product.slug).slice(0, 3)
             related.map((p) => (
               <ProductCard
                 href={p.href}
-                image={p.images[0]}
+                image={p.cardImage}
                 imageAlt={p.title}
                 eyebrow={`${productLabel(p)} / ${p.category}`}
                 title={p.title}
