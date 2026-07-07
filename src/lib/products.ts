@@ -155,7 +155,7 @@ export const products: Record<string, Product> = {
     priceCents: 4500,
     priceLabel: '45 €',
     shortDescription:
-      'Cinq huiles méditerranéennes, un seul geste, le matin. Une huile sèche qui pénètre vite.',
+      'Une huile sèche, le matin. Olive, amande, abricot, avocat, églantier et plus — pressées à froid, elle pénètre vite.',
     longDescription:
       "Le soin hydratant du rituel, version huile — pour les peaux qui aiment le gras nourrissant. Une huile sèche qui pénètre vite : olive, amande, abricot, avocat, églantier, complétés de jojoba, onagre, argousier et framboise.",
     accentColor: ACCENTS.vert,
