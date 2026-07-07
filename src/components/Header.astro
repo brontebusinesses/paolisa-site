@@ -2,15 +2,11 @@
 /**
  * <Header /> — §5.2
  * Layout flottant transparent sur le hero, devient blanc opaque au scroll au-delà de 100px.
- *
- * Layout §3.2 :
- *   ≡ MENU      L'INVENTAIRE          PAOLISA ●          RECHERCHE
- *   COMPTE      [ 0 ]
- *
- * Comportement : transparent par défaut sur la home, scroll > 100px → opaque.
+ * Menu overlay full-screen listant la gamme (6 produits, 2 niveaux).
  */
 import Wordmark from './Wordmark.astro';
 import { isStoreOpen } from '../lib/store-status';
+import { essentials, solaires, productLabel } from '../lib/products';
 
 interface Props {
   transparent?: boolean;
@@ -19,6 +15,8 @@ interface Props {
 
 const { transparent = false, currentPath = '/' } = Astro.props;
 const storeOpen = isStoreOpen();
+const essentiels = essentials();
+const solaireProducts = solaires();
 ---
 
 <header
@@ -32,7 +30,7 @@ const storeOpen = isStoreOpen();
 >
   <div class="container-paolisa">
     <div class="grid grid-cols-3 items-center h-[64px] md:h-[72px]">
-      {/* Left — Menu + L'inventaire */}
+      {/* Left — Menu + La gamme */}
       <div class="flex items-center gap-6 md:gap-8">
         <button
           type="button"
@@ -48,14 +46,14 @@ const storeOpen = isStoreOpen();
           <span>MENU</span>
         </button>
         <a
-          href="/huile/no-01"
+          href="/gamme"
           class:list={[
             'mono-label hidden md:inline-block hover:opacity-70 transition-opacity duration-150 ease-in-out',
             transparent ? 'text-ink-inverse' : 'text-ink-primary',
-            currentPath?.startsWith('/huile') ? 'opacity-70' : '',
+            currentPath?.startsWith('/gamme') ? 'opacity-70' : '',
           ]}
         >
-          L'INVENTAIRE
+          LA GAMME
         </a>
       </div>
 
@@ -66,13 +64,7 @@ const storeOpen = isStoreOpen();
         </a>
       </div>
 
-      {/* Right — Recherche / Compte / Panier
-          - Recherche : caché tant qu'on n'a pas la fonctionnalité (1 produit, search inutile)
-          - Compte    : caché en pré-lancement (pas de comptes clients)
-                        Au launch, pointera vers Shopify customer accounts
-          - Panier    : toujours visible (équilibre visuel + lien vers /panier)
-                        En pré-lancement il affiche 0 et la page dit "panier vide"
-      */}
+      {/* Right — Compte / Panier */}
       <div class="flex items-center justify-end gap-4 md:gap-6">
         {
           storeOpen && (
@@ -110,12 +102,9 @@ const storeOpen = isStoreOpen();
 {/* Menu overlay full-screen — §3.2 */}
 <div
   data-menu-overlay
-  class="fixed inset-0 z-50 bg-bg-primary hidden flex-col"
+  class="fixed inset-0 z-50 bg-bg-primary hidden flex-col overflow-y-auto"
   aria-hidden="true"
 >
-  {/* Header de l'overlay — même structure grid-cols-3 que le header normal
-      pour que FERMER soit aligné à gauche (même position que MENU) et que
-      PAOLISA reste parfaitement centré, comme sur le reste du site. */}
   <div class="container-paolisa border-b border-line-subtle">
     <div class="grid grid-cols-3 items-center h-[64px] md:h-[72px]">
       <div class="flex items-center">
@@ -137,12 +126,37 @@ const storeOpen = isStoreOpen();
   </div>
 
   <nav class="container-paolisa flex-1 flex items-start py-12 md:py-20">
-    <div class="grid grid-cols-1 md:grid-cols-2 gap-12 md:gap-20 w-full">
+    <div class="grid grid-cols-1 md:grid-cols-3 gap-12 md:gap-16 w-full">
       <div>
-        <p class="mono-label mb-6">L'INVENTAIRE</p>
+        <p class="mono-label mb-6">LES ESSENTIELS</p>
         <ul class="space-y-3">
-          <li><a href="/huile/no-01" class="display-s hover:opacity-70 transition-opacity duration-150 ease-in-out">N°01 — Huile matin</a></li>
-          <li><span class="display-s text-ink-tertiary">N°02 — Soir (bientôt)</span></li>
+          {
+            essentiels.map((p) => (
+              <li>
+                <a href={p.href} class="display-s hover:opacity-70 transition-opacity duration-150 ease-in-out">
+                  {productLabel(p)} — {p.title}
+                </a>
+              </li>
+            ))
+          }
+        </ul>
+        <p class="mono-label mb-4 mt-8">LES SOLAIRES</p>
+        <ul class="space-y-3">
+          {
+            solaireProducts.map((p) => (
+              <li>
+                <a href={p.href} class="display-s hover:opacity-70 transition-opacity duration-150 ease-in-out">
+                  {p.title}
+                </a>
+              </li>
+            ))
+          }
+        </ul>
+      </div>
+      <div>
+        <p class="mono-label mb-6">— LA GAMME —</p>
+        <ul class="space-y-3">
+          <li><a href="/gamme" class="display-s hover:opacity-70 transition-opacity duration-150 ease-in-out">Voir toute la gamme</a></li>
         </ul>
       </div>
       <div>
@@ -172,7 +186,6 @@ const storeOpen = isStoreOpen();
           el.classList.add('text-ink-primary');
           el.dataset.invertedOnScroll = 'true';
         });
-        // Wordmark dot stays terracotta — handled via CSS class.
       } else {
         header.classList.add('bg-transparent');
         header.classList.remove('bg-bg-primary', 'border-b', 'border-line-subtle');

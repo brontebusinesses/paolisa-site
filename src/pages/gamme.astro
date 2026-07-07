@@ -1,0 +1,93 @@
+---
+/**
+ * Page « La gamme » — l'inventaire complet (6 produits) en deux niveaux :
+ *   Les Essentiels (numérotés, ordre du rituel) · Les Solaires (non numérotés).
+ * Code couleur par flacon via ProductCard (accentColor issu de products.ts).
+ */
+import BaseLayout from '../layouts/BaseLayout.astro';
+import NoticeBar from '../components/NoticeBar.astro';
+import Header from '../components/Header.astro';
+import Footer from '../components/Footer.astro';
+import ProductCard from '../components/ProductCard.astro';
+import { essentials, solaires, productLabel } from '../lib/products';
+
+const essentiels = essentials();
+const solaireProducts = solaires();
+---
+
+<BaseLayout
+  title="La gamme — PAOLISA"
+  description="Les six produits Paolisa : le rituel du matin, du sérum à la protection solaire. Sérum éclat, contour des yeux, huile, crème, solaires."
+>
+  <NoticeBar message="LIVRAISON UNION EUROPÉENNE · RETOURS SOUS 30 JOURS" />
+  <Header transparent={false} currentPath="/gamme" />
+
+  <main>
+    <section class="container-paolisa pt-8 md:pt-12 pb-16 md:pb-24">
+      {/* Intro */}
+      <div class="flex items-baseline justify-between flex-wrap gap-4 mb-12 md:mb-16">
+        <div class="max-w-2xl">
+          <p class="mono-label mb-4">— L'INVENTAIRE —</p>
+          <h1 class="display-l mb-4">La gamme</h1>
+          <p class="body-l text-ink-secondary max-w-prose">
+            Le rituel se lit dans l'ordre. Un numéro par geste — le sérum d'abord,
+            puis le regard, puis le soin. Les solaires, eux, s'ajoutent au gré des
+            saisons. Le point ● terracotta tient le tout.
+          </p>
+        </div>
+        <p class="mono-label">[ 06 PRODUITS ]</p>
+      </div>
+
+      {/* Les Essentiels */}
+      <div class="flex items-center gap-4 mb-8">
+        <p class="mono-label whitespace-nowrap text-ink-primary">LES ESSENTIELS — LE RITUEL</p>
+        <span class="flex-1 border-t border-line-subtle"></span>
+      </div>
+      <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-px bg-line-faint border border-line-faint">
+        {
+          essentiels.map((p) => (
+            <ProductCard
+              href={p.href}
+              eyebrow={`${productLabel(p)} / ${p.category}`}
+              title={p.title}
+              subtitle={p.subtitle}
+              price={p.priceLabel}
+              status={p.status}
+              accentColor={p.accentColor}
+              accentInverted={p.accentInverted}
+              accentDarkText={p.accentDarkText}
+            />
+          ))
+        }
+      </div>
+      <p class="mono-micro text-ink-tertiary mt-4">
+        N°03 — DEUX TEXTURES POUR LA MÊME ÉTAPE : HUILE POUR LES PEAUX QUI AIMENT LE GRAS, CRÈME POUR LES AUTRES.
+      </p>
+
+      {/* Les Solaires */}
+      <div class="flex items-center gap-4 mb-8 mt-16 md:mt-24">
+        <p class="mono-label whitespace-nowrap text-ink-primary">LES SOLAIRES — AU GRÉ DES SAISONS</p>
+        <span class="flex-1 border-t border-line-subtle"></span>
+      </div>
+      <div class="grid grid-cols-1 sm:grid-cols-2 gap-px bg-line-faint border border-line-faint max-w-3xl">
+        {
+          solaireProducts.map((p) => (
+            <ProductCard
+              href={p.href}
+              eyebrow={`SOLAIRE / ${p.format}`}
+              title={p.title}
+              subtitle={p.subtitle}
+              price={p.priceLabel}
+              status={p.status}
+              accentColor={p.accentColor}
+              accentInverted={p.accentInverted}
+              accentDarkText={p.accentDarkText}
+            />
+          ))
+        }
+      </div>
+    </section>
+  </main>
+
+  <Footer />
+</BaseLayout>

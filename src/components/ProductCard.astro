@@ -1,28 +1,60 @@
 ---
 /**
- * <ProductCard /> — §5.10
- * Format carte voûtée : image arche en haut (200px 200px 4px 4px §2.4),
- * infos texte en bas. Mono label + display title + prix.
+ * <ProductCard /> — §5.10 + gamme code couleur (juillet 2026).
+ * Carte voûtée : arche en haut (teintée à la couleur du flacon si pas de photo),
+ * infos texte en bas — swatch + mono label + display title + sous-titre + prix.
  */
 interface Props {
   href: string;
   image?: string | null;
   imageAlt?: string;
-  eyebrow: string;     // mono label, ex. "N°01 / RITUEL MATIN"
-  title: string;       // display title, ex. "Huile visage rituelle"
-  price: string;       // ex. "€48"
-  status?: string;     // ex. "DISPONIBLE" / "Q3 / 2026"
+  eyebrow: string;          // mono label, ex. "N°01 / SÉRUM"
+  title: string;            // display title, ex. "Sérum éclat"
+  subtitle?: string;        // sous-titre technique
+  price: string;            // ex. "42 €"
+  status?: string;          // ex. "DISPONIBLE"
+  accentColor?: string;     // couleur flacon (hex)
+  accentInverted?: boolean; // étiquette inversée : fond écru, texte couleur
+  accentDarkText?: boolean; // accent clair → wordmark en encre (ex. jaune)
 }
 
-const { href, image = null, imageAlt = '', eyebrow, title, price, status } = Astro.props;
+const {
+  href,
+  image = null,
+  imageAlt = '',
+  eyebrow,
+  title,
+  subtitle,
+  price,
+  status,
+  accentColor,
+  accentInverted = false,
+  accentDarkText = false,
+} = Astro.props;
+
+const ECRU = '#ECE6D8';
+const INK = '#18181B';
+const TERRA = '#A85A35';
+
+// Fond de l'arche : photo > écru (inversé) > couleur du flacon > gris neutre.
+const archBg = accentInverted ? ECRU : accentColor ?? undefined;
+// Couleur du wordmark sur l'arche.
+const markColor = accentInverted
+  ? accentColor
+  : accentDarkText
+    ? INK
+    : ECRU;
 ---
 
 <a
   href={href}
   class="group block bg-bg-secondary hover:bg-bg-tertiary transition-colors duration-200 ease-in-out"
 >
-  {/* Image en arche §2.4 */}
-  <div class="relative w-full aspect-[3/4] overflow-hidden arch">
+  {/* Arche §2.4 */}
+  <div
+    class="relative w-full aspect-[3/4] overflow-hidden arch flex items-center justify-center"
+    style={!image && archBg ? `background:${archBg}` : undefined}
+  >
     {
       image ? (
         <img
@@ -31,6 +63,13 @@ const { href, image = null, imageAlt = '', eyebrow, title, price, status } = Ast
           class="absolute inset-0 w-full h-full object-cover"
           loading="lazy"
         />
+      ) : archBg ? (
+        <span
+          class="wordmark"
+          style={`font-size:16px;letter-spacing:0.22em;text-transform:uppercase;color:${markColor}`}
+        >
+          PAOLISA<span style={`color:${TERRA};margin-left:0.1em`}>●</span>
+        </span>
       ) : (
         <div class="absolute inset-0 w-full h-full bg-line-faint flex items-center justify-center">
           <span class="mono-micro text-ink-tertiary">— PHOTO À VENIR —</span>
@@ -41,8 +80,20 @@ const { href, image = null, imageAlt = '', eyebrow, title, price, status } = Ast
 
   {/* Infos texte */}
   <div class="px-4 md:px-6 py-6 border-t border-line-subtle">
-    <p class="mono-label mb-3">{eyebrow}</p>
-    <h3 class="display-s mb-4">{title}</h3>
+    <p class="mono-label mb-3 flex items-center gap-2">
+      {
+        accentColor && (
+          <span
+            class="inline-block w-2 h-2 border"
+            style={`background:${accentInverted ? ECRU : accentColor};border-color:rgba(0,0,0,0.15)`}
+          />
+        )
+      }
+      {eyebrow}
+    </p>
+    <h3 class="display-s mb-1">{title}</h3>
+    {subtitle && <p class="body-m text-ink-tertiary mb-4">{subtitle}</p>}
+    {!subtitle && <div class="mb-4"></div>}
     <div class="flex items-baseline justify-between">
       <span class="font-mono text-ink-primary text-[14px] tracking-[0.05em]">{price}</span>
       {status && <span class="mono-micro text-ink-tertiary">{status}</span>}

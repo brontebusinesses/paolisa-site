@@ -1,8 +1,7 @@
 ---
 /**
- * Home — § 4.1
- * Composition : NoticeBar → Header (transparent over hero) → Hero → TrioBar → Manifesto → CompositionList → Footer.
- * Copy : § 6.1.
+ * Home — § 4.1 (mise à jour gamme 6 produits, juillet 2026)
+ * NoticeBar → Header (transparent) → Hero → TrioBar → La gamme → Manifesto → CompositionList → Footer.
  */
 import BaseLayout from '../layouts/BaseLayout.astro';
 import NoticeBar from '../components/NoticeBar.astro';
@@ -11,72 +10,100 @@ import Hero from '../components/Hero.astro';
 import TrioBar from '../components/TrioBar.astro';
 import Manifesto from '../components/Manifesto.astro';
 import CompositionList from '../components/CompositionList.astro';
+import ProductCard from '../components/ProductCard.astro';
 import Footer from '../components/Footer.astro';
 import { isStoreOpen } from '../lib/store-status';
+import { productList, essentials, solaires, productLabel } from '../lib/products';
 
 const storeOpen = isStoreOpen();
+const gamme = productList();
 
-// § 6.1 — Trio bar items
+// § 6.1 — Trio bar items (gamme)
 const trioItems = [
+  { label: 'LA GAMME', status: '[ 06 PRODUITS ]', href: '/gamme' },
   {
-    label: 'N°01 — MATIN',
+    label: 'N°01 — SÉRUM',
     status: storeOpen ? '[ DISPONIBLE ]' : '[ BIENTÔT ]',
-    href: '/huile/no-01',
+    href: '/produit/serum',
   },
-  { label: 'N°02 — SOIR', status: '[ Q3 / 2026 ]' },
   { label: 'JOURNAL', status: '[ 04 ENTRÉES ]', href: '/journal' },
 ];
 
-// § 6.1 — Composition (5 ingrédients + aroma).
-// Ligne 06 « aroma · mandarine florale » conservée d'après la spec mais § 11 décision n°5 ouverte.
+// § 6.1 — Composition (huile N°03, hero de marque)
 const ingredients = [
   { index: '01', name: 'OLIVE',    origin: 'Pression à froid' },
   { index: '02', name: 'AMANDE',   origin: 'Pression à froid' },
   { index: '03', name: 'ABRICOT',  origin: 'Pression à froid' },
   { index: '04', name: 'AVOCAT',   origin: 'Pression à froid' },
-  { index: '05', name: 'ROSEHIP',  origin: 'Pression à froid' },
-  { index: '06', name: 'aroma · mandarine florale', origin: '—' },
+  { index: '05', name: 'ÉGLANTIER', origin: 'Pression à froid' },
+  { index: '06', name: 'argousier · framboise · onagre', origin: '—' },
 ];
 ---
 
 <BaseLayout
-  title="PAOLISA — Une huile, le matin."
-  description="N°01 — Huile visage rituelle, matin. Cinq huiles méditerranéennes pures, certifiées COSMOS Organic. €45 · 30 ml."
+  title="PAOLISA — Le rituel du matin, au complet."
+  description="La gamme Paolisa : sérum éclat, contour des yeux, huile ou crème, protection solaire. Six gestes, un rituel. Fabriqué avec Selfnamed, conditionné en Belgique."
   heroOverlay
 >
-  <NoticeBar message="EU SHIPPING · 30-DAY RETURNS" />
+  <NoticeBar message="LIVRAISON UNION EUROPÉENNE · RETOURS SOUS 30 JOURS" />
 
   <Header transparent currentPath="/" />
-
-  {/* Décalage = hauteur de la NoticeBar (+ rien : le header est position fixed
-      par-dessus le hero, donc la photo commence à 0). */}
 
   <main>
     <Hero
       image="/hero/no-01.png"
-      imageAlt="Flacon Paolisa N°01 avec une goutte d'huile en suspension, lumière chaude méditerranéenne"
-      eyebrow="N°01 / RITUEL MATIN / 30ML"
+      imageAlt="Flacon Paolisa avec une goutte d'huile en suspension, lumière chaude méditerranéenne"
+      eyebrow="LE RITUEL DU MATIN / 6 PRODUITS"
       headlineLine1="Le matin —"
       headlineLine2="Vous appartient."
-      cta1={{ label: "DÉCOUVRIR L'HUILE →", href: '/huile/no-01' }}
+      cta1={{ label: 'DÉCOUVRIR LA GAMME →', href: '/gamme' }}
       cta2={{ label: 'ORIGINE', href: '/origine' }}
     />
 
     <TrioBar items={trioItems} />
 
+    {/* La gamme — 6 produits, code couleur */}
+    <section class="section-y">
+      <div class="container-paolisa">
+        <div class="flex items-baseline justify-between flex-wrap gap-4 mb-10">
+          <div>
+            <p class="mono-label mb-3">— LA GAMME —</p>
+            <h2 class="display-l">Six gestes, un rituel.</h2>
+          </div>
+          <a href="/gamme" class="mono-label hover:opacity-70">TOUT VOIR →</a>
+        </div>
+        <div class="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-6 gap-px bg-line-faint border border-line-faint">
+          {
+            gamme.map((p) => (
+              <ProductCard
+                href={p.href}
+                eyebrow={p.number ? productLabel(p) : 'SOLAIRE'}
+                title={p.title}
+                price={p.priceLabel}
+                status={p.status}
+                accentColor={p.accentColor}
+                accentInverted={p.accentInverted}
+                accentDarkText={p.accentDarkText}
+              />
+            ))
+          }
+        </div>
+      </div>
+    </section>
+
     <Manifesto
       eyebrow="— MANIFESTE —"
-      headlineLine1="Une huile. Le matin."
-      headlineLine2="Voilà tout."
-      body="Cinq huiles méditerranéennes pures, certifiées COSMOS Organic. Un seul geste, une seule intention."
+      headlineLine1="Un geste après l'autre."
+      headlineLine2="Voilà le rituel."
+      body="Du sérum à la protection solaire, six produits qui se répondent. Des formules courtes, des actifs choisis, une intention : prendre soin de soi, simplement."
     />
 
     <CompositionList
       eyebrow="LA COMPOSITION"
-      subEyebrow="N°01 / 05 INGRÉDIENTS"
+      subEyebrow="N°03 HUILE / 05 INGRÉDIENTS"
       ingredients={ingredients}
-      footnote="* CERTIFIÉ COSMOS ORGANIC · 99% NATUREL"
-      cta={{ label: 'FICHE PRODUIT →', href: '/huile/no-01' }}
+      footnote="* INGRÉDIENTS ISSUS DE L'AGRICULTURE BIOLOGIQUE"
+      cta={{ label: 'FICHE HUILE →', href: '/huile/no-01' }}
     />
   </main>
 

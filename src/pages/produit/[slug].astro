@@ -1,0 +1,163 @@
+---
+/**
+ * PDP dynamique — les 5 produits de la gamme hors N°03 Huile (qui garde sa
+ * fiche crafted /huile/no-01). Galerie photos Shopify + bloc achat (accent
+ * couleur du flacon) + onglets + cross-sell « compléter le rituel ».
+ */
+import BaseLayout from '../../layouts/BaseLayout.astro';
+import NoticeBar from '../../components/NoticeBar.astro';
+import Header from '../../components/Header.astro';
+import Footer from '../../components/Footer.astro';
+import Button from '../../components/Button.astro';
+import QuantitySelector from '../../components/QuantitySelector.astro';
+import Accordion from '../../components/Accordion.astro';
+import ProductCard from '../../components/ProductCard.astro';
+import { getProduct, productList, productLabel } from '../../lib/products';
+import { buildPdpTabs } from '../../lib/pdp-tabs';
+import { isStoreOpen } from '../../lib/store-status';
+
+export function getStaticPaths() {
+  return productList()
+    .filter((p) => p.slug !== 'no-01') // l'huile garde /huile/no-01
+    .map((p) => ({ params: { slug: p.slug } }));
+}
+
+const { slug } = Astro.params;
+const product = getProduct(slug!)!;
+const storeOpen = isStoreOpen();
+const tabs = buildPdpTabs(product);
+const label = productLabel(product);
+
+const related = productList().filter((p) => p.slug !== product.slug).slice(0, 3);
+---
+
+<BaseLayout
+  title={`${product.title} — ${product.number ?? 'Solaire'} · PAOLISA`}
+  description={product.shortDescription}
+>
+  <NoticeBar message="LIVRAISON UNION EUROPÉENNE · RETOURS SOUS 30 JOURS" />
+  <Header transparent={false} currentPath="/gamme" />
+
+  <main>
+    <section class="container-paolisa pt-8 md:pt-12 pb-20 md:pb-32">
+      <div class="grid grid-cols-1 md:grid-cols-12 gap-8 md:gap-16">
+        {/* Galerie */}
+        <div class="md:col-span-7">
+          <div class="grid grid-cols-1 gap-3 md:gap-4">
+            <div class="relative w-full aspect-[4/5] overflow-hidden arch bg-bg-tertiary">
+              <img src={product.images[0]} alt={product.title} class="absolute inset-0 w-full h-full object-cover" />
+            </div>
+            {
+              product.images.length > 1 && (
+                <div class="grid grid-cols-2 gap-3 md:gap-4">
+                  {product.images.slice(1).map((src, i) => (
+                    <div class="relative w-full aspect-square overflow-hidden bg-bg-tertiary">
+                      <img src={src} alt={`${product.title} — vue ${i + 2}`} class="absolute inset-0 w-full h-full object-cover" loading="lazy" />
+                    </div>
+                  ))}
+                </div>
+              )
+            }
+          </div>
+        </div>
+
+        {/* Bloc info — sticky desktop */}
+        <aside class="md:col-span-5">
+          <div class="md:sticky md:top-[120px] md:max-w-md">
+            <div class="h-[3px] w-12 mb-6" style={`background:${product.accentColor}`}></div>
+            <p class="mono-label mb-4">{label} / {product.category}</p>
+            <h1 class="display-m mb-1">{product.title}</h1>
+            <p class="body-m text-ink-tertiary mb-4">{product.subtitle}</p>
+            <p class="mono-label text-ink-tertiary mb-6">{product.format}</p>
+
+            <p class="font-mono text-[18px] tracking-[0.05em] text-ink-primary mb-8">
+              {product.priceLabel}
+            </p>
+
+            <p class="body-l text-ink-secondary mb-8 max-w-prose">
+              {product.longDescription}
+            </p>
+
+            <ul class="space-y-2 mb-10 body-m">
+              {product.actives.map((a) => <li>· {a}</li>)}
+            </ul>
+
+            {
+              storeOpen ? (
+                <>
+                  <form
+                    method="post"
+                    action="https://paolisa-studio.myshopify.com/cart/add"
+                    class="mb-6"
+                    data-add-to-cart-form
+                  >
+                    <input type="hidden" name="id" value={product.shopifyVariantId} />
+                    <input type="hidden" name="return_to" value="/checkout" />
+                    <div class="flex flex-col sm:flex-row sm:items-center gap-4 sm:gap-6 mb-6">
+                      <span class="mono-label text-ink-tertiary">QUANTITÉ</span>
+                      <QuantitySelector initial={1} max={9} name="quantity" />
+                    </div>
+                    <Button variant="primary" type="submit" fullWidth>
+                      AJOUTER AU PANIER →
+                    </Button>
+                  </form>
+                  <p class="mono-micro text-ink-tertiary">
+                    LIVRAISON UNION EUROPÉENNE &nbsp;·&nbsp; RETOURS SOUS 30 JOURS
+                  </p>
+                </>
+              ) : (
+                <div class="border border-line-subtle p-6 md:p-8 mb-6">
+                  <p class="mono-label mb-3">— BIENTÔT DISPONIBLE —</p>
+                  <p class="body-l text-ink-secondary">
+                    Ce produit rejoint bientôt la boutique. Inscrivez-vous à la newsletter pour être prévenue.
+                  </p>
+                </div>
+              )
+            }
+          </div>
+        </aside>
+      </div>
+
+      {/* Onglets */}
+      <div class="mt-20 md:mt-32 grid grid-cols-1 md:grid-cols-12 gap-8 md:gap-16">
+        <div class="md:col-span-4">
+          <h2 class="display-s mb-3">— LE PRODUIT EN DÉTAIL</h2>
+          <p class="mono-label">{label} / {product.category}</p>
+        </div>
+        <div class="md:col-span-8">
+          <Accordion items={tabs} variant="default" />
+        </div>
+      </div>
+    </section>
+
+    {/* Cross-sell — compléter le rituel */}
+    <section class="bg-bg-secondary section-y">
+      <div class="container-paolisa">
+        <div class="flex items-center gap-4 mb-8">
+          <p class="mono-label whitespace-nowrap text-ink-primary">— COMPLÉTER LE RITUEL</p>
+          <span class="flex-1 border-t border-line-subtle"></span>
+          <a href="/gamme" class="mono-label whitespace-nowrap hover:opacity-70">TOUTE LA GAMME →</a>
+        </div>
+        <div class="grid grid-cols-1 sm:grid-cols-3 gap-px bg-line-faint border border-line-faint">
+          {
+            related.map((p) => (
+              <ProductCard
+                href={p.href}
+                eyebrow={`${productLabel(p)} / ${p.category}`}
+                title={p.title}
+                subtitle={p.subtitle}
+                price={p.priceLabel}
+                status={p.status}
+                accentColor={p.accentColor}
+                accentInverted={p.accentInverted}
+                accentDarkText={p.accentDarkText}
+              />
+            ))
+          }
+        </div>
+      </div>
+    </section>
+  </main>
+
+  <Footer />
+</BaseLayout>
