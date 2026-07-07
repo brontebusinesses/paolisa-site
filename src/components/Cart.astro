@@ -31,6 +31,7 @@
       <span class="mono-label">SOUS-TOTAL</span>
       <span data-toast-subtotal class="font-mono text-[14px] tracking-[0.05em]"></span>
     </div>
+    <p data-toast-nudge class="hidden body-m text-ink-secondary mb-3"></p>
     <a data-toast-checkout href="#" class="block text-center bg-bg-dark text-ink-inverse font-mono uppercase tracking-[0.14em] text-[11px] py-4 mb-2 hover:bg-ink-secondary transition-colors">
       PASSER AU PAIEMENT →
     </a>
@@ -39,7 +40,7 @@
 </div>
 
 <script>
-  import { addItem, count, subtotalCents, checkoutUrl, money } from '../lib/cart-client';
+  import { addItem, count, subtotalCents, checkoutUrl, money, freeShipping, remainingForFree } from '../lib/cart-client';
 
   const updateBadge = () => {
     document.querySelectorAll<HTMLElement>('[data-cart-count]').forEach((el) => {
@@ -59,6 +60,13 @@
     toast.querySelector('[data-toast-meta]')!.textContent = `Quantité ${line.qty} · ${money(line.priceCents * line.qty)}`;
     toast.querySelector('[data-toast-subtotal]')!.textContent = money(subtotalCents());
     (toast.querySelector('[data-toast-checkout]') as HTMLAnchorElement).href = checkoutUrl();
+    const nudge = toast.querySelector('[data-toast-nudge]') as HTMLElement;
+    if (freeShipping()) {
+      nudge.classList.add('hidden');
+    } else {
+      nudge.textContent = `Plus que ${money(remainingForFree())} pour la livraison offerte.`;
+      nudge.classList.remove('hidden');
+    }
     toast.classList.remove('hidden');
     if (timer) clearTimeout(timer);
     timer = window.setTimeout(() => toast.classList.add('hidden'), 6000);

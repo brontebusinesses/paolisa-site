@@ -66,6 +66,15 @@ export function money(cents: number): string {
   return (cents / 100).toLocaleString('fr-BE', { style: 'currency', currency: 'EUR' });
 }
 
+/** Livraison offerte dès 60 € d'achat. */
+export const FREE_SHIPPING_CENTS = 6000;
+export function freeShipping(): boolean {
+  return subtotalCents() >= FREE_SHIPPING_CENTS;
+}
+export function remainingForFree(): number {
+  return Math.max(0, FREE_SHIPPING_CENTS - subtotalCents());
+}
+
 /** Permalink Shopify : construit le panier puis redirige vers le checkout. */
 export function checkoutUrl(): string {
   const cart = getCart();
