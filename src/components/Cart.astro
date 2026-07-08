@@ -70,7 +70,7 @@
     }
     toast.classList.remove('hidden');
     if (timer) clearTimeout(timer);
-    timer = window.setTimeout(() => toast.classList.add('hidden'), 6000);
+    timer = window.setTimeout(() => toast.classList.add('hidden'), 2000);
   };
   toast?.querySelector('[data-cart-toast-close]')?.addEventListener('click', () => toast.classList.add('hidden'));
 

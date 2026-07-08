@@ -4,10 +4,12 @@
  * Arche voûtée avec la photo du flacon, infos texte en bas. Le code couleur ne
  * vit plus que sur le packaging — les cartes montrent les vrais flacons.
  *
- * Ajout rapide (quickAdd) : bouton « + AJOUTER AU PANIER » en overlay sur
- * l'image. Visible en permanence sur mobile (pas de survol), et révélé au
- * survol sur desktop. Il ajoute au panier sans ouvrir la fiche (géré par
- * Cart.astro via [data-quick-add], réutilise le mini-panier).
+ * Ajout rapide (quickAdd), deux formes selon l'écran :
+ *   • DESKTOP : bandeau « + AJOUTER AU PANIER » révélé au survol, sur l'image.
+ *   • MOBILE  : petit bouton rond « + » dans le coin bas-droite de la carte
+ *     (zone texte) — il ne recouvre pas la photo.
+ * Les deux ajoutent au panier sans ouvrir la fiche (géré par Cart.astro via
+ * [data-quick-add]). La quantité se gère ensuite dans le panier.
  */
 interface Props {
   href: string;
@@ -18,7 +20,7 @@ interface Props {
   subtitle?: string;
   price: string;
   status?: string;
-  /** Ajout rapide au panier (bouton au survol de la carte). */
+  /** Ajout rapide au panier. */
   quickAdd?: boolean;
   variantId?: string;
   slug?: string;
@@ -43,10 +45,19 @@ const {
 } = Astro.props;
 
 const canQuickAdd = quickAdd && variantId && slug && priceCents != null;
+const addAttrs = {
+  'data-quick-add': true,
+  'data-variant': variantId,
+  'data-slug': slug,
+  'data-title': title,
+  'data-price': priceCents,
+  'data-image': addImage ?? image,
+  'data-href': href,
+};
 ---
 
-{/* group + relative : le bouton d'ajout rapide s'overlaye sur l'image sans
-    imbriquer un <button> dans le <a> (HTML invalide). */}
+{/* group + relative : les boutons d'ajout rapide s'overlayent sans imbriquer
+    un <button> dans le <a> (HTML invalide). */}
 <div class="group relative bg-bg-secondary hover:bg-bg-tertiary transition-colors duration-200 ease-in-out">
   <a href={href} class="block">
     {/* Arche §2.4 — photo du flacon */}
@@ -73,7 +84,7 @@ const canQuickAdd = quickAdd && variantId && slug && priceCents != null;
       <h3 class="display-s mb-1">{title}</h3>
       {subtitle && <p class="body-m text-ink-tertiary mb-4">{subtitle}</p>}
       {!subtitle && <div class="mb-4"></div>}
-      <div class="flex items-baseline justify-between">
+      <div class="flex items-baseline justify-between pr-12 md:pr-0">
         <span class="font-mono text-ink-primary text-[14px] tracking-[0.05em]">{price}</span>
         {status && <span class="mono-micro text-ink-tertiary">{status}</span>}
       </div>
@@ -82,21 +93,28 @@ const canQuickAdd = quickAdd && variantId && slug && priceCents != null;
 
   {
     canQuickAdd && (
-      <div class="absolute top-0 left-0 w-full aspect-[3/4] flex items-end justify-center p-3 md:p-4 pointer-events-none">
+      <>
+        {/* DESKTOP — bandeau révélé au survol, sur l'image */}
+        <div class="hidden md:flex absolute top-0 left-0 w-full aspect-[3/4] items-end justify-center p-4 pointer-events-none">
+          <button
+            type="button"
+            {...addAttrs}
+            class="pointer-events-auto w-full bg-bg-dark text-ink-inverse font-mono uppercase tracking-[0.14em] text-[11px] py-3 opacity-0 translate-y-2 group-hover:opacity-100 group-hover:translate-y-0 focus-visible:opacity-100 focus-visible:translate-y-0 transition-all duration-200 ease-out hover:bg-ink-secondary"
+          >
+            + AJOUTER AU PANIER
+          </button>
+        </div>
+
+        {/* MOBILE — petit bouton rond « + » dans le coin bas-droite (zone texte) */}
         <button
           type="button"
-          data-quick-add
-          data-variant={variantId}
-          data-slug={slug}
-          data-title={title}
-          data-price={priceCents}
-          data-image={addImage ?? image}
-          data-href={href}
-          class="pointer-events-auto w-full bg-bg-dark text-ink-inverse font-mono uppercase tracking-[0.14em] text-[11px] py-3 opacity-100 translate-y-0 md:opacity-0 md:translate-y-2 md:group-hover:opacity-100 md:group-hover:translate-y-0 focus-visible:opacity-100 focus-visible:translate-y-0 transition-all duration-200 ease-out hover:bg-ink-secondary"
+          {...addAttrs}
+          aria-label={`Ajouter ${title} au panier`}
+          class="md:hidden absolute bottom-4 right-4 w-10 h-10 rounded-full bg-bg-dark text-ink-inverse flex items-center justify-center text-[20px] leading-none hover:bg-ink-secondary active:scale-95 transition"
         >
-          + AJOUTER AU PANIER
+          +
         </button>
-      </div>
+      </>
     )
   }
 </div>
