@@ -1,11 +1,16 @@
 ---
 /**
  * <HeroGamme /> — hero d'accueil « composition gamme » (juillet 2026).
- * Grand titre + les 6 flacons (photos Shopify) en rangée d'arches, sans couleur
+ * Grand titre + les 6 flacons (photos studio) en rangée d'arches, sans couleur
  * (le code couleur ne vit plus que sur le packaging). Fond crème, header opaque.
+ *
+ * Ajout rapide : bouton « + AJOUTER » en overlay sur l'image (révélé au survol
+ * sur desktop, visible sur mobile), qui ajoute au panier sans ouvrir la fiche.
+ * Géré par Cart.astro via [data-quick-add].
  */
 import Button from './Button.astro';
 import { productList, productLabel } from '../lib/products';
+import { isStoreOpen } from '../lib/store-status';
 
 interface Cta { label: string; href: string; }
 interface Props {
@@ -19,6 +24,7 @@ interface Props {
 
 const { eyebrow, headlineLine1, headlineLine2, sub, cta1, cta2 } = Astro.props;
 const gamme = productList();
+const storeOpen = isStoreOpen();
 ---
 
 <section class="bg-bg-secondary" aria-label="Hero — la gamme">
@@ -39,14 +45,38 @@ const gamme = productList();
       {
         gamme.map((p) => (
           <li class="border-b sm:border-b-0 border-r border-line-subtle">
-            <a href={p.href} class="block px-3 md:px-4 pt-5 pb-6 hover:bg-bg-tertiary transition-colors duration-200 ease-in-out">
-              <div class="relative w-full aspect-[3/4] overflow-hidden bg-bg-primary" style="border-radius:120px 120px 3px 3px">
-                <img src={p.cardImage} alt={p.title} class="absolute inset-0 w-full h-full object-cover" loading="lazy" />
-              </div>
-              <p class="mono-micro text-ink-tertiary mt-4">{p.number ? productLabel(p) : 'SOLAIRE'}</p>
-              <p class="display-s mt-1">{p.title}</p>
-              <p class="font-mono text-[12px] text-ink-secondary mt-2 tracking-[0.05em]">{p.priceLabel}</p>
-            </a>
+            {/* group + relative : le bouton d'ajout rapide s'overlaye sur l'image
+                sans imbriquer un <button> dans le <a> (HTML invalide). */}
+            <div class="group relative">
+              <a href={p.href} class="block px-3 md:px-4 pt-5 pb-6 hover:bg-bg-tertiary transition-colors duration-200 ease-in-out">
+                <div class="relative w-full aspect-[3/4] overflow-hidden bg-bg-primary" style="border-radius:120px 120px 3px 3px">
+                  <img src={p.cardImage} alt={p.title} class="absolute inset-0 w-full h-full object-cover" loading="lazy" />
+                </div>
+                <p class="mono-micro text-ink-tertiary mt-4">{p.number ? productLabel(p) : 'SOLAIRE'}</p>
+                <p class="display-s mt-1">{p.title}</p>
+                <p class="font-mono text-[12px] text-ink-secondary mt-2 tracking-[0.05em]">{p.priceLabel}</p>
+              </a>
+
+              {
+                storeOpen && p.available && (
+                  <div class="absolute top-5 left-3 right-3 md:left-4 md:right-4 aspect-[3/4] flex items-end justify-center p-2 pointer-events-none">
+                    <button
+                      type="button"
+                      data-quick-add
+                      data-variant={p.shopifyVariantId}
+                      data-slug={p.slug}
+                      data-title={p.title}
+                      data-price={p.priceCents}
+                      data-image={p.cardImage}
+                      data-href={p.href}
+                      class="pointer-events-auto w-full bg-bg-dark text-ink-inverse font-mono uppercase tracking-[0.1em] text-[10px] py-2 opacity-100 translate-y-0 md:opacity-0 md:translate-y-2 md:group-hover:opacity-100 md:group-hover:translate-y-0 focus-visible:opacity-100 focus-visible:translate-y-0 transition-all duration-200 ease-out hover:bg-ink-secondary"
+                    >
+                      + AJOUTER
+                    </button>
+                  </div>
+                )
+              }
+            </div>
           </li>
         ))
       }
