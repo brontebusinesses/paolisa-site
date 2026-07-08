@@ -3,6 +3,7 @@
  * <Cart /> — logique panier site-wide (rendu dans BaseLayout) :
  *  - met à jour le badge [data-cart-count] du header
  *  - intercepte les formulaires [data-add-to-cart] (ajout sans redirection)
+ *  - gère l'ajout rapide [data-quick-add] depuis les cartes (sans ouvrir la fiche)
  *  - affiche un mini-panier (toast) quelques secondes après l'ajout
  */
 ---
@@ -73,6 +74,7 @@
   };
   toast?.querySelector('[data-cart-toast-close]')?.addEventListener('click', () => toast.classList.add('hidden'));
 
+  // Formulaire d'ajout depuis la fiche produit (avec quantité).
   document.querySelectorAll<HTMLFormElement>('[data-add-to-cart]').forEach((form) => {
     form.addEventListener('submit', (e) => {
       e.preventDefault();
@@ -86,6 +88,24 @@
         qty,
         image: form.dataset.image!,
         href: form.dataset.href!,
+      };
+      addItem(line);
+      show(line);
+    });
+  });
+
+  // Ajout rapide depuis une carte produit (quantité 1, sans ouvrir la fiche).
+  document.querySelectorAll<HTMLButtonElement>('[data-quick-add]').forEach((btn) => {
+    btn.addEventListener('click', (e) => {
+      e.preventDefault();
+      const line = {
+        variantId: btn.dataset.variant!,
+        slug: btn.dataset.slug!,
+        title: btn.dataset.title!,
+        priceCents: Number(btn.dataset.price),
+        qty: 1,
+        image: btn.dataset.image!,
+        href: btn.dataset.href!,
       };
       addItem(line);
       show(line);

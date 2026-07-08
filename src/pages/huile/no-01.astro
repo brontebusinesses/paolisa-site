@@ -231,6 +231,10 @@ const avis = [
                 subtitle={p.subtitle}
                 price={p.priceLabel}
                 status={p.status}
+                quickAdd={storeOpen && p.available}
+                variantId={p.shopifyVariantId}
+                slug={p.slug}
+                priceCents={p.priceCents}
               />
             ))
           }

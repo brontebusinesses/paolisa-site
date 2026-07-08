@@ -3,6 +3,7 @@
  * Page « La gamme » — l'inventaire complet (6 produits) en deux niveaux :
  *   Les Essentiels (numérotés, ordre du rituel) · Les Solaires (non numérotés).
  * Cartes = photos des flacons (le code couleur ne vit plus que sur le packaging).
+ * Ajout rapide au panier activé quand la boutique est ouverte et le produit dispo.
  */
 import BaseLayout from '../layouts/BaseLayout.astro';
 import NoticeBar from '../components/NoticeBar.astro';
@@ -10,9 +11,11 @@ import Header from '../components/Header.astro';
 import Footer from '../components/Footer.astro';
 import ProductCard from '../components/ProductCard.astro';
 import { essentials, solaires, productLabel } from '../lib/products';
+import { isStoreOpen } from '../lib/store-status';
 
 const essentiels = essentials();
 const solaireProducts = solaires();
+const storeOpen = isStoreOpen();
 ---
 
 <BaseLayout
@@ -54,6 +57,10 @@ const solaireProducts = solaires();
               subtitle={p.subtitle}
               price={p.priceLabel}
               status={p.status}
+              quickAdd={storeOpen && p.available}
+              variantId={p.shopifyVariantId}
+              slug={p.slug}
+              priceCents={p.priceCents}
             />
           ))
         }
@@ -79,6 +86,10 @@ const solaireProducts = solaires();
               subtitle={p.subtitle}
               price={p.priceLabel}
               status={p.status}
+              quickAdd={storeOpen && p.available}
+              variantId={p.shopifyVariantId}
+              slug={p.slug}
+              priceCents={p.priceCents}
             />
           ))
         }

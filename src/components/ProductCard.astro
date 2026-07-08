@@ -3,6 +3,11 @@
  * <ProductCard /> — §5.10 (juillet 2026 : photo produit, sans code couleur).
  * Arche voûtée avec la photo du flacon, infos texte en bas. Le code couleur ne
  * vit plus que sur le packaging — les cartes montrent les vrais flacons.
+ *
+ * Ajout rapide (quickAdd) : bouton « + AJOUTER AU PANIER » en overlay sur
+ * l'image. Visible en permanence sur mobile (pas de survol), et révélé au
+ * survol sur desktop. Il ajoute au panier sans ouvrir la fiche (géré par
+ * Cart.astro via [data-quick-add], réutilise le mini-panier).
  */
 interface Props {
   href: string;
@@ -13,6 +18,12 @@ interface Props {
   subtitle?: string;
   price: string;
   status?: string;
+  /** Ajout rapide au panier (bouton au survol de la carte). */
+  quickAdd?: boolean;
+  variantId?: string;
+  slug?: string;
+  priceCents?: number;
+  addImage?: string;   // vignette envoyée au panier (défaut : image)
 }
 
 const {
@@ -24,40 +35,68 @@ const {
   subtitle,
   price,
   status,
+  quickAdd = false,
+  variantId,
+  slug,
+  priceCents,
+  addImage,
 } = Astro.props;
+
+const canQuickAdd = quickAdd && variantId && slug && priceCents != null;
 ---
 
-<a
-  href={href}
-  class="group block bg-bg-secondary hover:bg-bg-tertiary transition-colors duration-200 ease-in-out"
->
-  {/* Arche §2.4 — photo du flacon */}
-  <div class="relative w-full aspect-[3/4] overflow-hidden arch bg-bg-primary">
-    {
-      image ? (
-        <img
-          src={image}
-          alt={imageAlt}
-          class="absolute inset-0 w-full h-full object-cover"
-          loading="lazy"
-        />
-      ) : (
-        <div class="absolute inset-0 w-full h-full bg-line-faint flex items-center justify-center">
-          <span class="mono-micro text-ink-tertiary">— PHOTO À VENIR —</span>
-        </div>
-      )
-    }
-  </div>
-
-  {/* Infos texte */}
-  <div class="px-4 md:px-6 py-6 border-t border-line-subtle">
-    <p class="mono-label mb-3">{eyebrow}</p>
-    <h3 class="display-s mb-1">{title}</h3>
-    {subtitle && <p class="body-m text-ink-tertiary mb-4">{subtitle}</p>}
-    {!subtitle && <div class="mb-4"></div>}
-    <div class="flex items-baseline justify-between">
-      <span class="font-mono text-ink-primary text-[14px] tracking-[0.05em]">{price}</span>
-      {status && <span class="mono-micro text-ink-tertiary">{status}</span>}
+{/* group + relative : le bouton d'ajout rapide s'overlaye sur l'image sans
+    imbriquer un <button> dans le <a> (HTML invalide). */}
+<div class="group relative bg-bg-secondary hover:bg-bg-tertiary transition-colors duration-200 ease-in-out">
+  <a href={href} class="block">
+    {/* Arche §2.4 — photo du flacon */}
+    <div class="relative w-full aspect-[3/4] overflow-hidden arch bg-bg-primary">
+      {
+        image ? (
+          <img
+            src={image}
+            alt={imageAlt}
+            class="absolute inset-0 w-full h-full object-cover"
+            loading="lazy"
+          />
+        ) : (
+          <div class="absolute inset-0 w-full h-full bg-line-faint flex items-center justify-center">
+            <span class="mono-micro text-ink-tertiary">— PHOTO À VENIR —</span>
+          </div>
+        )
+      }
     </div>
-  </div>
-</a>
+
+    {/* Infos texte */}
+    <div class="px-4 md:px-6 py-6 border-t border-line-subtle">
+      <p class="mono-label mb-3">{eyebrow}</p>
+      <h3 class="display-s mb-1">{title}</h3>
+      {subtitle && <p class="body-m text-ink-tertiary mb-4">{subtitle}</p>}
+      {!subtitle && <div class="mb-4"></div>}
+      <div class="flex items-baseline justify-between">
+        <span class="font-mono text-ink-primary text-[14px] tracking-[0.05em]">{price}</span>
+        {status && <span class="mono-micro text-ink-tertiary">{status}</span>}
+      </div>
+    </div>
+  </a>
+
+  {
+    canQuickAdd && (
+      <div class="absolute top-0 left-0 w-full aspect-[3/4] flex items-end justify-center p-3 md:p-4 pointer-events-none">
+        <button
+          type="button"
+          data-quick-add
+          data-variant={variantId}
+          data-slug={slug}
+          data-title={title}
+          data-price={priceCents}
+          data-image={addImage ?? image}
+          data-href={href}
+          class="pointer-events-auto w-full bg-bg-dark text-ink-inverse font-mono uppercase tracking-[0.14em] text-[11px] py-3 opacity-100 translate-y-0 md:opacity-0 md:translate-y-2 md:group-hover:opacity-100 md:group-hover:translate-y-0 focus-visible:opacity-100 focus-visible:translate-y-0 transition-all duration-200 ease-out hover:bg-ink-secondary"
+        >
+          + AJOUTER AU PANIER
+        </button>
+      </div>
+    )
+  }
+</div>
