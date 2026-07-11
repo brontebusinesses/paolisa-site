@@ -6,7 +6,7 @@
  */
 
 const KLAVIYO_BASE = 'https://a.klaviyo.com/api';
-const KLAVIYO_REVISION = '2024-10-15';
+const KLAVIYO_REVISION = '2025-10-15';
 
 const apiKey = import.meta.env.KLAVIYO_API_KEY;
 const listId = import.meta.env.KLAVIYO_LIST_ID;
