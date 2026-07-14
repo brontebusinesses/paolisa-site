@@ -1,0 +1,74 @@
+---
+/**
+ * Page « Les Solaires » — les deux protections solaires seules
+ * (Voile solaire teinté SPF30 · Stick solaire SPF50), hors du rituel numéroté.
+ * Cartes = photos des flacons. Ajout rapide au panier quand la boutique est ouverte.
+ */
+import BaseLayout from '../layouts/BaseLayout.astro';
+import NoticeBar from '../components/NoticeBar.astro';
+import Header from '../components/Header.astro';
+import Footer from '../components/Footer.astro';
+import ProductCard from '../components/ProductCard.astro';
+import { solaires } from '../lib/products';
+import { isStoreOpen } from '../lib/store-status';
+
+const solaireProducts = solaires();
+const storeOpen = isStoreOpen();
+---
+
+<BaseLayout
+  title="Les solaires — PAOLISA"
+  description="Les protections solaires Paolisa : voile solaire teinté SPF30 et stick solaire SPF50. Le dernier geste du rituel, les jours de lumière."
+>
+  <NoticeBar message="LIVRAISON UNION EUROPÉENNE · RETOURS SOUS 30 JOURS" />
+  <Header transparent={false} currentPath="/solaires" />
+
+  <main>
+    <section class="container-paolisa pt-8 md:pt-12 pb-16 md:pb-24">
+      <div class="flex items-baseline justify-between flex-wrap gap-4 mb-12 md:mb-16">
+        <div class="max-w-2xl">
+          <p class="mono-label mb-4">— LES SOLAIRES —</p>
+          <h1 class="display-l mb-4">Les solaires</h1>
+          <p class="body-l text-ink-secondary max-w-prose">
+            Le dernier geste, avant de sortir. Deux protections qui ne
+            s'imposent pas : un voile teinté qui unifie le teint, un stick
+            invisible à glisser partout. Hors du rituel numéroté — elles
+            s'ajoutent au gré des saisons et de la lumière.
+          </p>
+        </div>
+        <p class="mono-label">[ 02 PRODUITS ]</p>
+      </div>
+
+      <div class="flex items-center gap-4 mb-8">
+        <p class="mono-label whitespace-nowrap text-ink-primary">PROTECTION · AU GRÉ DES SAISONS</p>
+        <span class="flex-1 border-t border-line-subtle"></span>
+      </div>
+      <div class="grid grid-cols-1 sm:grid-cols-2 gap-px bg-line-faint border border-line-faint max-w-3xl">
+        {
+          solaireProducts.map((p) => (
+            <ProductCard
+              href={p.href}
+              image={p.cardImage}
+              imageAlt={p.title}
+              eyebrow={`SOLAIRE / ${p.format}`}
+              title={p.title}
+              subtitle={p.subtitle}
+              price={p.priceLabel}
+              status={p.status}
+              quickAdd={storeOpen && p.available}
+              variantId={p.shopifyVariantId}
+              slug={p.slug}
+              priceCents={p.priceCents}
+            />
+          ))
+        }
+      </div>
+
+      <p class="mono-micro text-ink-tertiary mt-8">
+        <a href="/gamme" class="hover:opacity-70 transition-opacity duration-150 ease-in-out">← VOIR TOUTE LA GAMME</a>
+      </p>
+    </section>
+  </main>
+
+  <Footer />
+</BaseLayout>
