@@ -35,14 +35,15 @@ const essentiels = essentials();
       </div>
 
       <form
-        class="max-w-md mx-auto flex flex-col sm:flex-row items-stretch gap-4 sm:gap-0"
+        class="max-w-md mx-auto"
         action="/api/newsletter"
         method="post"
         data-newsletter-form
       >
         <input type="hidden" name="source" value="footer" />
         <input type="hidden" name="return" data-return-input />
-        <div class="flex-1">
+        <div class="flex flex-col sm:flex-row items-stretch gap-4 sm:gap-0">
+          <div class="flex-1">
           <label class="sr-only" for="footer-email">Votre email</label>
           <Input
             type="email"
@@ -58,6 +59,17 @@ const essentiels = essentials();
         <Button variant="primary" type="submit" class="sm:ml-4 bg-bg-primary text-ink-primary border-bg-primary hover:bg-line-subtle hover:border-line-subtle">
           S'INSCRIRE →
         </Button>
+        </div>
+        <div class="mt-4">
+          <label class="caption text-ink-tertiary block mb-1" for="footer-birthday">Votre date de naissance (facultatif) — pour votre cadeau d'anniversaire</label>
+          <Input
+            type="date"
+            name="birthday"
+            id="footer-birthday"
+            variant="dark"
+            ariaLabel="Date de naissance — pour votre cadeau d'anniversaire"
+          />
+        </div>
       </form>
       <p class="caption text-ink-tertiary mt-6 max-w-prose mx-auto">
         En vous inscrivant, vous acceptez de recevoir nos communications. Désinscription en un clic.

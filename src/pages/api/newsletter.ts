@@ -27,6 +27,7 @@ export const POST: APIRoute = async ({ request, redirect }) => {
   const source = String(formData.get('source') ?? 'footer');
   // Page de retour optionnelle — le formulaire peut passer ?return=/journal/foo
   const returnTo = String(formData.get('return') ?? '/');
+  const birthday = String(formData.get('birthday') ?? '').trim();
 
   if (!isValidEmail(email)) {
     return redirect(returnTo + '?newsletter=erreur', 303);
@@ -41,7 +42,7 @@ export const POST: APIRoute = async ({ request, redirect }) => {
         ? 'Site paolisa.eu — liste d\'attente N°01 (pré-lancement)'
         : 'Site paolisa.eu — footer';
 
-  const result = await subscribeNewsletter(email, sourceLabel, sourceKey);
+  const result = await subscribeNewsletter(email, sourceLabel, sourceKey, /^\d{4}-\d{2}-\d{2}$/.test(birthday) ? birthday : undefined);
 
   if (result.ok) {
     return redirect(returnTo + '?newsletter=ok', 303);

@@ -36,7 +36,8 @@ export type NewsletterSourceKey = 'footer' | 'waitlist' | 'article';
 export async function subscribeNewsletter(
   email: string,
   source = 'Site paolisa.eu — formulaire footer',
-  sourceKey: NewsletterSourceKey = 'footer'
+  sourceKey: NewsletterSourceKey = 'footer',
+  birthday?: string
 ): Promise<{ ok: true } | { ok: false; error: string }> {
   if (!isKlaviyoConfigured()) {
     return { ok: false, error: 'KLAVIYO_API_KEY ou KLAVIYO_LIST_ID manquante.' };
@@ -53,6 +54,7 @@ export async function subscribeNewsletter(
               type: 'profile',
               attributes: {
                 email,
+                ...(birthday ? { properties: { Birthday: birthday } } : {}),
                 subscriptions: {
                   email: {
                     marketing: {
