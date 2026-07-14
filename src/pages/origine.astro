@@ -11,56 +11,40 @@ import Button from '../components/Button.astro';
 
 const chapters = [
   {
-    code: 'PA',
+    code: 'PAO',
     name: 'Paolo',
     role: 'Le Nonno',
-    line: 'Italie · 1932 — 2018',
-    photo: 'https://images.unsplash.com/photo-1454875392665-2ac2c85e8d3e?q=85&w=1000&h=1250&fit=crop&auto=format&fm=jpg',
-    alt: 'Main posée dans une lumière douce — évocation du geste qui ne s\'oublie pas.',
-    credit: 'Danie Franco / Unsplash',
+    line: 'Trapani, Sicile · 1935',
     title: 'Le vélo, la fenêtre, la mémoire qui s\'efface.',
     body: [
-      'Paolo réparait des vélos dans un atelier à l\'ouest de Trieste. Le geste de la main qui tourne la clé, la lumière qui passait entre deux maisons à dix heures du matin, la peau qu\'on lave à l\'huile d\'olive parce qu\'il n\'y a rien d\'autre.',
-      'À la fin, il oubliait nos noms mais reconnaissait l\'odeur de l\'huile sur ses paumes. C\'est de là que vient ce flacon — d\'un geste qui ne s\'oubliait pas, même quand le reste s\'effaçait.',
+      'Paolo, c\'est un coureur — un cycliste qui avale les longs trajets, toujours sur son vélo, du côté de Trapani, en Sicile. Une chute lui a cassé le nez, un jour, le visage presque défiguré ; il est remonté en selle. La lumière entre deux maisons à dix heures du matin, la peau qu\'on lave à l\'huile d\'olive parce qu\'il n\'y a rien d\'autre.',
+      'Aujourd\'hui, il a oublié nos noms. Nous, non : on n\'oublie pas un amour qui existe, ni les moments partagés. C\'est de là que vient ce rituel — un geste qui reste, même quand le reste s\'efface.',
     ],
   },
   {
     code: 'ISA',
     name: 'Isabelle',
-    role: 'La mère',
-    line: 'Bruxelles · 1968',
-    photo: 'https://images.unsplash.com/photo-1560521166-117ca72366bd?q=85&w=1000&h=1250&fit=crop&auto=format&fm=jpg',
-    alt: 'Goutte d\'eau claire — la fraîcheur et la simplicité d\'un soin réduit à l\'essentiel.',
-    credit: 'Kelly Sikkema / Unsplash',
+    role: 'La maman',
+    line: 'Charleroi · 1968',
     title: 'Le juste nécessaire. La simplicité, c\'est aussi du soin.',
     body: [
-      'Maman ne s\'est jamais maquillée. Elle se lavait le visage à l\'eau froide, mettait une huile, et c\'était tout. Quand on lui demandait son secret, elle haussait les épaules : « Il n\'y a pas de secret. »',
-      'C\'est la rigueur d\'un soin réduit à son essentiel. Pas une pauvreté de moyens — un choix. Plutôt quelques gestes parfaits que dix gestes approximatifs.',
+      'Maman ne se maquille pas. Elle se lave le visage, met une crème hydratante — une crème toute simple, classique, la même depuis toujours — et c\'est tout.',
+      'Quand on lui demande son secret, elle hausse les épaules : « Il n\'y a pas de secret. Une peau bien hydratée, voilà. » Pas une pauvreté de moyens — un choix. Plutôt quelques gestes justes que dix approximatifs.',
     ],
   },
   {
     code: 'LISA',
     name: 'Lisa',
     role: 'La petite sœur',
-    line: 'Bruxelles · 1998',
-    photo: 'https://images.unsplash.com/photo-1515377905703-c4788e51af15?q=85&w=1000&h=1250&fit=crop&auto=format&fm=jpg',
-    alt: 'Flacon ambré tenu dans la main — le geste de l\'huile, transmis sans un mot.',
-    credit: 'Christin Hume / Unsplash',
+    line: 'Charleroi · 2003',
     title: 'La passion du soin, transmise sans qu\'on s\'en aperçoive.',
     body: [
-      'Lisa a grandi en regardant. Elle a appris la consistance d\'une huile entre les doigts, la lumière qu\'il faut pour bien voir sa peau, l\'heure du matin qui change tout.',
-      'C\'est la transmission silencieuse. Personne n\'a enseigné, personne n\'a appris. Et pourtant tout est là.',
+      'Lisa a grandi en regardant — et elle a fait mieux. Elle s\'est intéressée, elle a creusé : la composition, ce qui est beau et bon pour la peau, les rituels qui tiennent vraiment.',
+      'C\'est elle, surtout, qui m\'a fait comprendre l\'importance d\'une bonne routine. La transmission dans l\'autre sens : la petite sœur qui apprend tout, puis qui ouvre les yeux.',
     ],
   },
 ];
 
-const heroPhoto = {
-  src: 'https://images.unsplash.com/photo-1593030019566-d681b01e877f?q=85&w=1600&h=900&fit=crop&auto=format&fm=jpg',
-  alt: 'Drap de lin près d\'une fenêtre, baigné de lumière du matin.',
-  credit: 'Sarah Brown / Unsplash',
-};
-
-const webp = (src: string) => src.replace('fm=jpg', 'fm=webp');
 ---
 
 <BaseLayout
@@ -71,31 +55,21 @@ const webp = (src: string) => src.replace('fm=jpg', 'fm=webp');
   <Header transparent={false} currentPath="/origine" />
 
   <main>
-    {/* Hero éditorial */}
+    {/* Hero éditorial — ouverture typographique */}
     <section class="section-y">
       <div class="container-paolisa text-center">
         <p class="mono-label mb-6">— L'ORIGINE —</p>
         <h1 class="display-l max-w-prose mx-auto">
           Trois prénoms.<br />Trois générations.<br />Une conviction.
         </h1>
-        <figure class="mt-12 max-w-3xl mx-auto">
-          <div class="relative w-full aspect-[16/9] bg-line-faint">
-            <picture>
-              <source srcset={webp(heroPhoto.src)} type="image/webp" />
-              <img
-                src={heroPhoto.src}
-                alt={heroPhoto.alt}
-                class="absolute inset-0 w-full h-full object-cover"
-                loading="eager"
-              />
-            </picture>
-            <div class="pointer-events-none absolute inset-0 ring-1 ring-line-faint"></div>
-          </div>
-        </figure>
+        <p class="body-l text-ink-secondary max-w-prose mx-auto mt-8">
+          Paolo, Isabelle, Lisa. Une même famille, italo-belge, et un geste transmis de main en main — l'huile, le matin. PAOLISA est né de là.
+        </p>
+        <div class="mt-10 w-16 h-px bg-line-faint mx-auto"></div>
       </div>
     </section>
 
-    {/* Trois chapitres PA / ISA / LISA */}
+    {/* Trois chapitres PAO / ISA / LISA — texte seul */}
     {
       chapters.map((ch, i) => (
         <section class:list={[
@@ -103,43 +77,40 @@ const webp = (src: string) => src.replace('fm=jpg', 'fm=webp');
           i % 2 === 0 ? 'bg-bg-primary' : 'bg-bg-secondary',
         ]}>
           <div class="container-paolisa">
-            <div class:list={[
-              'grid grid-cols-1 md:grid-cols-12 gap-8 md:gap-16 items-start',
-              i === 1 ? 'md:[&>*:first-child]:order-2' : '',
-            ]}>
-              {/* Photo */}
-              <div class="md:col-span-6">
-                <figure>
-                  <div class="relative w-full aspect-[4/5] bg-line-faint">
-                    <picture>
-                      <source srcset={webp(ch.photo)} type="image/webp" />
-                      <img
-                        src={ch.photo}
-                        alt={ch.alt}
-                        class="absolute inset-0 w-full h-full object-cover"
-                        loading="lazy"
-                      />
-                    </picture>
-                    <div class="pointer-events-none absolute inset-0 ring-1 ring-line-faint"></div>
-                  </div>
-                </figure>
-              </div>
-
-              {/* Texte */}
-              <div class="md:col-span-6 md:pt-8">
-                <p class="mono-label mb-4">— {ch.code} —</p>
-                <p class="caption mb-2">{ch.name} · {ch.role}</p>
-                <p class="mono-micro text-ink-tertiary mb-8">{ch.line}</p>
-                <h2 class="display-m mb-8">{ch.title}</h2>
-                {ch.body.map((para) => (
-                  <p class="body-l text-ink-secondary mb-5 max-w-prose">{para}</p>
-                ))}
-              </div>
+            <div class="max-w-prose mx-auto text-center">
+              <p class="mono-label mb-4">— {ch.code} —</p>
+              <p class="caption mb-2">{ch.name} · {ch.role}</p>
+              <p class="mono-micro text-ink-tertiary mb-8">{ch.line}</p>
+              <h2 class="display-m mb-8">{ch.title}</h2>
+              {ch.body.map((para) => (
+                <p class="body-l text-ink-secondary mb-5">{para}</p>
+              ))}
             </div>
           </div>
         </section>
       ))
     }
+
+    {/* Signature — de main en main */}
+    <section class="bg-bg-secondary section-y">
+      <div class="container-paolisa">
+        <figure class="max-w-[180px] mx-auto">
+          <div class="relative w-full aspect-[4/3] bg-line-faint">
+            <picture>
+              <source srcset="/origine/signature.webp" type="image/webp" />
+              <img
+                src="/origine/signature.jpg"
+                alt="Deux mains qui se tiennent — une jeune, une âgée. Le geste transmis d'une génération à l'autre."
+                class="absolute inset-0 w-full h-full object-cover"
+                loading="lazy"
+              />
+            </picture>
+            <div class="pointer-events-none absolute inset-0 ring-1 ring-line-faint"></div>
+          </div>
+          <figcaption class="mono-micro text-ink-tertiary text-center mt-4">— DE MAIN EN MAIN —</figcaption>
+        </figure>
+      </div>
+    </section>
 
     {/* Manifeste long */}
     <section id="manifeste" class="bg-bg-tertiary section-y">
@@ -165,8 +136,10 @@ const webp = (src: string) => src.replace('fm=jpg', 'fm=webp');
     {/* CTA — de l'huile à la gamme */}
     <section class="section-y">
       <div class="container-paolisa text-center">
-        <p class="mono-label mb-4">— DÉCOUVRIR —</p>
-        <h2 class="display-s mb-8 max-w-prose mx-auto">L'huile a donné son nom à tout ça. Aujourd'hui, elle a une famille.</h2>
+        <p class="mono-label mb-6">— NOTRE PARTI PRIS —</p>
+        <h2 class="display-s mb-8 max-w-prose mx-auto">Le rituel a commencé avec une huile. Il compte aujourd'hui quelques gestes choisis.</h2>
+        <p class="body-l text-ink-secondary max-w-prose mx-auto mb-6">Végan, fabriqué en Europe. Des produits justes, respectueux de la peau, des animaux et de l'environnement — et assez simples pour tenir dans une vie qui va vite.</p>
+        <p class="body-l text-ink-secondary max-w-prose mx-auto mb-10">Pour les femmes qui avancent, entreprennent, n'ont pas le temps, et veulent quand même prendre soin d'elles. De bons produits, sans y penser.</p>
         <div class="flex flex-col sm:flex-row gap-4 sm:gap-6 justify-center">
           <Button variant="primary" href="/gamme">
             DÉCOUVRIR LA GAMME →
