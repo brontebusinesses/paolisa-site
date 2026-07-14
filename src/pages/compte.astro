@@ -1,0 +1,50 @@
+---
+/**
+ * Compte — espace client.
+ * Site headless : renvoie vers le portail de compte client Shopify
+ * (connexion par email, historique de commandes, points de fidélité Rivo).
+ */
+import BaseLayout from '../layouts/BaseLayout.astro';
+import NoticeBar from '../components/NoticeBar.astro';
+import Header from '../components/Header.astro';
+import Footer from '../components/Footer.astro';
+
+const ACCOUNT_URL = 'https://shopify.com/105621553484/account';
+---
+
+<BaseLayout
+  title="Compte — PAOLISA"
+  description="Votre compte Paolisa : commandes, points de fidélité et récompenses."
+>
+  <NoticeBar message="EU SHIPPING · 30-DAY RETURNS" />
+  <Header transparent={false} currentPath="/compte" />
+
+  <main>
+    <section class="container-paolisa pt-12 md:pt-20 pb-20 md:pb-32">
+      <header class="mb-16 md:mb-24 max-w-3xl">
+        <p class="mono-label mb-4">— COMPTE —</p>
+        <h1 class="display-l">Votre compte.</h1>
+        <p class="body-l text-ink-secondary mt-8 max-w-prose">
+          Retrouvez vos commandes, suivez vos points et vos récompenses. La connexion se fait par email, sans mot de passe à retenir.
+        </p>
+      </header>
+
+      <div class="max-w-prose space-y-12">
+        <a
+          href={ACCOUNT_URL}
+          class="inline-block mono-label border border-ink-primary px-8 py-4 hover:opacity-70 transition-opacity duration-150 ease-in-out"
+        >
+          ACCÉDER À MON COMPTE →
+        </a>
+
+        <div class="space-y-4 body-l text-ink-secondary">
+          <p class="mono-label text-ink-primary mb-2">— LE RITUEL RÉCOMPENSÉ</p>
+          <p>Chaque euro dépensé vous rapporte un point. Vos points se transforment en avantages sur vos prochaines commandes.</p>
+          <p>Votre compte vous donne aussi un code personnel : vos proches en profitent, vous aussi.</p>
+        </div>
+      </div>
+    </section>
+  </main>
+
+  <Footer />
+</BaseLayout>
