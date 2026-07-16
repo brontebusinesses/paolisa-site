@@ -50,7 +50,7 @@
 </div>
 
 <script>
-  import { addItem, count, subtotalCents, checkoutUrl, money, freeShipping, remainingForFree } from '../lib/cart-client';
+  import { addItem, count, subtotalCents, checkoutUrl, money, freeShipping, remainingForFree, clear, SHOP } from '../lib/cart-client';
 
   const updateBadge = () => {
     document.querySelectorAll<HTMLElement>('[data-cart-count]').forEach((el) => {
@@ -120,4 +120,18 @@
       show(line);
     });
   });
+
+  // Quand la cliente part vers le checkout Shopify (toast ou page /panier),
+  // on vide le panier local : le panier « vit » ensuite dans Shopify, et au
+  // retour sur le site il repart a zero (evite le panier fantome post-commande).
+  document.addEventListener('click', (e) => {
+    const el = e.target as HTMLElement;
+    const link = el.closest('a');
+    if (!link) return;
+    const href = link.getAttribute('href') || '';
+    if (href.includes(SHOP + '/cart/')) {
+      clear();
+    }
+  });
+
 </script>
