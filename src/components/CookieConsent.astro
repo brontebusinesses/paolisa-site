@@ -1,0 +1,103 @@
+---
+/**
+ * <CookieConsent /> — banniere de consentement aux cookies (RGPD / art. 129 loi
+ * belge du 13 juin 2005). Rendu une fois dans BaseLayout, avant les scripts tiers.
+ *
+ * Comportement :
+ *  - Affiche la banniere tant qu'aucun choix n'a ete enregistre.
+ *  - « Accepter » / « Refuser » stockent le choix (cookie 6 mois + localStorage).
+ *  - Expose window.paolisaConsent ('granted' | 'denied' | null) AVANT le chargement
+ *    des scripts tiers non essentiels, et emet l'evenement `paolisa:consent`.
+ *  - window.paolisaOpenCookiePrefs() rouvre la banniere (lien « modifier vos preferences »).
+ *
+ * Les scripts non essentiels (ex. Judge.me) ecoutent ce signal et ne se chargent
+ * qu'apres consentement. Vercel Web Analytics est sans cookie et hors perimetre.
+ */
+---
+
+<div
+  id="paolisa-cookie-consent"
+  class="fixed inset-x-0 bottom-0 z-[60] bg-bg-dark text-ink-inverse border-t border-white/10"
+  role="dialog"
+  aria-live="polite"
+  aria-label="Consentement aux cookies"
+  hidden
+>
+  <div class="container-paolisa py-4 flex flex-col gap-3 md:flex-row md:items-center md:justify-between">
+    <p class="body-m text-line-subtle max-w-2xl">
+      Nous utilisons des cookies pour mesurer l'audience et ameliorer votre experience.
+      Vous pouvez accepter ou refuser les cookies non essentiels.
+      <a
+        href="/mentions-legales#cookies"
+        class="text-ink-inverse border-b border-white/40 hover:opacity-70 transition-opacity duration-150 ease-in-out whitespace-nowrap"
+      >En savoir plus</a>.
+    </p>
+    <div class="flex items-center gap-3 shrink-0">
+      <button
+        type="button"
+        data-cookie-refuse
+        class="font-mono uppercase text-[10px] tracking-[0.18em] px-4 py-2 border border-white/30 text-line-subtle hover:opacity-70 transition-opacity duration-150 ease-in-out"
+      >Refuser</button>
+      <button
+        type="button"
+        data-cookie-accept
+        class="font-mono uppercase text-[10px] tracking-[0.18em] px-4 py-2 bg-ink-inverse text-ink-primary hover:opacity-80 transition-opacity duration-150 ease-in-out"
+      >Accepter</button>
+    </div>
+  </div>
+</div>
+
+<script is:inline>
+  (function () {
+    var KEY = 'paolisa_consent';
+    var MAX_AGE = 60 * 60 * 24 * 180; // 6 mois
+
+    function read() {
+      try {
+        var m = document.cookie.match(/(?:^|;\s*)paolisa_consent=(granted|denied)/);
+        if (m) return m[1];
+        var ls = localStorage.getItem(KEY);
+        return ls === 'granted' || ls === 'denied' ? ls : null;
+      } catch (e) { return null; }
+    }
+
+    function apply(value) {
+      window.paolisaConsent = value;
+      try { window.dispatchEvent(new CustomEvent('paolisa:consent', { detail: value })); } catch (e) {}
+    }
+
+    function save(value) {
+      try {
+        document.cookie = 'paolisa_consent=' + value + '; max-age=' + MAX_AGE + '; path=/; SameSite=Lax';
+        localStorage.setItem(KEY, value);
+      } catch (e) {}
+      apply(value);
+    }
+
+    var existing = read();
+    window.paolisaConsent = existing;
+    if (existing) apply(existing);
+
+    function bind() {
+      var bar = document.getElementById('paolisa-cookie-consent');
+      if (!bar) return;
+      function show() { bar.hidden = false; }
+      function hide() { bar.hidden = true; }
+
+      if (!existing) show();
+
+      var acc = bar.querySelector('[data-cookie-accept]');
+      var ref = bar.querySelector('[data-cookie-refuse]');
+      if (acc) acc.addEventListener('click', function () { save('granted'); hide(); });
+      if (ref) ref.addEventListener('click', function () { save('denied'); hide(); });
+
+      window.paolisaOpenCookiePrefs = function () { show(); };
+    }
+
+    if (document.readyState === 'loading') {
+      document.addEventListener('DOMContentLoaded', bind);
+    } else {
+      bind();
+    }
+  })();
+</script>

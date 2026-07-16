@@ -15,7 +15,25 @@ const token = JUDGEME_ENABLED ? JUDGEME_PUBLIC_TOKEN : undefined;
         window.jdgm.PLATFORM = 'shopify';
         window.jdgm.PUBLIC_TOKEN = token;
       </script>
-      <script is:inline async src="https://cdn.judge.me/widget_preloader.js"></script>
+      <script is:inline>
+        (function () {
+          function load() {
+            if (window.__jdgmPreloaderLoaded) return;
+            window.__jdgmPreloaderLoaded = true;
+            var s = document.createElement('script');
+            s.async = true;
+            s.src = 'https://cdn.judge.me/widget_preloader.js';
+            document.head.appendChild(s);
+          }
+          if (window.paolisaConsent === 'granted') {
+            load();
+          } else {
+            window.addEventListener('paolisa:consent', function (e) {
+              if (e.detail === 'granted') load();
+            });
+          }
+        })();
+      </script>
     </>
   )
 }
