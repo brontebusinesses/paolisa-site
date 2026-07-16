@@ -196,13 +196,6 @@ export const products: Record<string, Product> = {
       'Multi-usage',
       'Conditionné en Belgique',
     ],
-    application:
-      'Trois gouttes dans la paume, qu\'on réchauffe. Une pression douce — front, joues, cou. Trente secondes, devant une fenêtre.',
-    ritualSteps: [
-      'Trois gouttes dans la paume, qu\'on réchauffe entre les mains.',
-      'Une pression douce — front, joues, cou. Sans frotter.',
-      'Trente secondes immobile, devant une fenêtre.',
-    ],
   },
 
   'creme': {
