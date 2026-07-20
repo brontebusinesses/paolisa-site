@@ -50,7 +50,7 @@
 </div>
 
 <script>
-  import { addItem, count, subtotalCents, checkoutUrl, money, freeShipping, remainingForFree, clear, SHOP } from '../lib/cart-client';
+  import { addItem, count, subtotalCents, checkoutUrl, money, freeShipping, remainingForFree } from '../lib/cart-client';
 
   const updateBadge = () => {
     document.querySelectorAll<HTMLElement>('[data-cart-count]').forEach((el) => {
@@ -121,17 +121,13 @@
     });
   });
 
-  // Quand la cliente part vers le checkout Shopify (toast ou page /panier),
-  // on vide le panier local : le panier « vit » ensuite dans Shopify, et au
-  // retour sur le site il repart a zero (evite le panier fantome post-commande).
-  document.addEventListener('click', (e) => {
-    const el = e.target as HTMLElement;
-    const link = el.closest('a');
-    if (!link) return;
-    const href = link.getAttribute('href') || '';
-    if (href.includes(SHOP + '/cart/')) {
-      clear();
-    }
-  });
+  // NOTE : on ne vide PLUS le panier local quand la cliente part vers le
+  // checkout Shopify. Vider a ce moment provoquait un « flash » de panier vide
+  // avant la redirection (confus), et faisait perdre le panier en cas
+  // d'abandon du paiement. Le panier est desormais vide uniquement apres achat
+  // confirme, au chargement de la page /merci (clear() dans merci.astro).
+  // Pour renvoyer la cliente sur /merci apres paiement : Shopify admin →
+  // Settings → Checkout → Order status page (bouton/redirect vers
+  // https://paolisa.eu/merci).
 
 </script>
