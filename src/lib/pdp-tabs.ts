@@ -79,7 +79,6 @@ export function buildPdpTabs(product: Product): PdpTab[] {
       .join('');
     tabs.push({
       question: '— COMPOSITION',
-      defaultOpen: true,
       answer:
         '<p class="mb-6">' +
         escapeHtml(product.longDescription) +
@@ -96,7 +95,6 @@ export function buildPdpTabs(product: Product): PdpTab[] {
       .join('');
     tabs.push({
       question: '— COMPOSITION',
-      defaultOpen: true,
       answer:
         '<p class="mb-6">' +
         escapeHtml(product.longDescription) +
