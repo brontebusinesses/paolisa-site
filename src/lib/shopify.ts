@@ -24,8 +24,11 @@ export const isShopifyConfigured = (): boolean =>
 /**
  * Wrapper GraphQL minimal pour la Storefront API.
  * Lance une exception si la requête HTTP échoue ou si Shopify renvoie des errors.
+ * Exporté : réutilisé par lib/reviews.ts pour lire les avis publiés (avis_produit
+ * est un metaobject en accès storefront PUBLIC_READ, donc joignable avec ce
+ * même token public).
  */
-async function shopifyFetch<T>(
+export async function shopifyFetch<T>(
   query: string,
   variables: Record<string, unknown> = {}
 ): Promise<T> {

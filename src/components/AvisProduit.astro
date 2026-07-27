@@ -1,0 +1,269 @@
+---
+/**
+ * <AvisProduit /> — avis clients maison (remplace JudgeMeReviews, resté
+ * inactif faute du plan Judge.me payant nécessaire au headless).
+ *
+ * Aucune dépendance externe : liste + formulaire chargés via /api/reviews
+ * (Metaobjects Shopify, voir lib/reviews.ts). Un avis soumis part en
+ * Brouillon ; il n'apparaît ici qu'une fois publié par Bronté dans l'admin
+ * Shopify (Contenu > Avis produit).
+ */
+interface Props {
+  productId?: string;
+}
+const { productId } = Astro.props;
+---
+
+{
+  productId && (
+    <section class="bg-bg-primary section-y" aria-label="Avis clients" data-avis-produit data-product-id={productId}>
+      <div class="container-paolisa">
+        <div class="flex items-center gap-4 mb-8">
+          <p class="mono-label whitespace-nowrap text-ink-primary">— AVIS CLIENTS</p>
+          <span class="flex-1 border-t border-line-subtle" />
+        </div>
+
+        <p class="body-m text-ink-tertiary mb-10" data-avis-resume>Chargement des avis…</p>
+
+        <ul class="border-t border-line-subtle mb-16" data-avis-liste />
+
+        <div class="max-w-md">
+          <button type="button" class="mono-label text-ink-primary hover:opacity-70" data-avis-toggle>
+            — LAISSER UN AVIS
+          </button>
+
+          <div class="hidden mt-8" data-avis-form-wrapper>
+            <div class="hidden border-t border-line-subtle pt-4 mb-6" data-avis-ok role="status">
+              <p class="mono-label text-ink-primary mb-1">— MERCI —</p>
+              <p class="body-m text-ink-secondary">
+                Votre avis a été envoyé. Il sera visible après validation.
+              </p>
+            </div>
+            <div class="hidden border-t border-line-subtle pt-4 mb-6" data-avis-erreur role="alert">
+              <p class="mono-label text-ink-primary mb-1">— ERREUR —</p>
+              <p class="body-m text-ink-secondary" data-avis-erreur-message>
+                Une erreur est survenue. Réessayez.
+              </p>
+            </div>
+
+            <form class="space-y-6" data-avis-form>
+              <div>
+                <span class="mono-label text-ink-tertiary block mb-3">VOTRE NOTE</span>
+                <div class="flex gap-2" data-avis-stars role="radiogroup" aria-label="Note">
+                  {[1, 2, 3, 4, 5].map((n) => (
+                    <button
+                      type="button"
+                      data-avis-star={n}
+                      aria-label={`${n} étoile${n > 1 ? 's' : ''}`}
+                      aria-pressed="false"
+                      class="w-9 h-9 border border-ink-primary text-[13px] font-mono flex items-center justify-center transition-colors duration-150"
+                    >
+                      {n}
+                    </button>
+                  ))}
+                </div>
+                <input type="hidden" name="rating" data-avis-rating-input value="" />
+              </div>
+
+              <div>
+                <label class="mono-label text-ink-tertiary block mb-2" for="avis-author">VOTRE NOM</label>
+                <input
+                  id="avis-author"
+                  name="authorName"
+                  type="text"
+                  required
+                  maxlength="100"
+                  class="w-full border border-line-subtle bg-transparent px-4 py-3 body-m focus:outline-none focus:border-ink-primary"
+                />
+              </div>
+
+              <div>
+                <label class="mono-label text-ink-tertiary block mb-2" for="avis-title">TITRE (OPTIONNEL)</label>
+                <input
+                  id="avis-title"
+                  name="title"
+                  type="text"
+                  maxlength="200"
+                  class="w-full border border-line-subtle bg-transparent px-4 py-3 body-m focus:outline-none focus:border-ink-primary"
+                />
+              </div>
+
+              <div>
+                <label class="mono-label text-ink-tertiary block mb-2" for="avis-body">VOTRE AVIS</label>
+                <textarea
+                  id="avis-body"
+                  name="body"
+                  required
+                  rows="4"
+                  maxlength="3000"
+                  class="w-full border border-line-subtle bg-transparent px-4 py-3 body-m focus:outline-none focus:border-ink-primary"
+                />
+              </div>
+
+              <button type="submit" class="mono-label border border-ink-primary px-6 py-3 hover:bg-ink-primary hover:text-ink-inverse transition-colors duration-200" data-avis-submit>
+                ENVOYER MON AVIS
+              </button>
+            </form>
+          </div>
+        </div>
+      </div>
+    </section>
+  )
+}
+
+<script>
+  interface ReviewApiItem {
+    id: string;
+    rating: number;
+    title: string | null;
+    body: string;
+    authorName: string;
+    submittedAt: string | null;
+  }
+
+  function starsToText(rating: number): string {
+    return '★'.repeat(Math.round(rating)) + '☆'.repeat(5 - Math.round(rating));
+  }
+
+  function renderReviews(root: HTMLElement, reviews: ReviewApiItem[]) {
+    const resume = root.querySelector<HTMLElement>('[data-avis-resume]');
+    const liste = root.querySelector<HTMLElement>('[data-avis-liste]');
+    if (!resume || !liste) return;
+
+    if (reviews.length === 0) {
+      resume.textContent = 'Aucun avis pour le moment.';
+      liste.innerHTML = '';
+      return;
+    }
+
+    const average = reviews.reduce((sum, r) => sum + r.rating, 0) / reviews.length;
+    resume.textContent = `${starsToText(average)}  ${average.toFixed(1)} / 5 · ${reviews.length} avis`;
+
+    liste.innerHTML = '';
+    for (const review of reviews) {
+      const li = document.createElement('li');
+      li.className = 'border-b border-line-subtle py-8 max-w-prose';
+
+      const stars = document.createElement('p');
+      stars.className = 'font-mono text-[13px] text-ink-primary mb-2';
+      stars.textContent = starsToText(review.rating);
+      li.appendChild(stars);
+
+      if (review.title) {
+        const title = document.createElement('p');
+        title.className = 'display-s text-ink-primary mb-2';
+        title.textContent = review.title;
+        li.appendChild(title);
+      }
+
+      const body = document.createElement('p');
+      body.className = 'body-l text-ink-secondary mb-4';
+      body.textContent = review.body;
+      li.appendChild(body);
+
+      const meta = document.createElement('p');
+      meta.className = 'mono-label text-ink-tertiary';
+      const date = review.submittedAt
+        ? new Date(review.submittedAt).toLocaleDateString('fr-BE', { year: 'numeric', month: 'long', day: 'numeric' })
+        : '';
+      meta.textContent = `— ${review.authorName}${date ? `, ${date}` : ''}`;
+      li.appendChild(meta);
+
+      liste.appendChild(li);
+    }
+  }
+
+  async function loadReviews(root: HTMLElement, productId: string) {
+    const resume = root.querySelector<HTMLElement>('[data-avis-resume]');
+    try {
+      const res = await fetch(`/api/reviews?productId=${encodeURIComponent(productId)}`);
+      const data = await res.json();
+      if (!res.ok) throw new Error(data?.error ?? 'Erreur de chargement');
+      renderReviews(root, data.reviews ?? []);
+    } catch {
+      if (resume) resume.textContent = 'Impossible de charger les avis pour le moment.';
+    }
+  }
+
+  function initForm(root: HTMLElement, productId: string) {
+    const toggle = root.querySelector<HTMLButtonElement>('[data-avis-toggle]');
+    const wrapper = root.querySelector<HTMLElement>('[data-avis-form-wrapper]');
+    const form = root.querySelector<HTMLFormElement>('[data-avis-form]');
+    const stars = root.querySelectorAll<HTMLButtonElement>('[data-avis-star]');
+    const ratingInput = root.querySelector<HTMLInputElement>('[data-avis-rating-input]');
+    const ok = root.querySelector<HTMLElement>('[data-avis-ok]');
+    const erreur = root.querySelector<HTMLElement>('[data-avis-erreur]');
+    const erreurMessage = root.querySelector<HTMLElement>('[data-avis-erreur-message]');
+    const submitBtn = root.querySelector<HTMLButtonElement>('[data-avis-submit]');
+
+    toggle?.addEventListener('click', () => {
+      wrapper?.classList.toggle('hidden');
+    });
+
+    stars.forEach((btn) => {
+      btn.addEventListener('click', () => {
+        const value = Number(btn.dataset.avisStar);
+        if (ratingInput) ratingInput.value = String(value);
+        stars.forEach((s) => {
+          const active = Number(s.dataset.avisStar) <= value;
+          s.classList.toggle('bg-ink-primary', active);
+          s.classList.toggle('text-ink-inverse', active);
+          s.setAttribute('aria-pressed', String(active));
+        });
+      });
+    });
+
+    form?.addEventListener('submit', async (e) => {
+      e.preventDefault();
+      ok?.classList.add('hidden');
+      erreur?.classList.add('hidden');
+
+      const formData = new FormData(form);
+      const rating = Number(ratingInput?.value ?? 0);
+
+      if (!rating) {
+        if (erreurMessage) erreurMessage.textContent = 'Merci de choisir une note.';
+        erreur?.classList.remove('hidden');
+        return;
+      }
+
+      if (submitBtn) submitBtn.disabled = true;
+
+      try {
+        const res = await fetch('/api/reviews', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({
+            productId,
+            rating,
+            authorName: formData.get('authorName'),
+            title: formData.get('title'),
+            body: formData.get('body'),
+          }),
+        });
+        const data = await res.json();
+        if (!res.ok || !data.success) throw new Error(data?.error ?? 'Erreur d’envoi.');
+
+        ok?.classList.remove('hidden');
+        form.reset();
+        stars.forEach((s) => {
+          s.classList.remove('bg-ink-primary', 'text-ink-inverse');
+          s.setAttribute('aria-pressed', 'false');
+        });
+        if (ratingInput) ratingInput.value = '';
+      } catch (err) {
+        if (erreurMessage) erreurMessage.textContent = err instanceof Error ? err.message : 'Erreur d’envoi.';
+        erreur?.classList.remove('hidden');
+      } finally {
+        if (submitBtn) submitBtn.disabled = false;
+      }
+    });
+  }
+
+  document.querySelectorAll<HTMLElement>('[data-avis-produit]').forEach((root) => {
+    const productId = root.dataset.productId;
+    if (!productId) return;
+    loadReviews(root, productId);
+    initForm(root, productId);
+  });
+</script>
