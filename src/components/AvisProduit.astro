@@ -260,10 +260,24 @@ const { productId } = Astro.props;
     });
   }
 
+  /**
+   * Ouvre le formulaire automatiquement si l'URL contient ?avis=1 — permet
+   * d'envoyer un lien direct « laisser un avis » à un client par email
+   * (ex: /produit/serum?avis=1#avis).
+   */
+  function maybeAutoOpenForm(root: HTMLElement) {
+    const params = new URLSearchParams(window.location.search);
+    if (params.get('avis') !== '1') return;
+    const wrapper = root.querySelector<HTMLElement>('[data-avis-form-wrapper]');
+    wrapper?.classList.remove('hidden');
+    root.scrollIntoView({ behavior: 'smooth', block: 'start' });
+  }
+
   document.querySelectorAll<HTMLElement>('[data-avis-produit]').forEach((root) => {
     const productId = root.dataset.productId;
     if (!productId) return;
     loadReviews(root, productId);
     initForm(root, productId);
+    maybeAutoOpenForm(root);
   });
 </script>
