@@ -129,7 +129,7 @@ export const products: Record<string, Product> = {
     category: 'YEUX',
     ritual: 'DEUXIÈME GESTE',
     title: 'Contour des yeux',
-    subtitle: 'regard reposé · effet rétinol',
+    subtitle: 'regard reposé · alternative au rétinol',
     format: '15 ml',
     priceCents: 3500,
     priceLabel: '35 €',
@@ -301,7 +301,7 @@ export const products: Record<string, Product> = {
     priceCents: 3400,
     priceLabel: '34 €',
     shortDescription:
-      'Le soin hydratant, version crème — pour les peaux qui n’aiment pas le gras. Un effet rétinol tout en douceur.',
+      'Le soin hydratant, version crème — pour les peaux qui n’aiment pas le gras. Une alternative au rétinol tout en douceur.',
     longDescription:
       "La même étape que l'huile, texture crème. Soyeuse, à absorption rapide, elle mise sur une alternative naturelle au rétinol (Bidens Pilosa 2 %) avec vitamines C et E et acide hyaluronique pour lisser les ridules et repulper — sans irritation.",
     accentColor: ACCENTS.corail,
