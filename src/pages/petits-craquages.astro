@@ -13,6 +13,7 @@ import { craquages } from '../lib/products';
 import { isStoreOpen } from '../lib/store-status';
 
 const craquageProducts = craquages();
+const craquageCols = Math.min(craquageProducts.length, 4) || 1;
 const storeOpen = isStoreOpen();
 ---
 
@@ -42,7 +43,10 @@ const storeOpen = isStoreOpen();
         <p class="mono-label whitespace-nowrap text-ink-primary">ÉDITION LIMITÉE · AU GRÉ DES TROUVAILLES</p>
         <span class="flex-1 border-t border-line-subtle"></span>
       </div>
-      <div class="grid grid-cols-[repeat(auto-fit,minmax(260px,1fr))] gap-px bg-line-faint border border-line-faint">
+      <div
+        class="grid w-fit max-w-full gap-px bg-line-faint border border-line-faint"
+        style={`grid-template-columns: repeat(${craquageCols}, minmax(200px, 284px));`}
+      >
         {
           craquageProducts.map((p) => (
             <ProductCard

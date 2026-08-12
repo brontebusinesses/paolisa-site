@@ -16,6 +16,7 @@ import { isStoreOpen } from '../lib/store-status';
 const essentiels = essentials();
 const solaireProducts = solaires();
 const craquageProducts = craquages();
+const craquageCols = Math.min(craquageProducts.length, 4) || 1;
 const storeOpen = isStoreOpen();
 ---
 
@@ -105,7 +106,10 @@ const storeOpen = isStoreOpen();
               <span class="flex-1 border-t border-line-subtle"></span>
               <a href="/petits-craquages" class="mono-label whitespace-nowrap hover:opacity-70">TOUT VOIR →</a>
             </div>
-            <div class="grid grid-cols-[repeat(auto-fit,minmax(260px,1fr))] gap-px bg-line-faint border border-line-faint">
+            <div
+              class="grid w-fit max-w-full gap-px bg-line-faint border border-line-faint"
+              style={`grid-template-columns: repeat(${craquageCols}, minmax(200px, 284px));`}
+            >
               {
                 craquageProducts.map((p) => (
                   <ProductCard
