@@ -22,6 +22,7 @@ export const ACCENTS = {
   corail: '#FF6B5E',
   ecru: '#ECE6D8',
   poudre: '#F2B8C6',
+  chartreuse: '#CBDB39',
 } as const;
 
 const CDN = 'https://cdn.shopify.com/s/files/1/1056/2155/3484/files';
@@ -584,9 +585,69 @@ export const products: Record<string, Product> = {
       'Fabriqué en France',
     ],
   },
+
+  'patchs-yeux-fatigue': {
+    slug: 'patchs-yeux-fatigue',
+    href: '/produit/patchs-yeux-fatigue',
+    tier: 'craquage',
+    number: null,
+    category: 'YEUX',
+    ritual: 'PETIT CRAQUAGE',
+    title: 'Patchs Yeux Hydrogel Anti-Fatigue',
+    subtitle: 'antioxydants & acide hyaluronique · 7 paires',
+    format: '7 g / 0,25 oz',
+    priceCents: 2900,
+    priceLabel: '29 €',
+    shortDescription:
+      'Le geste rafraîchissant après une nuit courte. Deux patchs hydrogel, quinze minutes, pour un regard visiblement moins fatigué.',
+    longDescription:
+      "Les antioxydants protègent et ravivent l'éclat, tandis que le panthénol, la glycérine et l'acide hyaluronique hydratent en profondeur pour un contour des yeux repulpé et confortable. Texture fraîche et gélifiée, façon rituel K-beauty.",
+    accentColor: ACCENTS.chartreuse,
+    accentName: 'Vert chartreuse',
+    cardImage: `${CDN}/YRK594hnv5bpCkajODIcpnTvNUk04x2x.jpg?v=1786551033`,
+    images: [
+      `${CDN}/YRK594hnv5bpCkajODIcpnTvNUk04x2x.jpg?v=1786551033`,
+      `${CDN}/KQb_sSb6ivVOIiREhGQ_lxCuK8tvRFYK.jpg?v=1786551034`,
+    ],
+    shopifyHandle: 'anti-fatigue-hydrogel-eye-patches',
+    shopifyVariantId: '58378932519244',
+    available: false,
+    status: 'ÉPUISÉ — BIENTÔT DE RETOUR',
+    actives: [
+      "Antioxydants — protègent, ravivent l'éclat",
+      'Panthénol — apaise, hydrate',
+      'Glycérine — hydrate en profondeur',
+      'Acide hyaluronique (sodium hyaluronate) — repulpe',
+    ],
+    inci: [
+      'Aqua/Water',
+      'Glycerin',
+      'Annona Cherimola Fruit Extract*',
+      'Carrageenan',
+      'Panthenol',
+      'Amorphophallus Konjac Root Extract',
+      'Aspalathus Linearis Leaf',
+      'Sucrose',
+      'Phenethyl Alcohol',
+      'Sodium Levulinate',
+      'Sodium Anisate',
+      'Sodium Hyaluronate',
+      'Sodium Citrate',
+      'Citric Acid',
+      'Phenylpropanol',
+      'Sodium Dehydroacetate',
+      'Geraniol',
+      'Linalool',
+    ],
+    certifications: [
+      'Vegan',
+      'Sans noix',
+      'Convient aux peaux normales à sèches',
+    ],
+  },
 };
 
-const ORDER = ['serum', 'contour-yeux', 'no-01', 'creme', 'solaire-teinte', 'stick-solaire', 'patchs-yeux'];
+const ORDER = ['serum', 'contour-yeux', 'no-01', 'creme', 'solaire-teinte', 'stick-solaire', 'patchs-yeux', 'patchs-yeux-fatigue'];
 
 export const getProduct = (slug: string): Product | undefined => products[slug];
 export const productList = (): Product[] => ORDER.map((s) => products[s]).filter(Boolean);
