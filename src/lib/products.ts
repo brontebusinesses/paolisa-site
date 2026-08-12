@@ -660,5 +660,5 @@ export const gammeList = (): Product[] => productList().filter((p) => p.tier !==
 
 export const productLabel = (p: Product): string => {
   if (p.number) return p.texture ? `${p.number} · ${p.texture}` : p.number;
-  return p.tier === 'craquage' ? 'CRAQUAGE' : 'SOLAIRE';
+  return p.tier === 'craquage' ? 'PETITS CRAQUAGES' : 'SOLAIRE';
 };

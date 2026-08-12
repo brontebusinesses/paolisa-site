@@ -11,7 +11,7 @@
  * Géré par Cart.astro via [data-quick-add].
  */
 import Button from './Button.astro';
-import { gammeList, productLabel } from '../lib/products';
+import { productList, productLabel } from '../lib/products';
 import { isStoreOpen } from '../lib/store-status';
 
 interface Cta { label: string; href: string; }
@@ -25,7 +25,7 @@ interface Props {
 }
 
 const { eyebrow, headlineLine1, headlineLine2, sub, cta1, cta2 } = Astro.props;
-const gamme = gammeList();
+const gamme = productList();
 const storeOpen = isStoreOpen();
 ---
 
