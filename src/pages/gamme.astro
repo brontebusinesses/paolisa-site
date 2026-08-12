@@ -10,11 +10,12 @@ import NoticeBar from '../components/NoticeBar.astro';
 import Header from '../components/Header.astro';
 import Footer from '../components/Footer.astro';
 import ProductCard from '../components/ProductCard.astro';
-import { essentials, solaires, productLabel } from '../lib/products';
+import { essentials, solaires, craquages, productLabel } from '../lib/products';
 import { isStoreOpen } from '../lib/store-status';
 
 const essentiels = essentials();
 const solaireProducts = solaires();
+const craquageProducts = craquages();
 const storeOpen = isStoreOpen();
 ---
 
@@ -94,6 +95,39 @@ const storeOpen = isStoreOpen();
           ))
         }
       </div>
+
+      {/* Petits Craquages */}
+      {
+        craquageProducts.length > 0 && (
+          <>
+            <div class="flex items-center gap-4 mb-8 mt-16 md:mt-24">
+              <p class="mono-label whitespace-nowrap text-ink-primary">PETITS CRAQUAGES — ÉDITION LIMITÉE</p>
+              <span class="flex-1 border-t border-line-subtle"></span>
+              <a href="/petits-craquages" class="mono-label whitespace-nowrap hover:opacity-70">TOUT VOIR →</a>
+            </div>
+            <div class="grid grid-cols-[repeat(auto-fit,minmax(260px,1fr))] gap-px bg-line-faint border border-line-faint">
+              {
+                craquageProducts.map((p) => (
+                  <ProductCard
+                    href={p.href}
+                    image={p.cardImage}
+                    imageAlt={p.title}
+                    eyebrow={`CRAQUAGE / ${p.category}`}
+                    title={p.title}
+                    subtitle={p.subtitle}
+                    price={p.priceLabel}
+                    status={p.status}
+                    quickAdd={storeOpen && p.available}
+                    variantId={p.shopifyVariantId}
+                    slug={p.slug}
+                    priceCents={p.priceCents}
+                  />
+                ))
+              }
+            </div>
+          </>
+        )
+      }
     </section>
   </main>
 
