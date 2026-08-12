@@ -15,6 +15,7 @@ import { isStoreOpen } from '../lib/store-status';
 
 const essentiels = essentials();
 const solaireProducts = solaires();
+const solaireCols = Math.min(solaireProducts.length, 4) || 1;
 const craquageProducts = craquages();
 const craquageCols = Math.min(craquageProducts.length, 4) || 1;
 const storeOpen = isStoreOpen();
@@ -76,7 +77,10 @@ const storeOpen = isStoreOpen();
         <p class="mono-label whitespace-nowrap text-ink-primary">LES SOLAIRES — AU GRÉ DES SAISONS</p>
         <span class="flex-1 border-t border-line-subtle"></span>
       </div>
-      <div class="grid grid-cols-1 sm:grid-cols-2 gap-px bg-line-faint border border-line-faint max-w-3xl">
+      <div
+        class="grid w-fit max-w-full gap-px bg-line-faint border border-line-faint"
+        style={`grid-template-columns: repeat(${solaireCols}, minmax(200px, 284px));`}
+      >
         {
           solaireProducts.map((p) => (
             <ProductCard
