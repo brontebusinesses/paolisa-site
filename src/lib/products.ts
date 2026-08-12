@@ -12,7 +12,7 @@
  * PANIER : `shopifyVariantId` = variante postée sur /cart/add. Vérifié 07/07/2026.
  */
 
-export type Tier = 'essentiel' | 'solaire';
+export type Tier = 'essentiel' | 'solaire' | 'craquage';
 
 export const ACCENTS = {
   vert: '#1FA85C',
@@ -21,6 +21,7 @@ export const ACCENTS = {
   jaune: '#F2A81D',
   corail: '#FF6B5E',
   ecru: '#ECE6D8',
+  poudre: '#F2B8C6',
 } as const;
 
 const CDN = 'https://cdn.shopify.com/s/files/1/1056/2155/3484/files';
@@ -514,14 +515,86 @@ export const products: Record<string, Product> = {
       'Geraniol**',
     ],
   },
+
+  /* ===================== PETITS CRAQUAGES ===================== */
+
+  'patchs-yeux': {
+    slug: 'patchs-yeux',
+    href: '/produit/patchs-yeux',
+    tier: 'craquage',
+    number: null,
+    category: 'YEUX',
+    ritual: 'PETIT CRAQUAGE',
+    title: 'Patchs Yeux Hydrogel Anti-Âge',
+    subtitle: 'niacinamide & acide hyaluronique · 7 paires',
+    format: '7 g / 0,25 oz',
+    priceCents: 2900,
+    priceLabel: '29 €',
+    shortDescription:
+      'Deux patchs hydrogel, quinze minutes, pour un regard reposé et repulpé — même à la dernière minute.',
+    longDescription:
+      "La niacinamide unifie et illumine le teint, l'acide hyaluronique hydrate en profondeur pour lisser l'aspect des ridules de sécheresse, tandis que le panthénol et le jus d'aloe apaisent la zone la plus fine du visage. Une touche d'or signe la texture hydrogel, façon rituel K-beauty.",
+    accentColor: ACCENTS.poudre,
+    accentName: 'Rose poudré',
+    cardImage: `${CDN}/uxZghpJrBBZN2qk9T2lXZrn1Anvqj1Ns.jpg?v=1786546564`,
+    images: [
+      `${CDN}/uxZghpJrBBZN2qk9T2lXZrn1Anvqj1Ns.jpg?v=1786546564`,
+      `${CDN}/krudZFtosTCrTz8vEq-OyvkNj4DMC_N2.jpg?v=1786546564`,
+    ],
+    shopifyHandle: 'anti-age-hydrogel-eye-patches',
+    shopifyVariantId: '58377596633420',
+    available: false,
+    status: 'ÉPUISÉ — BIENTÔT DE RETOUR',
+    actives: [
+      'Niacinamide (B3) — éclat, teint unifié',
+      'Acide hyaluronique — hydrate et repulpe',
+      "Panthénol & jus d'aloe — apaisent, hydratation multi-niveaux",
+      'Or (CI 77480) — signature de la texture hydrogel',
+    ],
+    inci: [
+      'Aqua/Water',
+      'Glycerin',
+      'Carrageenan',
+      'Panthenol',
+      'Mica',
+      'Amorphophallus Konjac Root Extract',
+      'Sucrose',
+      'Hordeum Vulgare Stem Water',
+      'CI 77891 (Dioxyde de titane)',
+      'Sodium Levulinate',
+      'Niacinamide',
+      'Phenoxyethanol',
+      'Sodium Anisate',
+      'Sodium Hyaluronate',
+      'CI 77491 (Oxydes de fer)',
+      'Benzoic Acid',
+      'Dehydroacetic Acid',
+      'Lactic Acid',
+      'Sorbic Acid',
+      'Aloe Barbadensis Leaf Juice Powder*',
+      'Sodium Benzoate',
+      'Citric Acid',
+      'CI 77480 (Or)',
+      'Sodium Hydroxide',
+    ],
+    certifications: [
+      'Vegan',
+      'Sans parfum',
+      'Testé sous contrôle dermatologique',
+      'Fabriqué en France',
+    ],
+  },
 };
 
-const ORDER = ['serum', 'contour-yeux', 'no-01', 'creme', 'solaire-teinte', 'stick-solaire'];
+const ORDER = ['serum', 'contour-yeux', 'no-01', 'creme', 'solaire-teinte', 'stick-solaire', 'patchs-yeux'];
 
 export const getProduct = (slug: string): Product | undefined => products[slug];
 export const productList = (): Product[] => ORDER.map((s) => products[s]).filter(Boolean);
 export const essentials = (): Product[] => productList().filter((p) => p.tier === 'essentiel');
 export const solaires = (): Product[] => productList().filter((p) => p.tier === 'solaire');
+export const craquages = (): Product[] => productList().filter((p) => p.tier === 'craquage');
 
-export const productLabel = (p: Product): string =>
-  p.number ? (p.texture ? `${p.number} · ${p.texture}` : p.number) : 'SOLAIRE';
+export const productLabel = (p: Product): string => {
+  if (p.number) return p.texture ? `${p.number} · ${p.texture}` : p.number;
+  return p.tier === 'craquage' ? 'CRAQUAGE' : 'SOLAIRE';
+};

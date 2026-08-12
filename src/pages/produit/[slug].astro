@@ -92,7 +92,7 @@ const related = productList().filter((p) => p.slug !== product.slug).slice(0, 3)
             </ul>
 
             {
-              storeOpen ? (
+              storeOpen && product.available ? (
                 <>
                   <form
                     class="mb-6"
@@ -116,6 +116,13 @@ const related = productList().filter((p) => p.slug !== product.slug).slice(0, 3)
                     LIVRAISON UNION EUROPÉENNE &nbsp;·&nbsp; RETOURS SOUS 30 JOURS
                   </p>
                 </>
+              ) : storeOpen && !product.available ? (
+                <div class="border border-line-subtle p-6 md:p-8 mb-6">
+                  <p class="mono-label mb-3">— ÉPUISÉ —</p>
+                  <p class="body-l text-ink-secondary">
+                    Cette pièce est en rupture pour le moment. Inscrivez-vous à la newsletter pour être prévenue de son retour.
+                  </p>
+                </div>
               ) : (
                 <div class="border border-line-subtle p-6 md:p-8 mb-6">
                   <p class="mono-label mb-3">— BIENTÔT DISPONIBLE —</p>
