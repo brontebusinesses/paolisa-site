@@ -15,7 +15,7 @@ import Accordion from '../../components/Accordion.astro';
 import AvisClients from '../../components/AvisClients.astro';
 import ProductCard from '../../components/ProductCard.astro';
 import AvisProduit from '../../components/AvisProduit.astro';
-import { getProduct, productList, productLabel } from '../../lib/products';
+import { getProduct, gammeList, productLabel } from '../../lib/products';
 import { productGidForSlug } from '../../lib/reviews';
 import { buildPdpTabs } from '../../lib/pdp-tabs';
 import { isStoreOpen, LAUNCH_LABEL } from '../../lib/store-status';
@@ -33,7 +33,7 @@ const galleryImages = product.images.map((src, i) => ({
 }));
 
 const tabs = buildPdpTabs(product);
-const related = productList().filter((p) => p.slug !== 'no-01').slice(0, 3);
+const related = gammeList().filter((p) => p.slug !== 'no-01').slice(0, 3);
 
 const avis = [
   {

@@ -13,7 +13,7 @@ import QuantitySelector from '../../components/QuantitySelector.astro';
 import Accordion from '../../components/Accordion.astro';
 import ProductCard from '../../components/ProductCard.astro';
 import AvisProduit from '../../components/AvisProduit.astro';
-import { getProduct, productList, productLabel } from '../../lib/products';
+import { getProduct, productList, gammeList, productLabel } from '../../lib/products';
 import { productGidForSlug } from '../../lib/reviews';
 import { buildPdpTabs } from '../../lib/pdp-tabs';
 import { isStoreOpen } from '../../lib/store-status';
@@ -31,7 +31,7 @@ const tabs = buildPdpTabs(product);
 const label = productLabel(product);
 const reviewProductId = productGidForSlug(product.slug);
 
-const related = productList().filter((p) => p.slug !== product.slug).slice(0, 3);
+const related = gammeList().filter((p) => p.slug !== product.slug).slice(0, 3);
 ---
 
 <BaseLayout

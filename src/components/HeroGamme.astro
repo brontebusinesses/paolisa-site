@@ -11,7 +11,7 @@
  * Géré par Cart.astro via [data-quick-add].
  */
 import Button from './Button.astro';
-import { productList, productLabel } from '../lib/products';
+import { gammeList, productLabel } from '../lib/products';
 import { isStoreOpen } from '../lib/store-status';
 
 interface Cta { label: string; href: string; }
@@ -25,7 +25,7 @@ interface Props {
 }
 
 const { eyebrow, headlineLine1, headlineLine2, sub, cta1, cta2 } = Astro.props;
-const gamme = productList();
+const gamme = gammeList();
 const storeOpen = isStoreOpen();
 ---
 
@@ -54,7 +54,7 @@ const storeOpen = isStoreOpen();
                 <div class="relative w-full aspect-[3/4] overflow-hidden bg-bg-primary" style="border-radius:120px 120px 3px 3px">
                   <img src={p.cardImage} alt={p.title} class="absolute inset-0 w-full h-full object-cover" loading="lazy" />
                 </div>
-                <p class="mono-micro text-ink-tertiary mt-4">{p.number ? productLabel(p) : 'SOLAIRE'}</p>
+                <p class="mono-micro text-ink-tertiary mt-4">{productLabel(p)}</p>
                 <p class="display-s mt-1">{p.title}</p>
                 <p class="font-mono text-[12px] text-ink-secondary mt-2 tracking-[0.05em] pr-9 md:pr-0">{p.priceLabel}</p>
               </a>

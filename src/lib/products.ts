@@ -654,6 +654,9 @@ export const productList = (): Product[] => ORDER.map((s) => products[s]).filter
 export const essentials = (): Product[] => productList().filter((p) => p.tier === 'essentiel');
 export const solaires = (): Product[] => productList().filter((p) => p.tier === 'solaire');
 export const craquages = (): Product[] => productList().filter((p) => p.tier === 'craquage');
+/** La gamme « officielle » (essentiels + solaires), sans les Petits Craquages —
+ *  à utiliser pour le hero d'accueil et les cross-sell « compléter le rituel ». */
+export const gammeList = (): Product[] => productList().filter((p) => p.tier !== 'craquage');
 
 export const productLabel = (p: Product): string => {
   if (p.number) return p.texture ? `${p.number} · ${p.texture}` : p.number;
