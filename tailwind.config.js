@@ -10,12 +10,12 @@ export default {
           primary: '#FBF8F1',
           secondary: '#F8F3E9',
           tertiary: '#F3EEE0',
-          dark: '#5A4433',
+          dark: '#4B3729',
         },
         ink: {
-          primary: '#5A4433',
-          secondary: '#6B5744',
-          tertiary: '#9C8770',
+          primary: '#4B3729',
+          secondary: '#5C4A3A',
+          tertiary: '#8D7A66',
           inverse: '#FBF8F1',
         },
         line: {

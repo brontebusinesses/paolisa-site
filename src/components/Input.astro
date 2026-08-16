@@ -1,7 +1,7 @@
 ---
 /**
  * <Input /> — §5.9
- * Variantes : default (border 0.5px), dark (sur fond brun foncé, border #7A6552).
+ * Variantes : default (border 0.5px), dark (sur fond brun foncé, border #6B5848).
  * Pas de border-radius. §2.4.
  */
 interface Props {
@@ -37,7 +37,7 @@ const variants: Record<string, string> = {
   default:
     'border-line-subtle text-ink-primary placeholder:text-ink-tertiary focus:border-ink-primary',
   dark:
-    'border-[#7A6552] text-ink-inverse placeholder:text-ink-tertiary focus:border-ink-inverse',
+    'border-[#6B5848] text-ink-inverse placeholder:text-ink-tertiary focus:border-ink-inverse',
 };
 
 const classes = [base, variants[variant], className].filter(Boolean).join(' ');

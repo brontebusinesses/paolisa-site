@@ -17,15 +17,15 @@
 
 @layer base {
   :root {
-    --asset-rev: 3;
+    --asset-rev: 4;
     --bg-primary: #FBF8F1;
     --bg-secondary: #F8F3E9;
     --bg-tertiary: #F3EEE0;
-    --bg-dark: #5A4433;
+    --bg-dark: #4B3729;
 
-    --ink-primary: #5A4433;
-    --ink-secondary: #6B5744;
-    --ink-tertiary: #9C8770;
+    --ink-primary: #4B3729;
+    --ink-secondary: #5C4A3A;
+    --ink-tertiary: #8D7A66;
     --ink-inverse: #FBF8F1;
 
     --line-subtle: #E0D5C4;
