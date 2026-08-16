@@ -20,7 +20,7 @@ const baseHeaders = (): Record<string, string> => ({
 
 export const isKlaviyoConfigured = (): boolean => Boolean(apiKey && listId);
 
-export type NewsletterSourceKey = 'footer' | 'waitlist' | 'article';
+export type NewsletterSourceKey = 'footer' | 'waitlist' | 'article' | 'popup';
 
 /**
  * Inscrit un email à la liste newsletter avec consentement.

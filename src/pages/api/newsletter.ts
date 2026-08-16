@@ -34,13 +34,18 @@ export const POST: APIRoute = async ({ request, redirect }) => {
   }
 
   const sourceKey =
-    source === 'article' ? 'article' : source === 'waitlist' ? 'waitlist' : 'footer';
+    source === 'article' ? 'article'
+    : source === 'waitlist' ? 'waitlist'
+    : source === 'popup' ? 'popup'
+    : 'footer';
   const sourceLabel =
     sourceKey === 'article'
       ? 'Site paolisa.eu — fin d\'article journal'
       : sourceKey === 'waitlist'
         ? 'Site paolisa.eu — liste d\'attente N°01 (pré-lancement)'
-        : 'Site paolisa.eu — footer';
+        : sourceKey === 'popup'
+          ? 'Site paolisa.eu — pop-up de bienvenue'
+          : 'Site paolisa.eu — footer';
 
   const result = await subscribeNewsletter(email, sourceLabel, sourceKey, /^\d{4}-\d{2}-\d{2}$/.test(birthday) ? birthday : undefined);
 

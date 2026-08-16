@@ -1,0 +1,161 @@
+---
+/**
+ * <WelcomePopup /> — §5.x
+ * Pop-up d'offre de bienvenue (−10 % première commande), même offre que le
+ * footer. Rendu une fois dans BaseLayout.
+ *
+ * Comportement :
+ *  - Apparaît 3s après l'arrivée sur une page, sauf sur /panier, /merci, /compte.
+ *  - Une seule fois : dès qu'il s'affiche, un flag est écrit en localStorage
+ *    (paolisa_welcome_popup) qui coupe toute réapparition pendant 21 jours.
+ *  - Dès inscription confirmée (redirection ?newsletter=ok), le flag passe
+ *    en « subscribed » définitif : le pop-up ne revient plus jamais.
+ *  - Fermeture : ×, lien « non merci », clic sur le fond, ou touche Échap.
+ *  - Réutilise le même endpoint /api/newsletter que le footer (POST classique,
+ *    redirection avec ?newsletter=ok|erreur), donc le même code BIENVENUE10
+ *    part par le flow Klaviyo existant, pas de nouveau code à gérer.
+ */
+import Input from './Input.astro';
+import Button from './Button.astro';
+---
+
+<div
+  id="paolisa-welcome-popup"
+  class="hidden fixed inset-0 z-[70] bg-ink-primary/50 flex items-center justify-center p-4"
+  role="dialog"
+  aria-modal="true"
+  aria-labelledby="welcome-popup-title"
+>
+  <div class="relative bg-bg-primary border border-line-subtle w-full max-w-[420px] p-8 md:p-10">
+    <button
+      type="button"
+      data-popup-close
+      aria-label="Fermer"
+      class="absolute top-4 right-4 mono-label text-ink-tertiary hover:text-ink-primary leading-none"
+    >×</button>
+
+    <p class="mono-label mb-4">— OFFRE DE BIENVENUE —</p>
+    <h2 id="welcome-popup-title" class="display-m mb-4 max-w-[280px]">
+      &minus;10 % sur votre première commande.
+    </h2>
+    <p class="body-m mb-6">
+      Laissez votre email, votre code arrive tout de suite.
+    </p>
+
+    <form action="/api/newsletter" method="post" data-popup-form>
+      <input type="hidden" name="source" value="popup" />
+      <input type="hidden" name="return" data-popup-return />
+      <div class="flex flex-col gap-4">
+        <div>
+          <label class="sr-only" for="popup-email">Votre email</label>
+          <Input
+            type="email"
+            name="email"
+            id="popup-email"
+            placeholder="VOTRE EMAIL"
+            required
+            ariaLabel="Votre adresse email"
+            autocomplete="email"
+          />
+        </div>
+        <Button variant="primary" type="submit" fullWidth>
+          RECEVOIR MON CODE →
+        </Button>
+      </div>
+    </form>
+
+    <p class="caption mt-5">
+      Vous recevrez aussi le journal et les nouveautés de la gamme. Désinscription en un clic.
+    </p>
+
+    <button
+      type="button"
+      data-popup-close
+      class="mono-micro text-ink-tertiary hover:text-ink-primary mt-5 block mx-auto"
+    >NON MERCI</button>
+  </div>
+</div>
+
+<script is:inline>
+  (function () {
+    var KEY = 'paolisa_welcome_popup';
+    var SUPPRESS_MS = 21 * 24 * 60 * 60 * 1000; // 21 jours
+    var DELAY_MS = 3000; // 3s, comme demandé
+    var EXCLUDED_PATHS = ['/panier', '/merci', '/compte'];
+
+    function readState() {
+      try {
+        var raw = localStorage.getItem(KEY);
+        return raw ? JSON.parse(raw) : null;
+      } catch (e) {
+        return null;
+      }
+    }
+
+    function writeState(state) {
+      try {
+        localStorage.setItem(KEY, JSON.stringify(state));
+      } catch (e) {
+        /* localStorage indisponible (navigation privée…) — on ne bloque pas la page */
+      }
+    }
+
+    var state = readState();
+    var now = Date.now();
+
+    // Retour depuis /api/newsletter après une inscription réussie (popup, footer,
+    // ou tout autre formulaire) → ne plus jamais montrer le pop-up.
+    var params = new URLSearchParams(window.location.search);
+    if (params.get('newsletter') === 'ok') {
+      state = { subscribed: true, at: now };
+      writeState(state);
+    }
+
+    if (state && state.subscribed) return;
+    if (state && state.at && now - state.at < SUPPRESS_MS) return;
+    if (EXCLUDED_PATHS.indexOf(window.location.pathname) !== -1) return;
+
+    function bind() {
+      var overlay = document.getElementById('paolisa-welcome-popup');
+      if (!overlay) return;
+
+      var returnInput = overlay.querySelector('[data-popup-return]');
+      if (returnInput) returnInput.value = window.location.pathname || '/';
+
+      function onKeydown(e) {
+        if (e.key === 'Escape') hide();
+      }
+
+      function show() {
+        overlay.classList.remove('hidden');
+        document.body.style.overflow = 'hidden';
+        document.addEventListener('keydown', onKeydown);
+        // Écrit l'état dès l'affichage : une navigation vers une autre page dans
+        // la foulée ne redéclenche pas un second pop-up.
+        writeState({ subscribed: false, at: Date.now() });
+      }
+
+      function hide() {
+        overlay.classList.add('hidden');
+        document.body.style.overflow = '';
+        document.removeEventListener('keydown', onKeydown);
+      }
+
+      overlay.querySelectorAll('[data-popup-close]').forEach(function (btn) {
+        btn.addEventListener('click', hide);
+      });
+
+      overlay.addEventListener('click', function (e) {
+        if (e.target === overlay) hide();
+      });
+
+      window.setTimeout(show, DELAY_MS);
+    }
+
+    if (document.readyState === 'loading') {
+      document.addEventListener('DOMContentLoaded', bind);
+    } else {
+      bind();
+    }
+  })();
+</script>
