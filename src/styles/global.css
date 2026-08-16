@@ -9,26 +9,27 @@
 @tailwind utilities;
 
 /* --------------------------------------------------------------------------
- * Fonts — §2.2 (révisé juillet 2026)
- * Raleway (wordmark, aligné packaging) · Inter (display + body) · JetBrains Mono (labels)
+ * Fonts — §2.2 (révisé août 2026)
+ * Raleway (wordmark, aligné packaging) · Bricolage Grotesque (titres) ·
+ * Karla (texte courant) · JetBrains Mono (labels)
  * Loaded via Google Fonts <link> in BaseLayout.astro with font-display: swap.
  * -------------------------------------------------------------------------- */
 
 @layer base {
   :root {
-    --asset-rev: 2;
-    --bg-primary: #FFFFFF;
-    --bg-secondary: #FAFAF8;
-    --bg-tertiary: #F4F4F0;
-    --bg-dark: #18181B;
+    --asset-rev: 3;
+    --bg-primary: #FBF8F1;
+    --bg-secondary: #F8F3E9;
+    --bg-tertiary: #F3EEE0;
+    --bg-dark: #5A4433;
 
-    --ink-primary: #18181B;
-    --ink-secondary: #4A4A48;
-    --ink-tertiary: #6B6B68;
-    --ink-inverse: #FAFAF8;
+    --ink-primary: #5A4433;
+    --ink-secondary: #6B5744;
+    --ink-tertiary: #9C8770;
+    --ink-inverse: #FBF8F1;
 
-    --line-subtle: #DDDDDA;
-    --line-faint: #E8E8E5;
+    --line-subtle: #E0D5C4;
+    --line-faint: #EAE2D2;
 
     --terracotta: #A85A35;
   }
@@ -134,11 +135,11 @@
   }
 
   .display-l {
-    @apply font-sans uppercase text-ink-primary;
-    font-weight: 500;
+    @apply font-display text-ink-primary;
+    font-weight: 600;
     font-size: 1.375rem;
     line-height: 1.15;
-    letter-spacing: -0.018em;
+    letter-spacing: -0.01em;
   }
 
   @media (min-width: 768px) {
@@ -148,11 +149,11 @@
   }
 
   .display-m {
-    @apply font-sans uppercase text-ink-primary;
-    font-weight: 500;
+    @apply font-display text-ink-primary;
+    font-weight: 600;
     font-size: 1.125rem;
     line-height: 1.2;
-    letter-spacing: -0.012em;
+    letter-spacing: -0.01em;
   }
 
   @media (min-width: 768px) {
@@ -162,11 +163,11 @@
   }
 
   .display-s {
-    @apply font-sans uppercase text-ink-primary;
-    font-weight: 500;
+    @apply font-display text-ink-primary;
+    font-weight: 600;
     font-size: 0.9375rem;
     line-height: 1.25;
-    letter-spacing: -0.01em;
+    letter-spacing: -0.005em;
   }
 
   @media (min-width: 768px) {

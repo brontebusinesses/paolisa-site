@@ -7,29 +7,31 @@ export default {
     extend: {
       colors: {
         bg: {
-          primary: '#FFFFFF',
-          secondary: '#FAFAF8',
-          tertiary: '#F4F4F0',
-          dark: '#18181B',
+          primary: '#FBF8F1',
+          secondary: '#F8F3E9',
+          tertiary: '#F3EEE0',
+          dark: '#5A4433',
         },
         ink: {
-          primary: '#18181B',
-          secondary: '#4A4A48',
-          tertiary: '#6B6B68',
-          inverse: '#FAFAF8',
+          primary: '#5A4433',
+          secondary: '#6B5744',
+          tertiary: '#9C8770',
+          inverse: '#FBF8F1',
         },
         line: {
-          subtle: '#DDDDDA',
-          faint: '#E8E8E5',
+          subtle: '#E0D5C4',
+          faint: '#EAE2D2',
         },
         // Conservé comme token mais plus utilisé sur le site (point ● désormais noir).
         terracotta: '#A85A35',
       },
       fontFamily: {
-        // §2.2 (révisé juillet 2026) — Raleway pour le wordmark (aligné packaging),
-        // Inter pour le reste, JetBrains Mono pour les labels techniques.
+        // §2.2 (révisé août 2026) — Raleway pour le wordmark (aligné packaging),
+        // Bricolage Grotesque pour les titres, Karla pour le texte courant,
+        // JetBrains Mono pour les labels techniques.
         wordmark: ['Raleway', 'system-ui', 'sans-serif'],
-        sans: ['Inter', 'system-ui', 'sans-serif'],
+        display: ['"Bricolage Grotesque"', 'system-ui', 'sans-serif'],
+        sans: ['Karla', 'system-ui', 'sans-serif'],
         mono: ['"JetBrains Mono"', 'ui-monospace', 'monospace'],
       },
       fontSize: {

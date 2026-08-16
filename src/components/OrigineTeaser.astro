@@ -1,0 +1,44 @@
+---
+/**
+ * <OrigineTeaser /> — bloc chaleur sur la home, entre HeroGamme et TrioBar.
+ * Grande photo pleine largeur (les mains de Paolo et de sa petite-fille, la
+ * même que sur /origine) suivie d'un fragment de l'histoire familiale, pour
+ * casser l'effet catalogue avant d'aller plus loin dans la gamme.
+ *
+ * Mobile d'abord (99% du trafic) : l'image occupe toute la largeur de
+ * l'écran sans marge (aspect 4/3, la plus haute proportion), le texte suit
+ * en dessous, centré, une seule colonne. Sur desktop l'image s'élargit
+ * (aspect 16/9) plutôt que de passer en deux colonnes, pour rester simple
+ * et cohérente avec le reste du site.
+ */
+import Button from './Button.astro';
+---
+
+<section class="bg-bg-primary" aria-label="Notre histoire">
+  <div class="relative w-full aspect-[4/3] md:aspect-[16/9] overflow-hidden bg-bg-tertiary">
+    <picture>
+      <source srcset="/origine/signature.webp" type="image/webp" />
+      <img
+        src="/origine/signature.jpg"
+        alt="Deux mains qui se tiennent, une jeune, une âgée. Le geste transmis d'une génération à l'autre."
+        class="absolute inset-0 w-full h-full object-cover"
+        loading="lazy"
+      />
+    </picture>
+  </div>
+
+  <div class="container-paolisa section-y">
+    <div class="max-w-prose mx-auto text-center">
+      <p class="mono-label mb-6">— DE MAIN EN MAIN —</p>
+      <h2 class="display-m mb-6">
+        Trois prénoms. Trois générations. Une conviction.
+      </h2>
+      <p class="body-l text-ink-secondary mb-10">
+        Paolo, Isabelle, Lisa. Une même famille, italo-belge, et un geste transmis de main en main : l'huile, le matin. PAOLISA est né de là.
+      </p>
+      <Button variant="secondary" href="/origine">
+        DÉCOUVRIR NOTRE HISTOIRE →
+      </Button>
+    </div>
+  </div>
+</section>

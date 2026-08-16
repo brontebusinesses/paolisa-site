@@ -2,7 +2,7 @@
 /**
  * <Footer /> — §5.3
  * Trois zones : offre de bienvenue (haut centré), 4 colonnes liens, mentions (bas).
- * Toujours fond #18181B, texte #FAFAF8.
+ * Toujours fond #5A4433 (brun foncé), texte #FBF8F1.
  */
 import Wordmark from './Wordmark.astro';
 import Input from './Input.astro';
@@ -14,7 +14,7 @@ const essentiels = essentials();
 
 <footer class="bg-bg-dark text-ink-inverse">
   {/* Offre de bienvenue / newsletter */}
-  <div class="border-b border-[#2A2A2D]">
+  <div class="border-b border-[#6E5844]">
     <div class="container-paolisa section-y text-center">
       <p class="mono-label text-ink-tertiary mb-4">— OFFRE DE BIENVENUE —</p>
       <h2 class="display-m text-ink-inverse mb-4 max-w-prose mx-auto">
@@ -26,10 +26,10 @@ const essentiels = essentials();
 
       {/* Feedback inscription — lit ?newsletter=ok|erreur dans l'URL */}
       <div data-newsletter-feedback class="hidden max-w-md mx-auto mb-6">
-        <p data-feedback-ok class="hidden caption text-ink-inverse border border-[#2A2A2D] py-3 px-4">
+        <p data-feedback-ok class="hidden caption text-ink-inverse border border-[#6E5844] py-3 px-4">
           ✓ MERCI. VOTRE CODE DE BIENVENUE ARRIVE DANS VOTRE BOÎTE MAIL.
         </p>
-        <p data-feedback-erreur class="hidden caption text-ink-inverse border border-[#2A2A2D] py-3 px-4">
+        <p data-feedback-erreur class="hidden caption text-ink-inverse border border-[#6E5844] py-3 px-4">
           ⚠ UNE ERREUR EST SURVENUE. ESSAYEZ ENCORE OU ÉCRIVEZ-NOUS À HELLO@PAOLISA.EU.
         </p>
       </div>
@@ -167,7 +167,7 @@ const essentiels = essentials();
   </div>
 
   {/* Mentions bas */}
-  <div class="border-t border-[#2A2A2D]">
+  <div class="border-t border-[#6E5844]">
     <div class="container-paolisa py-6">
       <div class="flex flex-col md:flex-row md:items-center md:justify-between gap-4">
         <div class="flex flex-wrap items-center gap-x-6 gap-y-2">
