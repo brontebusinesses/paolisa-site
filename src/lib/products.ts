@@ -537,7 +537,7 @@ export const products: Record<string, Product> = {
       "La niacinamide unifie et illumine le teint, l'acide hyaluronique hydrate en profondeur pour lisser l'aspect des ridules de sécheresse, tandis que le panthénol et le jus d'aloe apaisent la zone la plus fine du visage. Une touche d'or signe la texture hydrogel, façon rituel K-beauty.",
     accentColor: ACCENTS.poudre,
     accentName: 'Rose poudré',
-    cardImage: `${CDN}/uxZghpJrBBZN2qk9T2lXZrn1Anvqj1Ns.jpg?v=1786546564`,
+    cardImage: '/hero/hero-patchs-yeux.jpg',
     images: [
       `${CDN}/uxZghpJrBBZN2qk9T2lXZrn1Anvqj1Ns.jpg?v=1786546564`,
       `${CDN}/krudZFtosTCrTz8vEq-OyvkNj4DMC_N2.jpg?v=1786546564`,
@@ -604,7 +604,7 @@ export const products: Record<string, Product> = {
       "Les antioxydants protègent et ravivent l'éclat, tandis que le panthénol, la glycérine et l'acide hyaluronique hydratent en profondeur pour un contour des yeux repulpé et confortable. Texture fraîche et gélifiée, façon rituel K-beauty.",
     accentColor: ACCENTS.chartreuse,
     accentName: 'Vert chartreuse',
-    cardImage: `${CDN}/YRK594hnv5bpCkajODIcpnTvNUk04x2x.jpg?v=1786551033`,
+    cardImage: '/hero/hero-patchs-yeux-fatigue.jpg',
     images: [
       `${CDN}/YRK594hnv5bpCkajODIcpnTvNUk04x2x.jpg?v=1786551033`,
       `${CDN}/KQb_sSb6ivVOIiREhGQ_lxCuK8tvRFYK.jpg?v=1786551034`,
