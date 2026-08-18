@@ -26,6 +26,7 @@ interface Props {
   slug?: string;
   priceCents?: number;
   addImage?: string;   // vignette envoyée au panier (défaut : image)
+  accentColor?: string; // couleur d'accent du produit — trait fin autour du cadre photo
 }
 
 const {
@@ -42,6 +43,7 @@ const {
   slug,
   priceCents,
   addImage,
+  accentColor,
 } = Astro.props;
 
 const canQuickAdd = quickAdd && variantId && slug && priceCents != null;
@@ -61,7 +63,7 @@ const addAttrs = {
 <div class="group relative bg-bg-secondary hover:bg-bg-tertiary transition-colors duration-200 ease-in-out">
   <a href={href} class="block">
     {/* Arche §2.4 — photo du flacon */}
-    <div class="relative w-full aspect-[3/4] overflow-hidden arch bg-bg-primary">
+    <div class="relative w-full aspect-[3/4] overflow-hidden arch bg-bg-primary" style={accentColor ? `border: 1.5px solid ${accentColor}` : undefined}>
       {
         image ? (
           <img

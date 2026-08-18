@@ -306,8 +306,8 @@ export const products: Record<string, Product> = {
       'Le soin hydratant, version crème — pour les peaux qui n’aiment pas le gras. Une alternative au rétinol tout en douceur.',
     longDescription:
       "La même étape que l'huile, texture crème. Soyeuse, à absorption rapide, elle mise sur une alternative naturelle au rétinol (Bidens Pilosa 2 %) avec vitamines C et E et acide hyaluronique pour lisser les ridules et repulper — sans irritation.",
-    accentColor: ACCENTS.corail,
-    accentName: 'Corail',
+    accentColor: ACCENTS.vert,
+    accentName: 'Vert',
     cardImage: '/hero/hero-creme.jpg',
     images: [
       `${CDN}/pIQfWAaB0Cd-47QqEBERPjuf-Mr3wZsR.jpg?v=1783438067`,
@@ -385,8 +385,8 @@ export const products: Record<string, Product> = {
       'Une protection haute qui unifie le teint d’un voile naturel. La dernière étape, avant de sortir.',
     longDescription:
       "Protection solaire teintée à filtres minéraux, SPF30. Fini naturel embellisseur, sans film blanc. Enrichie en argousier et acide hyaluronique pour ne pas dessécher. Le geste qui clôt le rituel les jours de lumière.",
-    accentColor: ACCENTS.bleu,
-    accentName: 'Bleu',
+    accentColor: ACCENTS.corail,
+    accentName: 'Corail',
     cardImage: '/hero/hero-solaire-teinte.jpg',
     images: [
       `${CDN}/ybSYPTcTamRoE2WtnOYgMkz7ctRTor5j.jpg?v=1783438332`,
@@ -467,8 +467,8 @@ export const products: Record<string, Product> = {
       'Un stick minéral SPF50, invisible, à glisser partout. La retouche solaire de la journée.',
     longDescription:
       "Protection minérale SPF50 en format stick — simple, sans effort, sans traces blanches. À glisser dans le sac pour retoucher pommettes, nez, contour des yeux au fil de la journée.",
-    accentColor: ACCENTS.bleu,
-    accentName: 'Bleu (inversé)',
+    accentColor: ACCENTS.corail,
+    accentName: 'Corail (inversé)',
     accentInverted: true,
     cardImage: '/hero/hero-stick-solaire.jpg',
     images: [
@@ -535,8 +535,8 @@ export const products: Record<string, Product> = {
       'Deux patchs hydrogel, quinze minutes, pour un regard reposé et repulpé — même à la dernière minute.',
     longDescription:
       "La niacinamide unifie et illumine le teint, l'acide hyaluronique hydrate en profondeur pour lisser l'aspect des ridules de sécheresse, tandis que le panthénol et le jus d'aloe apaisent la zone la plus fine du visage. Une touche d'or signe la texture hydrogel, façon rituel K-beauty.",
-    accentColor: ACCENTS.poudre,
-    accentName: 'Rose poudré',
+    accentColor: ACCENTS.bleu,
+    accentName: 'Bleu',
     cardImage: '/hero/hero-patchs-yeux.jpg',
     images: [
       `${CDN}/uxZghpJrBBZN2qk9T2lXZrn1Anvqj1Ns.jpg?v=1786546564`,
@@ -602,8 +602,8 @@ export const products: Record<string, Product> = {
       'Le geste rafraîchissant après une nuit courte. Deux patchs hydrogel, quinze minutes, pour un regard visiblement moins fatigué.',
     longDescription:
       "Les antioxydants protègent et ravivent l'éclat, tandis que le panthénol, la glycérine et l'acide hyaluronique hydratent en profondeur pour un contour des yeux repulpé et confortable. Texture fraîche et gélifiée, façon rituel K-beauty.",
-    accentColor: ACCENTS.chartreuse,
-    accentName: 'Vert chartreuse',
+    accentColor: ACCENTS.bleu,
+    accentName: 'Bleu',
     cardImage: '/hero/hero-patchs-yeux-fatigue.jpg',
     images: [
       `${CDN}/YRK594hnv5bpCkajODIcpnTvNUk04x2x.jpg?v=1786551033`,

@@ -51,7 +51,7 @@ const storeOpen = isStoreOpen();
                 imbriquer un <button> dans le <a> (HTML invalide). */}
             <div class="group relative">
               <a href={p.href} class="block px-3 md:px-4 pt-5 pb-6 hover:bg-bg-tertiary transition-colors duration-200 ease-in-out">
-                <div class="relative w-full aspect-[3/4] overflow-hidden bg-bg-primary" style="border-radius:120px 120px 3px 3px">
+                <div class="relative w-full aspect-[3/4] overflow-hidden bg-bg-primary" style={`border-radius:120px 120px 3px 3px; border: 1.5px solid ${p.accentColor}`}>
                   <img src={p.cardImage} alt={p.title} class="absolute inset-0 w-full h-full object-cover" loading="lazy" />
                 </div>
                 <p class="mono-micro text-ink-tertiary mt-4">{productLabel(p)}</p>
