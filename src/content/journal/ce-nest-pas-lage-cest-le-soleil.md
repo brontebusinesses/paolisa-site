@@ -3,6 +3,8 @@ title: 'Ce n''est pas l''âge, c''est le soleil'
 excerpt: 'Depuis que je fais cette marque, je ne me passe plus de SPF. Tous les jours, sans exception.'
 date: 2026-08-07
 readingTime: '2 MIN'
+image: '/journal/cover-ce-nest-pas-lage-cest-le-soleil.jpg'
+imageAlt: 'Journal Paolisa — Ce n''est pas l''age, c''est le soleil'
 ---
 
 Il y a une phrase qui a tout changé pour moi : ce n'est pas l'âge qui donne des rides. C'est le soleil.

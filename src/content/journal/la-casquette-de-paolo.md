@@ -3,6 +3,8 @@ title: 'La casquette de Paolo'
 excerpt: 'Il en a plein. Il met toujours les mêmes.'
 date: 2026-07-20
 readingTime: '2 MIN'
+image: '/journal/cover-la-casquette-de-paolo.jpg'
+imageAlt: 'Journal Paolisa — La casquette de Paolo'
 ---
 
 Je ne l'ai jamais vu sans.
