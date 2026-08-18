@@ -25,13 +25,12 @@ const trioItems = [
   { label: 'JOURNAL', status: '[ 04 ENTRÉES ]', href: '/journal' },
 ];
 
-const ingredients = [
-  { index: '01', name: 'OLIVE',    origin: 'Pression à froid' },
-  { index: '02', name: 'AMANDE',   origin: 'Pression à froid' },
-  { index: '03', name: 'ABRICOT',  origin: 'Pression à froid' },
-  { index: '04', name: 'AVOCAT',   origin: 'Pression à froid' },
-  { index: '05', name: 'ÉGLANTIER', origin: 'Pression à froid' },
-  { index: '06', name: 'argousier · framboise · onagre', origin: '—' },
+const ingredientPrinciples = [
+  { index: '01', name: 'FORMULES COURTES', origin: "Peu d'ingrédients, chacun choisi pour son efficacité" },
+  { index: '02', name: 'ACTIFS CIBLÉS', origin: 'Niacinamide, acide hyaluronique, alternative au rétinol' },
+  { index: '03', name: 'SOURCÉ AVEC SOIN', origin: 'Extraits naturels (aloe, centella, argousier...) et huiles vierges pressées à froid pour le sérum-huile' },
+  { index: '04', name: 'DES ACTIFS DOCUMENTÉS', origin: 'Chaque ingrédient a un rôle, détaillé sur sa fiche' },
+  { index: '05', name: 'TRANSPARENCE TOTALE', origin: 'INCI complet sur chaque fiche produit' },
 ];
 ---
 
@@ -63,11 +62,10 @@ const ingredients = [
     />
 
     <CompositionList
-      eyebrow="LA COMPOSITION"
-      subEyebrow="N°03 HUILE / 05 INGRÉDIENTS"
-      ingredients={ingredients}
-      footnote="* INGRÉDIENTS ISSUS DE L'AGRICULTURE BIOLOGIQUE"
-      cta={{ label: 'FICHE HUILE →', href: '/huile/no-01' }}
+      eyebrow="NOS INGRÉDIENTS"
+      subEyebrow="UNE MÊME EXIGENCE, PRODUIT APRÈS PRODUIT"
+      ingredients={ingredientPrinciples}
+      cta={{ label: 'VOIR TOUTE LA GAMME →', href: '/gamme' }}
     />
   </main>
 
