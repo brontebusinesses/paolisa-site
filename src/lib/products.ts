@@ -25,7 +25,6 @@ export const ACCENTS = {
   chartreuse: '#CBDB39',
 } as const;
 
-const CDN = 'https://cdn.shopify.com/s/files/1/1056/2155/3484/files';
 
 export interface Product {
   slug: string;
@@ -387,7 +386,7 @@ export const products: Record<string, Product> = {
     accentName: 'Corail',
     cardImage: '/hero/hero-solaire-teinte.jpg',
     images: [
-      `${CDN}/ybSYPTcTamRoE2WtnOYgMkz7ctRTor5j.jpg?v=1783438332`,
+      '/pdp/solaire-teinte-2.jpg',
       '/pdp/solaire-teinte-1.jpg',
     ],
     shopifyHandle: 'sunscreen-spf30-with-tint',
