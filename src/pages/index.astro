@@ -1,28 +1,43 @@
 ---
 /**
- * Home — hero « composition gamme » (juillet 2026).
- * NoticeBar → Header (opaque) → HeroGamme → TrioBar → Manifesto → CompositionList → Footer.
+ * Home — hero « composition gamme » (juillet 2026), enrichie août 2026.
+ * NoticeBar → Header (opaque) → HeroGamme → DiagnosticTeaser → OrigineTeaser →
+ * TrioBar → Manifesto → CompositionList → JournalTeaser → Footer.
+ *
+ * Les compteurs (produits, entrées du journal) sont calculés à la source :
+ * ils ne peuvent plus se désynchroniser du catalogue ni du contenu.
  */
+import { getCollection } from 'astro:content';
 import BaseLayout from '../layouts/BaseLayout.astro';
 import NoticeBar from '../components/NoticeBar.astro';
 import Header from '../components/Header.astro';
 import HeroGamme from '../components/HeroGamme.astro';
+import DiagnosticTeaser from '../components/DiagnosticTeaser.astro';
+import OrigineTeaser from '../components/OrigineTeaser.astro';
 import TrioBar from '../components/TrioBar.astro';
 import Manifesto from '../components/Manifesto.astro';
 import CompositionList from '../components/CompositionList.astro';
+import JournalTeaser from '../components/JournalTeaser.astro';
 import Footer from '../components/Footer.astro';
+import { productList } from '../lib/products';
 import { isStoreOpen } from '../lib/store-status';
 
 const storeOpen = isStoreOpen();
 
+const pad = (n: number) => String(n).padStart(2, '0');
+
+/** Compteurs dynamiques — même source que ce qui est réellement affiché. */
+const productCount = productList().length;
+const journalCount = (await getCollection('journal', ({ data }) => !data.draft)).length;
+
 const trioItems = [
-  { label: 'LA GAMME', status: '[ 06 PRODUITS ]', href: '/gamme' },
+  { label: 'LA GAMME', status: `[ ${pad(productCount)} PRODUITS ]`, href: '/gamme' },
   {
     label: 'N°01 — SÉRUM',
     status: storeOpen ? '[ DISPONIBLE ]' : '[ BIENTÔT ]',
     href: '/produit/serum',
   },
-  { label: 'JOURNAL', status: '[ 04 ENTRÉES ]', href: '/journal' },
+  { label: 'JOURNAL', status: `[ ${pad(journalCount)} ENTRÉES ]`, href: '/journal' },
 ];
 
 const ingredientPrinciples = [
@@ -44,13 +59,17 @@ const ingredientPrinciples = [
 
   <main>
     <HeroGamme
-      eyebrow="LA GAMME / 6 PRODUITS"
+      eyebrow={`LA GAMME / ${pad(productCount)} PRODUITS`}
       headlineLine1="Six gestes."
       headlineLine2="Un rituel."
       sub="Le sérum, le regard, le soin — huile ou crème — et la protection. Trouvez le vôtre."
       cta1={{ label: 'DÉCOUVRIR LA GAMME →', href: '/gamme' }}
-      cta2={{ label: "L'ORIGINE", href: '/origine' }}
+      cta2={{ label: 'FAIRE LE DIAGNOSTIC', href: '/diagnostic' }}
     />
+
+    <DiagnosticTeaser />
+
+    <OrigineTeaser />
 
     <TrioBar items={trioItems} />
 
@@ -67,6 +86,8 @@ const ingredientPrinciples = [
       ingredients={ingredientPrinciples}
       cta={{ label: 'VOIR TOUTE LA GAMME →', href: '/gamme' }}
     />
+
+    <JournalTeaser />
   </main>
 
   <Footer />

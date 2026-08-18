@@ -1,0 +1,450 @@
+---
+/**
+ * Diagnostic — « Trouvez votre rituel » (août 2026).
+ *
+ * Trois questions, chacune portant un critère d'achat réel :
+ *   1. Ce qu'on veut travailler  → décide le cœur de la routine
+ *   2. La peau au quotidien      → tranche entre l'huile et la crème
+ *   3. La protection solaire     → ajoute (ou non) un solaire, et lequel
+ *
+ * La routine fait 2, 3 ou 4 produits selon les réponses — on ne force pas un
+ * nombre fixe, et la grille du résultat s'ajuste (voir .result-grid).
+ *
+ * Les correspondances suivent les fiches produits :
+ *   • Contour des yeux et Crème lissante partagent le Bidens Pilosa 2 %
+ *     (alternative au rétinol) → c'est le duo « rides ».
+ *   • Patchs anti-fatigue = antioxydants, le geste d'après nuit courte.
+ *   • Patchs anti-âge = niacinamide + acide hyaluronique, les ridules.
+ *
+ * Aucune dépendance externe : les huit produits candidats sont rendus côté
+ * serveur (donc l'ajout rapide de Cart.astro les voit au chargement), et le
+ * script ne fait qu'afficher les retenus et les remettre dans l'ordre.
+ * Source unique : products.ts — prix, liens et photos ne peuvent pas diverger.
+ */
+import BaseLayout from '../layouts/BaseLayout.astro';
+import NoticeBar from '../components/NoticeBar.astro';
+import Header from '../components/Header.astro';
+import Footer from '../components/Footer.astro';
+import Button from '../components/Button.astro';
+import { getProduct, productLabel } from '../lib/products';
+import { isStoreOpen } from '../lib/store-status';
+
+const storeOpen = isStoreOpen();
+
+interface Option { value: string; label: string; detail: string; }
+interface Step { key: string; step: number; title: string; help: string; options: Option[]; }
+
+const steps: Step[] = [
+  {
+    key: 'objectif',
+    step: 1,
+    title: 'Qu’aimeriez-vous travailler en priorité ?',
+    help: 'Une seule réponse — c’est elle qui décide du cœur de votre routine.',
+    options: [
+      { value: 'cernes', label: 'Mes cernes', detail: 'Un regard fatigué, des poches au réveil' },
+      { value: 'ridules', label: 'Les ridules du regard', detail: 'Ces petites lignes au coin de l’œil' },
+      { value: 'rides', label: 'Les rides du visage', detail: 'Le front, les joues, le sillon nasogénien' },
+      { value: 'eclat', label: 'L’éclat et le confort', detail: 'Un teint terne, une peau qui tiraille au quotidien' },
+    ],
+  },
+  {
+    key: 'peau',
+    step: 2,
+    title: 'Votre peau, au quotidien ?',
+    help: 'C’est ce critère qui tranche entre l’huile et la crème, quand un soin hydratant entre dans la routine.',
+    options: [
+      { value: 'seche', label: 'Elle tiraille', detail: 'Sèche, parfois des zones qui pèlent' },
+      { value: 'normale', label: 'Elle va bien', detail: 'Ni tiraillement, ni brillance marquée' },
+      { value: 'mixte', label: 'Elle brille', detail: 'Mixte à grasse, surtout sur la zone T' },
+    ],
+  },
+  {
+    key: 'solaire',
+    step: 3,
+    title: 'Et la protection solaire ?',
+    help: 'Dernier critère : il ajoute — ou non — un solaire à votre routine, et décide lequel.',
+    options: [
+      { value: 'deja', label: 'J’en ai déjà une', detail: 'Je suis équipée de ce côté-là' },
+      { value: 'dehors', label: 'Non, et je suis souvent dehors', detail: 'Sport, terrasse, randonnée, plein soleil' },
+      { value: 'ville', label: 'Non, surtout en ville', detail: 'Trajets, bureau, tous les jours' },
+    ],
+  },
+];
+
+/** Les huit produits que le diagnostic peut recommander, avec leur argument. */
+const candidates: { slug: string; reason: string }[] = [
+  {
+    slug: 'serum',
+    reason:
+      'Niacinamide et acide hyaluronique : il affine le grain, ravive l’éclat et repulpe. La première étape, sur peau propre.',
+  },
+  {
+    slug: 'contour-yeux',
+    reason:
+      'Bidens Pilosa 2 %, l’alternative douce au rétinol : il atténue les cernes et lisse les ridules, sans l’irritation d’un rétinol classique.',
+  },
+  {
+    slug: 'no-01',
+    reason:
+      'Cinq huiles méditerranéennes pressées à froid, texture sèche : elle nourrit en profondeur sans laisser de film.',
+  },
+  {
+    slug: 'creme',
+    reason:
+      'Le même actif anti-rides que le contour des yeux, en soin visage. Texture non grasse, absorption rapide, toutes peaux.',
+  },
+  {
+    slug: 'solaire-teinte',
+    reason:
+      'Un SPF30 minéral qui unifie le teint d’un voile naturel, sans film blanc. La dernière étape, avant de sortir.',
+  },
+  {
+    slug: 'stick-solaire',
+    reason:
+      'Un SPF50 minéral en stick, invisible : il se glisse dans le sac et se retouche dans la journée, sans miroir.',
+  },
+  {
+    slug: 'patchs-yeux-fatigue',
+    reason:
+      'Antioxydants et panthénol, texture fraîche : quinze minutes après une nuit courte, et le regard est visiblement moins fatigué.',
+  },
+  {
+    slug: 'patchs-yeux',
+    reason:
+      'Niacinamide et acide hyaluronique en hydrogel : quinze minutes pour hydrater et lisser l’aspect des ridules du contour.',
+  },
+];
+
+const cards = candidates
+  .map((c) => ({ ...c, product: getProduct(c.slug) }))
+  .filter((c) => c.product);
+---
+
+<BaseLayout
+  title="Le diagnostic — PAOLISA"
+  description="Trois questions pour trouver votre rituel Paolisa : ce que vous voulez travailler, votre peau, votre exposition au soleil."
+>
+  <NoticeBar message="LIVRAISON UNION EUROPÉENNE · RETOURS SOUS 30 JOURS" />
+  <Header transparent={false} currentPath="/diagnostic" />
+
+  <main>
+    <section class="container-paolisa pt-10 md:pt-16 pb-20 md:pb-32" data-diagnostic>
+      {/* En-tête */}
+      <header class="max-w-2xl mb-12 md:mb-16">
+        <p class="mono-label mb-4">— LE DIAGNOSTIC —</p>
+        <h1 class="display-l mb-6">Trouvez votre rituel.</h1>
+        <p class="body-l text-ink-secondary max-w-prose">
+          Trois questions : ce que vous voulez travailler, votre peau, votre
+          exposition. On en déduit vos produits — deux, trois ou quatre, selon
+          vos réponses. Jamais plus qu’il n’en faut.
+        </p>
+      </header>
+
+      {/* Progression */}
+      <div class="mb-10 md:mb-14 scroll-mt-32" data-anchor>
+        <div class="flex items-center justify-between mb-3">
+          <p class="mono-label" data-progress-label>ÉTAPE 01 / 03</p>
+          <button
+            type="button"
+            data-back
+            class="mono-label text-ink-tertiary hover:text-ink-primary transition-opacity duration-150 ease-in-out hidden"
+          >
+            ← RETOUR
+          </button>
+        </div>
+        <div class="w-full h-px bg-line-faint">
+          <div class="h-px bg-ink-primary transition-all duration-300 ease-out" style="width:33%" data-progress-bar></div>
+        </div>
+      </div>
+
+      {/* Questions */}
+      {
+        steps.map((q, qi) => (
+          <div data-step={q.key} class={qi === 0 ? '' : 'hidden'}>
+            <h2 class="display-m mb-3">{q.title}</h2>
+            <p class="body-m text-ink-tertiary mb-8 md:mb-10 max-w-prose">{q.help}</p>
+            <ul
+              class:list={[
+                'grid gap-4 md:gap-6 grid-cols-1',
+                q.options.length === 4 ? 'md:grid-cols-2 md:max-w-4xl' : 'md:grid-cols-3',
+              ]}
+            >
+              {q.options.map((o) => (
+                <li>
+                  <button
+                    type="button"
+                    data-answer
+                    data-key={q.key}
+                    data-value={o.value}
+                    class="group w-full h-full text-left border border-line-subtle bg-bg-primary hover:border-ink-primary hover:bg-bg-secondary transition-colors duration-200 ease-in-out p-6 md:p-8"
+                  >
+                    <span class="display-s block mb-2">{o.label}</span>
+                    <span class="body-m text-ink-secondary block">{o.detail}</span>
+                  </button>
+                </li>
+              ))}
+            </ul>
+          </div>
+        ))
+      }
+
+      {/* Résultat */}
+      <div data-result class="hidden" aria-live="polite">
+        <p class="mono-label mb-4">— VOTRE RITUEL —</p>
+        <h2 class="display-m mb-4" data-result-title>Votre rituel.</h2>
+        <p class="body-l text-ink-secondary max-w-prose mb-10 md:mb-14" data-result-summary></p>
+
+        <ul class="result-grid mb-10" style="--cols:3" data-result-grid>
+          {
+            cards.map((c) => (
+              <li data-card={c.slug} class="hidden bg-bg-primary">
+                <div class="group relative h-full flex flex-col">
+                  <a
+                    href={c.product!.href}
+                    class="block px-4 pt-5 pb-6 hover:bg-bg-tertiary transition-colors duration-200 ease-in-out flex-1"
+                  >
+                    <p class="mono-micro text-ink-tertiary mb-3" data-geste></p>
+                    <div
+                      class="relative w-full aspect-[3/4] overflow-hidden bg-bg-primary"
+                      style="border-radius:120px 120px 3px 3px; border: 1px solid #4B3729"
+                    >
+                      <img
+                        src={c.product!.cardImage}
+                        alt={c.product!.title}
+                        class="absolute inset-0 w-full h-full object-cover"
+                        loading="lazy"
+                      />
+                    </div>
+                    <p class="mono-micro text-ink-tertiary mt-4">{productLabel(c.product!)}</p>
+                    <p class="display-s mt-1">{c.product!.title}</p>
+                    <p class="font-mono text-[11px] text-ink-tertiary mt-2 tracking-[0.05em]">
+                      {c.product!.priceLabel}
+                    </p>
+                    <p class="body-m text-ink-secondary mt-4">{c.reason}</p>
+                  </a>
+
+                  {storeOpen && c.product!.available && (
+                    <div class="px-4 pb-5">
+                      <button
+                        type="button"
+                        data-quick-add
+                        data-variant={c.product!.shopifyVariantId}
+                        data-slug={c.product!.slug}
+                        data-title={c.product!.title}
+                        data-price={c.product!.priceCents}
+                        data-image={c.product!.cardImage}
+                        data-href={c.product!.href}
+                        class="w-full bg-bg-dark text-ink-inverse font-mono uppercase tracking-[0.1em] text-[10px] py-3 hover:bg-ink-secondary transition-colors duration-200 ease-in-out"
+                      >
+                        + AJOUTER
+                      </button>
+                    </div>
+                  )}
+                </div>
+              </li>
+            ))
+          }
+        </ul>
+
+        <div class="flex flex-col sm:flex-row items-start sm:items-center gap-4 sm:gap-8">
+          <Button variant="primary" href="/gamme">VOIR TOUTE LA GAMME →</Button>
+          <button
+            type="button"
+            data-restart
+            class="mono-label text-ink-tertiary hover:text-ink-primary transition-opacity duration-150 ease-in-out"
+          >
+            ↺ REFAIRE LE DIAGNOSTIC
+          </button>
+        </div>
+      </div>
+    </section>
+  </main>
+
+  <Footer />
+</BaseLayout>
+
+<style>
+  /* La grille du résultat suit le nombre de produits retenus (2, 3 ou 4) :
+     sans ça, une routine de 2 produits laisserait une case vide couleur filet. */
+  .result-grid {
+    display: grid;
+    grid-template-columns: 1fr;
+    gap: 1px;
+    background: var(--line-faint);
+    border: 1px solid var(--line-faint);
+    list-style: none;
+  }
+
+  @media (min-width: 768px) {
+    .result-grid {
+      grid-template-columns: repeat(var(--cols), minmax(0, 1fr));
+    }
+  }
+</style>
+
+<script>
+  const root = document.querySelector('[data-diagnostic]');
+  if (root) {
+    const stepEls = Array.from(root.querySelectorAll<HTMLElement>('[data-step]'));
+    const order = stepEls.map((s) => s.dataset.step || '');
+    const result = root.querySelector<HTMLElement>('[data-result]');
+    const resultTitle = root.querySelector<HTMLElement>('[data-result-title]');
+    const summary = root.querySelector<HTMLElement>('[data-result-summary]');
+    const grid = root.querySelector<HTMLElement>('[data-result-grid]');
+    const progressLabel = root.querySelector<HTMLElement>('[data-progress-label]');
+    const progressBar = root.querySelector<HTMLElement>('[data-progress-bar]');
+    const backBtn = root.querySelector<HTMLElement>('[data-back]');
+    const anchor = root.querySelector<HTMLElement>('[data-anchor]');
+
+    /** Les patchs ne sont pas un geste quotidien : on les annonce autrement. */
+    const CRAQUAGES = ['patchs-yeux', 'patchs-yeux-fatigue'];
+    const TOTAL = order.length;
+
+    const answers: Record<string, string> = {};
+    let current = 0;
+
+    const pad = (n: number) => String(n).padStart(2, '0');
+
+    const scrollToAnchor = () => {
+      if (!anchor) return;
+      const y = anchor.getBoundingClientRect().top + window.scrollY - 120;
+      window.scrollTo({ top: Math.max(0, y), behavior: 'smooth' });
+    };
+
+    const render = () => {
+      stepEls.forEach((s, i) => s.classList.toggle('hidden', i !== current));
+      result?.classList.add('hidden');
+      if (progressLabel) progressLabel.textContent = `ÉTAPE ${pad(current + 1)} / ${pad(TOTAL)}`;
+      if (progressBar) progressBar.style.width = `${Math.round(((current + 1) / TOTAL) * 100)}%`;
+      backBtn?.classList.toggle('hidden', current === 0);
+    };
+
+    /** Le soin hydratant : crème pour les peaux qui brillent, huile sinon. */
+    const soin = () => (answers.peau === 'mixte' ? 'creme' : 'no-01');
+
+    /** Le solaire ajouté par la question 3 — ou rien. */
+    const solaire = () =>
+      answers.solaire === 'dehors' ? 'stick-solaire' : answers.solaire === 'ville' ? 'solaire-teinte' : null;
+
+    /** Chaque objectif déclenche son propre cœur de routine. */
+    const compute = () => {
+      let core: string[];
+      switch (answers.objectif) {
+        case 'cernes':
+          core = ['contour-yeux', 'patchs-yeux-fatigue'];
+          break;
+        case 'ridules':
+          core = ['contour-yeux', 'patchs-yeux'];
+          break;
+        case 'rides':
+          core = ['serum', 'contour-yeux', 'creme'];
+          break;
+        default:
+          core = ['serum', soin()];
+      }
+      const sun = solaire();
+      return sun ? [...core, sun] : core;
+    };
+
+    const summarize = (chosen: string[]) => {
+      const objectif =
+        answers.objectif === 'cernes'
+          ? 'Vous voulez travailler vos cernes'
+          : answers.objectif === 'ridules'
+            ? 'Vous visez les ridules du contour'
+            : answers.objectif === 'rides'
+              ? 'Vous ciblez les rides du visage'
+              : 'Vous cherchez de l’éclat et du confort';
+
+      const coeur =
+        answers.objectif === 'cernes'
+          ? 'le contour des yeux tous les matins, les patchs pour les lendemains difficiles'
+          : answers.objectif === 'ridules'
+            ? 'le contour des yeux au quotidien, les patchs deux fois par semaine'
+            : answers.objectif === 'rides'
+              ? 'le sérum prépare, le contour traite la zone qui marque en premier, la crème lisse le reste — les deux derniers avec le même actif'
+              : chosen.includes('creme')
+                ? 'le sérum et la crème lissante, une texture légère pour une peau qui brille'
+                : 'le sérum et l’huile visage, nourrissante sans être grasse';
+
+      const fin =
+        answers.solaire === 'dehors'
+          ? ' On y ajoute le stick SPF50, parce que vous êtes souvent dehors.'
+          : answers.solaire === 'ville'
+            ? ' On y ajoute le voile teinté, pour les jours de ville.'
+            : ' Rien de plus : vous êtes déjà équipée côté solaire.';
+
+      return `${objectif} : ${coeur}.${fin}`;
+    };
+
+    const showResult = () => {
+      const chosen = compute();
+
+      /* La grille s'ajuste au nombre exact de produits — pas de case vide. */
+      grid?.style.setProperty('--cols', String(chosen.length));
+
+      let geste = 0;
+      root.querySelectorAll<HTMLElement>('[data-card]').forEach((card) => {
+        const slug = card.dataset.card || '';
+        const rank = chosen.indexOf(slug);
+        const hit = rank !== -1;
+        card.classList.toggle('hidden', !hit);
+        card.style.order = hit ? String(rank) : '';
+      });
+
+      /* Numérotation dans l'ordre d'affichage, les patchs mis à part. */
+      chosen.forEach((slug) => {
+        const card = root.querySelector<HTMLElement>(`[data-card="${slug}"] [data-geste]`);
+        if (!card) return;
+        if (CRAQUAGES.includes(slug)) {
+          card.textContent = '— LE PLUS —';
+        } else {
+          geste += 1;
+          card.textContent = `— GESTE ${pad(geste)} —`;
+        }
+      });
+
+      if (resultTitle) {
+        resultTitle.textContent = chosen.length === 2 ? 'Vos deux produits.' : chosen.length === 3 ? 'Vos trois produits.' : 'Vos quatre produits.';
+      }
+      if (summary) summary.textContent = summarize(chosen);
+
+      stepEls.forEach((s) => s.classList.add('hidden'));
+      result?.classList.remove('hidden');
+      if (progressLabel) progressLabel.textContent = 'TERMINÉ';
+      if (progressBar) progressBar.style.width = '100%';
+      backBtn?.classList.add('hidden');
+      scrollToAnchor();
+    };
+
+    root.querySelectorAll<HTMLElement>('[data-answer]').forEach((btn) => {
+      btn.addEventListener('click', () => {
+        answers[btn.dataset.key || ''] = btn.dataset.value || '';
+        if (current < TOTAL - 1) {
+          current += 1;
+          render();
+          scrollToAnchor();
+        } else {
+          showResult();
+        }
+      });
+    });
+
+    backBtn?.addEventListener('click', () => {
+      if (current > 0) {
+        current -= 1;
+        render();
+        scrollToAnchor();
+      }
+    });
+
+    root.querySelector<HTMLElement>('[data-restart]')?.addEventListener('click', () => {
+      Object.keys(answers).forEach((k) => delete answers[k]);
+      current = 0;
+      render();
+      scrollToAnchor();
+    });
+
+    render();
+  }
+</script>

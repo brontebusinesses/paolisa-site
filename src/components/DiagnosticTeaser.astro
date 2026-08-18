@@ -1,0 +1,27 @@
+---
+/**
+ * <DiagnosticTeaser /> — bande d'entrée vers /diagnostic sur la home.
+ *
+ * Placée juste sous la grille produits : c'est le moment où le visiteur voit
+ * six flacons et se demande lequel est pour lui. Le hero pose la question
+ * (« Trouvez le vôtre »), cette bande y répond.
+ */
+import Button from './Button.astro';
+---
+
+<section class="bg-bg-tertiary border-t border-line-subtle" aria-label="Diagnostic">
+  <div class="container-paolisa section-y">
+    <div class="max-w-prose">
+      <p class="mono-label mb-6">— TROUVEZ LE VÔTRE —</p>
+      <h2 class="display-m mb-6">
+        Huile ou crème ?<br />Trois questions suffisent.
+      </h2>
+      <p class="body-l text-ink-secondary mb-10">
+        Ce que vous voulez travailler, votre peau, votre exposition au soleil.
+        Trois questions, et on vous dit quels produits composent votre matin —
+        deux, trois ou quatre. Jamais plus qu’il n’en faut.
+      </p>
+      <Button variant="primary" href="/diagnostic">FAIRE LE DIAGNOSTIC →</Button>
+    </div>
+  </div>
+</section>

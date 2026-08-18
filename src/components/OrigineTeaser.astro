@@ -1,32 +1,19 @@
 ---
 /**
- * <OrigineTeaser /> — bloc chaleur sur la home, entre HeroGamme et TrioBar.
- * Grande photo pleine largeur (les mains de Paolo et de sa petite-fille, la
- * même que sur /origine) suivie d'un fragment de l'histoire familiale, pour
- * casser l'effet catalogue avant d'aller plus loin dans la gamme.
+ * <OrigineTeaser /> — bloc chaleur sur la home, entre la bande diagnostic et
+ * la TrioBar.
  *
- * Mobile d'abord (99% du trafic) : l'image occupe toute la largeur de
- * l'écran sans marge (aspect 4/3, la plus haute proportion), le texte suit
- * en dessous, centré, une seule colonne. Sur desktop l'image s'élargit
- * (aspect 16/9) plutôt que de passer en deux colonnes, pour rester simple
- * et cohérente avec le reste du site.
+ * Version texte seul (août 2026) : la grande photo pleine largeur a été
+ * retirée — elle écrasait la page d'accueil et repoussait tout le reste sous
+ * la ligne de flottaison. Le fragment d'histoire familiale suffit à casser
+ * l'effet catalogue et à envoyer vers /origine, où la photo vit toujours.
+ *
+ * Mobile d'abord (99% du trafic) : une seule colonne, texte centré.
  */
 import Button from './Button.astro';
 ---
 
-<section class="bg-bg-primary" aria-label="Notre histoire">
-  <div class="relative w-full aspect-[4/3] md:aspect-[16/9] overflow-hidden bg-bg-tertiary">
-    <picture>
-      <source srcset="/origine/signature.webp" type="image/webp" />
-      <img
-        src="/origine/signature.jpg"
-        alt="Deux mains qui se tiennent, une jeune, une âgée. Le geste transmis d'une génération à l'autre."
-        class="absolute inset-0 w-full h-full object-cover"
-        loading="lazy"
-      />
-    </picture>
-  </div>
-
+<section class="bg-bg-primary border-t border-line-subtle" aria-label="Notre histoire">
   <div class="container-paolisa section-y">
     <div class="max-w-prose mx-auto text-center">
       <p class="mono-label mb-6">— DE MAIN EN MAIN —</p>

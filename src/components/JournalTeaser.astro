@@ -1,0 +1,61 @@
+---
+/**
+ * <JournalTeaser /> — les trois dernières entrées du journal, sur la home.
+ *
+ * Le journal était jusqu'ici accessible par un seul lien texte dans la TrioBar.
+ * Ce bloc l'expose en bas de page d'accueil, là où le visiteur qui a tout lu
+ * cherche quoi faire ensuite. Réutilise <EditorialCard /> (même rendu que /journal).
+ */
+import { getCollection } from 'astro:content';
+import EditorialCard from './EditorialCard.astro';
+
+interface Props {
+  /** Nombre d'entrées affichées (3 par défaut). */
+  limit?: number;
+}
+
+const { limit = 3 } = Astro.props;
+
+const all = await getCollection('journal', ({ data }) => !data.draft);
+const entries = all
+  .sort((a, b) => b.data.date.getTime() - a.data.date.getTime())
+  .slice(0, limit);
+
+const formatDate = (d: Date) =>
+  d.toLocaleDateString('fr-FR', { day: '2-digit', month: '2-digit', year: 'numeric' }).replace(/\//g, '.');
+---
+
+{
+  entries.length > 0 && (
+    <section class="bg-bg-primary border-t border-line-subtle" aria-label="Le journal">
+      <div class="container-paolisa section-y">
+        <div class="flex items-end justify-between flex-wrap gap-6 mb-12 md:mb-16">
+          <div class="max-w-xl">
+            <p class="mono-label mb-4">— LE JOURNAL —</p>
+            <h2 class="display-m">Notes de marque, notes de soin.</h2>
+          </div>
+          <a
+            href="/journal"
+            class="mono-label text-ink-tertiary hover:text-ink-primary transition-opacity duration-150 ease-in-out"
+          >
+            VOIR TOUTES LES ENTRÉES →
+          </a>
+        </div>
+
+        <div class="grid grid-cols-1 md:grid-cols-3 gap-10 md:gap-12">
+          {entries.map((entry) => (
+            <EditorialCard
+              href={`/journal/${entry.slug}`}
+              image={entry.data.image}
+              imageAlt={entry.data.imageAlt}
+              title={entry.data.title}
+              excerpt={entry.data.excerpt}
+              date={formatDate(entry.data.date)}
+              readingTime={entry.data.readingTime}
+            />
+          ))}
+        </div>
+      </div>
+    </section>
+  )
+}
