@@ -1,0 +1,28 @@
+---
+/**
+ * <GammeOnglet /> — la bande d'accès à la gamme, juste sous le hero.
+ *
+ * Remplace la grille de produits qui occupait le haut de la page d'accueil :
+ * le visiteur choisit d'aller voir les produits au lieu de les recevoir en
+ * pleine figure. Le compteur vient du catalogue, il ne peut pas se périmer.
+ */
+import { productList } from '../lib/products';
+
+const count = productList().length;
+const pad = (n: number) => String(n).padStart(2, '0');
+---
+
+<section class="bg-bg-secondary border-t border-b border-line-subtle" aria-label="La gamme">
+  <div class="container-paolisa">
+    <a
+      href="/gamme"
+      class="flex items-center justify-between gap-6 py-8 md:py-10 hover:opacity-70 transition-opacity duration-150 ease-in-out"
+    >
+      <span>
+        <span class="mono-label text-ink-primary block">— LA GAMME —</span>
+        <span class="display-m block mt-2">Découvrir toute la gamme</span>
+      </span>
+      <span class="mono-label whitespace-nowrap">{pad(count)} PRODUITS &nbsp;→</span>
+    </a>
+  </div>
+</section>

@@ -1,0 +1,74 @@
+---
+/**
+ * <HeroAccueil /> — hero d'accueil (août 2026).
+ *
+ * Image éditoriale plein cadre. Le wordmark et la baseline sont incrustés
+ * dans la photo, donc le composant n'ajoute aucun titre : un seul appel à
+ * l'action, le diagnostic.
+ *
+ * L'image garde toujours son rectangle entier — rien n'est jamais rogné,
+ * quelle que soit la taille d'écran (choix assumé : elle rapetisse sur
+ * mobile plutôt que d'être recadrée).
+ *   • Desktop : le bouton se pose sur l'image, sous la baseline incrustée.
+ *   • Mobile  : le bouton passe sous l'image, sur fond crème.
+ *
+ * WebP servi en priorité, JPG en repli — c'est la plus grosse image du site.
+ */
+import Button from './Button.astro';
+
+interface Cta {
+  label: string;
+  href: string;
+}
+
+interface Props {
+  image?: string;
+  imageWebp?: string;
+  imageAlt?: string;
+  cta: Cta;
+}
+
+const {
+  image = '/hero/accueil.jpg',
+  imageWebp = '/hero/accueil.webp',
+  imageAlt = 'Une femme applique son soin Paolisa devant le miroir de sa salle de bain, la gamme posée sur le plan de travail.',
+  cta,
+} = Astro.props;
+---
+
+<section class="relative bg-bg-primary" aria-label="Accueil">
+  <picture>
+    <source srcset={imageWebp} type="image/webp" />
+    <img
+      src={image}
+      alt={imageAlt}
+      class="w-full h-auto block"
+      loading="eager"
+      decoding="async"
+    />
+  </picture>
+
+  <div class="hero-cta">
+    <Button variant="primary" href={cta.href}>{cta.label}</Button>
+  </div>
+</section>
+
+<style>
+  /* Mobile : sous l'image, pour ne rien recouvrir sur un petit écran. */
+  .hero-cta {
+    display: flex;
+    justify-content: center;
+    padding: 28px 20px 36px;
+  }
+
+  /* Desktop : posé sur l'image, sous la baseline incrustée. */
+  @media (min-width: 768px) {
+    .hero-cta {
+      position: absolute;
+      left: 50%;
+      bottom: 12%;
+      transform: translateX(-50%);
+      padding: 0;
+    }
+  }
+</style>

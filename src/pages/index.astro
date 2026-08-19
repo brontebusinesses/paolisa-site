@@ -1,18 +1,22 @@
 ---
 /**
- * Home — hero « composition gamme » (juillet 2026), enrichie août 2026.
- * NoticeBar → Header (opaque) → HeroGamme → DiagnosticTeaser → OrigineTeaser →
- * TrioBar → Manifesto → CompositionList → JournalTeaser → Footer.
+ * Home — hero éditorial (août 2026).
+ * NoticeBar → Header → HeroAccueil → GammeOnglet → OrigineTeaser → TrioBar →
+ * Manifesto → CompositionList → JournalTeaser → Footer.
  *
- * Les compteurs (produits, entrées du journal) sont calculés à la source :
- * ils ne peuvent plus se désynchroniser du catalogue ni du contenu.
+ * La grille de produits ne s'affiche plus en haut de page : le hero pose
+ * l'ambiance et envoie vers le diagnostic, la bande « gamme » prend le relais
+ * pour ceux qui veulent voir les produits tout de suite.
+ *
+ * Le compteur d'entrées du journal est calculé à la source : il ne peut plus
+ * se désynchroniser du contenu.
  */
 import { getCollection } from 'astro:content';
 import BaseLayout from '../layouts/BaseLayout.astro';
 import NoticeBar from '../components/NoticeBar.astro';
 import Header from '../components/Header.astro';
-import HeroGamme from '../components/HeroGamme.astro';
-import DiagnosticTeaser from '../components/DiagnosticTeaser.astro';
+import HeroAccueil from '../components/HeroAccueil.astro';
+import GammeOnglet from '../components/GammeOnglet.astro';
 import OrigineTeaser from '../components/OrigineTeaser.astro';
 import TrioBar from '../components/TrioBar.astro';
 import Manifesto from '../components/Manifesto.astro';
@@ -51,23 +55,16 @@ const ingredientPrinciples = [
 
 <BaseLayout
   title="PAOLISA — Le rituel du matin, au complet."
-  description="La gamme Paolisa : sérum éclat, contour des yeux, huile ou crème, protection solaire. Six gestes, un rituel."
+  description="Skincare végane fabriquée en Europe. Sérum éclat, contour des yeux, huile ou crème, protection solaire. Trouvez votre rituel en trois questions."
 >
   <NoticeBar message="LIVRAISON UNION EUROPÉENNE · RETOURS SOUS 30 JOURS" />
 
   <Header transparent={false} currentPath="/" />
 
   <main>
-    <HeroGamme
-      eyebrow={`LA GAMME / ${pad(productCount)} PRODUITS`}
-      headlineLine1="Six gestes."
-      headlineLine2="Un rituel."
-      sub="Le sérum, le regard, le soin — huile ou crème — et la protection. Trouvez le vôtre."
-      cta1={{ label: 'DÉCOUVRIR LA GAMME →', href: '/gamme' }}
-      cta2={{ label: 'FAIRE LE DIAGNOSTIC', href: '/diagnostic' }}
-    />
+    <HeroAccueil cta={{ label: 'FAIRE LE DIAGNOSTIC →', href: '/diagnostic' }} />
 
-    <DiagnosticTeaser />
+    <GammeOnglet />
 
     <OrigineTeaser />
 
