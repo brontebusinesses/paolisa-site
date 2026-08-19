@@ -36,13 +36,13 @@ const {
 } = Astro.props;
 ---
 
-<section class="relative bg-bg-primary" aria-label="Accueil">
+<section class="hero-accueil relative bg-bg-primary" aria-label="Accueil">
   <picture>
     <source srcset={imageWebp} type="image/webp" />
     <img
       src={image}
       alt={imageAlt}
-      class="w-full h-auto block"
+      class="hero-img w-full h-auto block"
       loading="eager"
       decoding="async"
     />
@@ -61,8 +61,13 @@ const {
     padding: 28px 20px 36px;
   }
 
-  /* Desktop : posé sur l'image, sous la baseline incrustée. */
   @media (min-width: 768px) {
+    /* L'image occupe toute la largeur, sans marge de fond : sur certains
+       portables le bas de la photo (le plan de travail) passe donc sous la
+       ligne de flottaison. C'est assumé — le wordmark, la baseline et le
+       bouton, eux, restent visibles sans scroller. */
+
+    /* Posé sur l'image, sous la baseline incrustée. */
     .hero-cta {
       position: absolute;
       left: 50%;

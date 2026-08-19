@@ -3,6 +3,13 @@
  * <Header /> — §5.2
  * Layout flottant transparent sur le hero, devient blanc opaque au scroll au-delà de 100px.
  * Menu overlay full-screen listant la gamme (6 produits, 2 niveaux).
+ *
+ * Deux réglages pour le mode transparent (août 2026) :
+ *   • overlayInk — la couleur des liens posés sur le hero. 'light' (crème) sur
+ *     une photo sombre, 'dark' (brun) sur une photo claire.
+ *   • hideWordmarkAtTop — masque le wordmark tant qu'on est en haut de page,
+ *     pour les heros qui portent déjà la marque dans l'image. Il réapparaît
+ *     dès que le header devient opaque au scroll.
  */
 import Wordmark from './Wordmark.astro';
 import { isStoreOpen } from '../lib/store-status';
@@ -10,18 +17,33 @@ import { essentials, solaires, productLabel } from '../lib/products';
 
 interface Props {
   transparent?: boolean;
+  overlayInk?: 'light' | 'dark';
+  hideWordmarkAtTop?: boolean;
   currentPath?: string;
 }
 
-const { transparent = false, currentPath = '/' } = Astro.props;
+const {
+  transparent = false,
+  overlayInk = 'light',
+  hideWordmarkAtTop = false,
+  currentPath = '/',
+} = Astro.props;
+
 const storeOpen = isStoreOpen();
 const essentiels = essentials();
 const solaireProducts = solaires();
+
+/** Couleur des liens du header selon le fond sur lequel ils reposent. */
+const linkInk = transparent && overlayInk === 'light' ? 'text-ink-inverse' : 'text-ink-primary';
+
+/** Le wordmark n'est escamoté que si le header est réellement transparent. */
+const wordmarkHidden = transparent && hideWordmarkAtTop;
 ---
 
 <header
   data-header
   data-transparent={transparent ? 'true' : 'false'}
+  data-hide-wordmark={wordmarkHidden ? 'true' : 'false'}
   style="top: var(--notice-bar-height, 36px);"
   class:list={[
     'fixed inset-x-0 z-40 transition-colors duration-200 ease-in-out',
@@ -39,7 +61,7 @@ const solaireProducts = solaires();
           aria-expanded="false"
           class:list={[
             'mono-label inline-flex items-center gap-2 hover:opacity-70 transition-opacity duration-150 ease-in-out',
-            transparent ? 'text-ink-inverse' : 'text-ink-primary',
+            linkInk,
           ]}
         >
           <span aria-hidden="true">≡</span>
@@ -49,7 +71,7 @@ const solaireProducts = solaires();
           href="/gamme"
           class:list={[
             'mono-label hidden md:inline-block hover:opacity-70 transition-opacity duration-150 ease-in-out',
-            transparent ? 'text-ink-inverse' : 'text-ink-primary',
+            linkInk,
             currentPath?.startsWith('/gamme') ? 'opacity-70' : '',
           ]}
         >
@@ -57,10 +79,18 @@ const solaireProducts = solaires();
         </a>
       </div>
 
-      {/* Centre — Wordmark */}
+      {/* Centre — Wordmark (escamoté en haut de page si le hero le porte déjà) */}
       <div class="flex justify-center">
-        <a href="/" aria-label="Paolisa — accueil" class="hover:opacity-100">
-          <Wordmark size="md" inverse={transparent} />
+        <a
+          href="/"
+          aria-label="Paolisa — accueil"
+          data-header-wordmark
+          class:list={[
+            'hover:opacity-100 transition-opacity duration-200 ease-in-out',
+            wordmarkHidden ? 'opacity-0 pointer-events-none' : '',
+          ]}
+        >
+          <Wordmark size="md" inverse={transparent && overlayInk === 'light'} />
         </a>
       </div>
 
@@ -72,7 +102,7 @@ const solaireProducts = solaires();
               href="/compte"
               class:list={[
                 'mono-label hidden md:inline-block hover:opacity-70 transition-opacity duration-150 ease-in-out',
-                transparent ? 'text-ink-inverse' : 'text-ink-primary',
+                linkInk,
               ]}
             >
               COMPTE
@@ -84,7 +114,7 @@ const solaireProducts = solaires();
           aria-label="Panier"
           class:list={[
             'mono-label inline-flex items-center gap-2 hover:opacity-70 transition-opacity duration-150 ease-in-out',
-            transparent ? 'text-ink-inverse' : 'text-ink-primary',
+            linkInk,
           ]}
         >
           <span>PANIER</span>
@@ -177,8 +207,16 @@ const solaireProducts = solaires();
   // Scroll behaviour — header transparent → opaque au-delà de 100px (§5.2).
   const header = document.querySelector<HTMLElement>('[data-header]');
   if (header && header.dataset.transparent === 'true') {
+    /* Le wordmark, masqué tant qu'on est sur le hero qui porte déjà la marque. */
+    const wordmark =
+      header.dataset.hideWordmark === 'true'
+        ? header.querySelector<HTMLElement>('[data-header-wordmark]')
+        : null;
+
     const onScroll = () => {
       const scrolled = window.scrollY > 100;
+      wordmark?.classList.toggle('opacity-0', !scrolled);
+      wordmark?.classList.toggle('pointer-events-none', !scrolled);
       if (scrolled) {
         header.classList.remove('bg-transparent');
         header.classList.add('bg-bg-primary', 'border-b', 'border-line-subtle');
