@@ -37,16 +37,24 @@ const {
 ---
 
 <section class="hero-accueil relative bg-bg-primary" aria-label="Accueil">
-  <picture>
-    <source srcset={imageWebp} type="image/webp" />
-    <img
-      src={image}
-      alt={imageAlt}
-      class="hero-img w-full h-auto block"
-      loading="eager"
-      decoding="async"
-    />
-  </picture>
+  <div class="relative">
+    <picture>
+      <source srcset={imageWebp} type="image/webp" />
+      <img
+        src={image}
+        alt={imageAlt}
+        class="hero-img w-full h-auto block"
+        loading="eager"
+        decoding="async"
+      />
+    </picture>
+
+    {/* Repère invisible posé au bas du wordmark incrusté dans la photo (66,5 %
+        de sa hauteur). Le Header s'en sert pour savoir quand faire réapparaître
+        PAOLISA : au moment précis où celui de l'image disparaît sous la barre,
+        et pas à un nombre de pixels arbitraire. */}
+    <span data-wordmark-cue class="hero-cue" aria-hidden="true"></span>
+  </div>
 
   <div class="hero-cta">
     <Button variant="primary" href={cta.href}>{cta.label}</Button>
@@ -54,6 +62,16 @@ const {
 </section>
 
 <style>
+  /* Repère de bascule du wordmark — sans dimension, purement positionnel. */
+  .hero-cue {
+    position: absolute;
+    top: 66.5%;
+    left: 0;
+    width: 1px;
+    height: 1px;
+    pointer-events: none;
+  }
+
   /* Mobile : sous l'image, pour ne rien recouvrir sur un petit écran. */
   .hero-cta {
     display: flex;

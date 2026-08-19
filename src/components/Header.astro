@@ -213,10 +213,21 @@ const wordmarkHidden = transparent && hideWordmarkAtTop;
         ? header.querySelector<HTMLElement>('[data-header-wordmark]')
         : null;
 
+    /* Repère optionnel posé dans le hero (voir HeroAccueil) : le wordmark du
+       header prend le relais pile quand celui de l'image passe sous la barre.
+       Sans repère, on retombe sur le seuil historique de 100px. */
+    const cue = document.querySelector<HTMLElement>('[data-wordmark-cue]');
+
+    const wordmarkDue = () =>
+      cue
+        ? cue.getBoundingClientRect().top <= header.getBoundingClientRect().bottom
+        : window.scrollY > 100;
+
     const onScroll = () => {
       const scrolled = window.scrollY > 100;
-      wordmark?.classList.toggle('opacity-0', !scrolled);
-      wordmark?.classList.toggle('pointer-events-none', !scrolled);
+      const showWordmark = wordmarkDue();
+      wordmark?.classList.toggle('opacity-0', !showWordmark);
+      wordmark?.classList.toggle('pointer-events-none', !showWordmark);
       if (scrolled) {
         header.classList.remove('bg-transparent');
         header.classList.add('bg-bg-primary', 'border-b', 'border-line-subtle');
@@ -235,6 +246,8 @@ const wordmarkHidden = transparent && hideWordmarkAtTop;
       }
     };
     window.addEventListener('scroll', onScroll, { passive: true });
+    /* La hauteur de l'image change avec la largeur : on recalcule au redimensionnement. */
+    window.addEventListener('resize', onScroll, { passive: true });
     onScroll();
   }
 
