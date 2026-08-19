@@ -1,7 +1,13 @@
 ---
 /**
  * <NoticeBar /> — §5.1
- * Fond #18181B, texte mono #DDDDDA, padding 8px, sticky top.
+ * Fond #18181B, texte mono #DDDDDA, fixée en haut.
+ *
+ * Hauteur imposée à 36px (h-9) plutôt que laissée au padding vertical : le
+ * Header se positionne à `top: var(--notice-bar-height)` = 36px, alors qu'un
+ * `py-2` ne donnait que ~33,5px (8 + 17,5 + 8). Les 2,5px d'écart laissaient
+ * passer un filet de la page derrière les deux barres — invisible sur fond
+ * crème, mais bien visible depuis que le hero d'accueil remonte sous le header.
  */
 interface Props {
   message: string;
@@ -12,10 +18,10 @@ const { message, dismissible = false } = Astro.props;
 ---
 
 <div
-  class="fixed top-0 inset-x-0 z-50 bg-bg-dark text-line-subtle py-2 text-center"
+  class="fixed top-0 inset-x-0 z-50 bg-bg-dark text-line-subtle h-9 flex items-center text-center"
   data-notice-bar
 >
-  <div class="container-paolisa flex items-center justify-center gap-4">
+  <div class="container-paolisa w-full flex items-center justify-center gap-4">
     <span class="font-mono uppercase text-[10px] tracking-[0.18em]">{message}</span>
     {
       dismissible && (
