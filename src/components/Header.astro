@@ -213,21 +213,21 @@ const wordmarkHidden = transparent && hideWordmarkAtTop;
         ? header.querySelector<HTMLElement>('[data-header-wordmark]')
         : null;
 
-    /* Repère optionnel posé dans le hero (voir HeroAccueil) : le wordmark du
-       header prend le relais pile quand celui de l'image passe sous la barre.
-       Sans repère, on retombe sur le seuil historique de 100px. */
+    /* Repère optionnel posé dans le hero (voir HeroAccueil) : tout le header
+       bascule d'un coup — fond crème, filet et wordmark — pile quand la marque
+       incrustée dans l'image passe sous la barre. Sans repère, on retombe sur
+       le seuil historique de 100px. */
     const cue = document.querySelector<HTMLElement>('[data-wordmark-cue]');
 
-    const wordmarkDue = () =>
+    const isDue = () =>
       cue
         ? cue.getBoundingClientRect().top <= header.getBoundingClientRect().bottom
         : window.scrollY > 100;
 
     const onScroll = () => {
-      const scrolled = window.scrollY > 100;
-      const showWordmark = wordmarkDue();
-      wordmark?.classList.toggle('opacity-0', !showWordmark);
-      wordmark?.classList.toggle('pointer-events-none', !showWordmark);
+      const scrolled = isDue();
+      wordmark?.classList.toggle('opacity-0', !scrolled);
+      wordmark?.classList.toggle('pointer-events-none', !scrolled);
       if (scrolled) {
         header.classList.remove('bg-transparent');
         header.classList.add('bg-bg-primary', 'border-b', 'border-line-subtle');
