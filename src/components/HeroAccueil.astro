@@ -61,6 +61,19 @@ const {
   </div>
 </section>
 
+<style is:global>
+  /* Sur téléphone, l'image ne fait que ~220px de haut : si elle passait sous
+     le header comme en desktop, celui-ci lui couperait la moitié du wordmark
+     incrusté. On rétablit donc la marge haute — le hero commence sous la
+     barre, entier. Le header, lui, reste sans marque jusqu'à ce que la photo
+     soit passée (voir Header.astro). */
+  @media (max-width: 767px) {
+    body[data-hero-overlay='true'] main {
+      padding-top: calc(var(--notice-bar-height) + var(--header-height));
+    }
+  }
+</style>
+
 <style>
   /* Repère de bascule du wordmark — sans dimension, purement positionnel. */
   .hero-cue {

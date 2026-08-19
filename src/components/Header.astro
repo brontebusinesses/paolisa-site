@@ -224,10 +224,17 @@ const wordmarkHidden = transparent && hideWordmarkAtTop;
         ? cue.getBoundingClientRect().top <= header.getBoundingClientRect().bottom
         : window.scrollY > 100;
 
+    /* Sur téléphone le hero ne passe pas sous le header (l'image est trop
+       courte, il lui couperait le wordmark) : la barre y est donc opaque dès
+       le départ. Seule la marque attend son tour, pour ne pas doubler celle
+       de la photo. */
+    const isMobile = () => window.matchMedia('(max-width: 767px)').matches;
+
     const onScroll = () => {
-      const scrolled = isDue();
-      wordmark?.classList.toggle('opacity-0', !scrolled);
-      wordmark?.classList.toggle('pointer-events-none', !scrolled);
+      const due = isDue();
+      const scrolled = due || isMobile();
+      wordmark?.classList.toggle('opacity-0', !due);
+      wordmark?.classList.toggle('pointer-events-none', !due);
       if (scrolled) {
         header.classList.remove('bg-transparent');
         header.classList.add('bg-bg-primary', 'border-b', 'border-line-subtle');
