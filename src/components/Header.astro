@@ -219,22 +219,20 @@ const wordmarkHidden = transparent && hideWordmarkAtTop;
        le seuil historique de 100px. */
     const cue = document.querySelector<HTMLElement>('[data-wordmark-cue]');
 
-    const isDue = () =>
-      cue
-        ? cue.getBoundingClientRect().top <= header.getBoundingClientRect().bottom
-        : window.scrollY > 100;
-
-    /* Sur téléphone le hero ne passe pas sous le header (l'image est trop
-       courte, il lui couperait le wordmark) : la barre y est donc opaque dès
-       le départ. Seule la marque attend son tour, pour ne pas doubler celle
-       de la photo. */
-    const isMobile = () => window.matchMedia('(max-width: 767px)').matches;
+    const isDue = () => {
+      if (!cue) return window.scrollY > 100;
+      const parent = cue.parentElement;
+      /* Tant que l'image du hero n'est pas chargée, son conteneur est plat :
+         le repère se retrouve tout en haut et déclencherait la bascule à tort.
+         On attend qu'il ait une hauteur réelle. */
+      if (!parent || parent.getBoundingClientRect().height < 1) return false;
+      return cue.getBoundingClientRect().top <= header.getBoundingClientRect().bottom;
+    };
 
     const onScroll = () => {
-      const due = isDue();
-      const scrolled = due || isMobile();
-      wordmark?.classList.toggle('opacity-0', !due);
-      wordmark?.classList.toggle('pointer-events-none', !due);
+      const scrolled = isDue();
+      wordmark?.classList.toggle('opacity-0', !scrolled);
+      wordmark?.classList.toggle('pointer-events-none', !scrolled);
       if (scrolled) {
         header.classList.remove('bg-transparent');
         header.classList.add('bg-bg-primary', 'border-b', 'border-line-subtle');
@@ -255,6 +253,12 @@ const wordmarkHidden = transparent && hideWordmarkAtTop;
     window.addEventListener('scroll', onScroll, { passive: true });
     /* La hauteur de l'image change avec la largeur : on recalcule au redimensionnement. */
     window.addEventListener('resize', onScroll, { passive: true });
+    /* …et surtout une fois l'image du hero décodée : avant, sa hauteur est
+       inconnue et le repère est mal placé (d'où le wordmark visible à
+       l'arrivée, mais correct après un rechargement depuis le cache). */
+    window.addEventListener('load', onScroll);
+    window.addEventListener('pageshow', onScroll);
+    document.querySelector<HTMLImageElement>('.hero-img')?.addEventListener('load', onScroll);
     onScroll();
   }
 
