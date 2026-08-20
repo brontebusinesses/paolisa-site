@@ -1,0 +1,96 @@
+---
+/**
+ * <MetaPixel /> — pixel Meta (Facebook / Instagram), soumis au consentement.
+ *
+ * Le pixel ne se charge JAMAIS tant que le visiteur n'a pas accepté : il
+ * s'appuie sur `window.paolisaConsent` et sur l'évènement `paolisa:consent`
+ * exposés par <CookieConsent />. C'est une obligation RGPD (art. 129 de la loi
+ * belge du 13 juin 2005) — un pixel publicitaire n'est pas un cookie essentiel.
+ *
+ * Évènements envoyés :
+ *   • PageView   — à chaque page, dès le consentement
+ *   • AddToCart  — sur les boutons d'ajout existants ([data-quick-add] et
+ *                  [data-add-to-cart]), avec la valeur et la référence produit
+ *
+ * L'ID du dataset se règle dans .env (PUBLIC_META_PIXEL_ID) et, à défaut,
+ * retombe sur l'ID du compte Paolisa.
+ */
+const pixelId = import.meta.env.PUBLIC_META_PIXEL_ID ?? '1003817182689295';
+---
+
+<script is:inline define:vars={{ pixelId }}>
+  (function () {
+    var loaded = false;
+
+    function loadPixel() {
+      if (loaded || !pixelId) return;
+      loaded = true;
+
+      /* Snippet officiel Meta */
+      !(function (f, b, e, v, n, t, s) {
+        if (f.fbq) return;
+        n = f.fbq = function () {
+          n.callMethod ? n.callMethod.apply(n, arguments) : n.queue.push(arguments);
+        };
+        if (!f._fbq) f._fbq = n;
+        n.push = n;
+        n.loaded = !0;
+        n.version = '2.0';
+        n.queue = [];
+        t = b.createElement(e);
+        t.async = !0;
+        t.src = v;
+        s = b.getElementsByTagName(e)[0];
+        s.parentNode.insertBefore(t, s);
+      })(window, document, 'script', 'https://connect.facebook.net/en_US/fbevents.js');
+
+      window.fbq('init', pixelId);
+      window.fbq('track', 'PageView');
+
+      bindCartEvents();
+    }
+
+    /* Ajout au panier — on se greffe sur les boutons déjà en place. */
+    function bindCartEvents() {
+      document.addEventListener(
+        'click',
+        function (ev) {
+          var el = ev.target;
+          if (!el || !el.closest) return;
+          var btn = el.closest('[data-quick-add]');
+          var form = el.closest('form[data-add-to-cart]');
+          var src = btn || form;
+          if (!src || !window.fbq) return;
+
+          var cents = Number(src.dataset.price || 0);
+          window.fbq('track', 'AddToCart', {
+            content_name: src.dataset.title || '',
+            content_ids: [src.dataset.slug || ''],
+            content_type: 'product',
+            value: cents ? cents / 100 : undefined,
+            currency: 'EUR',
+          });
+        },
+        true
+      );
+    }
+
+    if (window.paolisaConsent === 'granted') {
+      loadPixel();
+    } else {
+      window.addEventListener('paolisa:consent', function (e) {
+        if (e && e.detail === 'granted') loadPixel();
+      });
+    }
+  })();
+</script>
+
+<noscript>
+  <img
+    height="1"
+    width="1"
+    style="display:none"
+    alt=""
+    src={`https://www.facebook.com/tr?id=${pixelId}&ev=PageView&noscript=1`}
+  />
+</noscript>
