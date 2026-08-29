@@ -65,7 +65,7 @@ export const POST: APIRoute = async ({ request }) => {
       body: String(body),
     });
     return new Response(
-      JSON.stringify({ success: true, message: 'Avis envoyé. Il sera visible après validation.' }),
+      JSON.stringify({ success: true, message: 'Avis envoyé.' }),
       { status: 201 }
     );
   } catch (err) {
