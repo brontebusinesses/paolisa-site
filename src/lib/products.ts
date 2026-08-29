@@ -607,8 +607,8 @@ export const products: Record<string, Product> = {
     ],
     shopifyHandle: 'anti-fatigue-hydrogel-eye-patches',
     shopifyVariantId: '58378932519244',
-    available: true,
-    status: 'DISPONIBLE',
+    available: false,
+    status: 'ÉPUISÉ · BIENTÔT DE RETOUR',
     actives: [
       "Antioxydants — protègent, ravivent l'éclat",
       'Panthénol — apaise, hydrate',
