@@ -5,18 +5,24 @@
  * Stockage : Metaobjects Shopify, type "avis_produit" (créé dans l'admin
  * Shopify le 27/07/2026 — Contenu > Définitions de metaobjects). Champs :
  *   rating (1-5), title, body, author_name, product (référence produit),
- *   submitted_at. Capacité "publishable" : chaque avis est publié
- *   automatiquement (statut Actif) dès sa soumission, sans validation
- *   manuelle (aucun outil de modération, ni humaine ni automatique).
+ *   submitted_at. Capacité "publishable" : chaque avis naît en Brouillon.
+ *
+ * Modération par lien email (29/08/2026) : à la soumission, Bronté reçoit un
+ * mail (via Klaviyo, voir lib/klaviyo.ts) avec deux liens "Publier" /
+ * "Supprimer" qui appellent /api/reviews/moderate?id=...&action=publish|reject.
+ * Un clic suffit, aucune connexion à l'admin Shopify n'est nécessaire. La
+ * protection est volontairement légère (l'ID du metaobject sert de jeton,
+ * pas de secret séparé) : risque jugé acceptable vu l'enjeu (un avis texte,
+ * pas une donnée sensible) et l'ID n'est communiqué qu'à Bronté par mail.
  *
  * Lecture (avis publiés) : Storefront API — le metaobject a l'accès
  * storefront PUBLIC_READ, donc on réutilise le token public déjà en place
  * pour le catalogue (SHOPIFY_STOREFRONT_TOKEN). Seuls les avis au statut
  * ACTIVE (publiés) sont accessibles par ce chemin.
  *
- * Écriture (nouvel avis) : la Storefront API ne permet pas de créer de
- * metaobject — il faut l'Admin API. App « Avis produit — Admin API » créée
- * le 27/07/2026 via le Dev Dashboard Shopify (scopes read_metaobjects +
+ * Écriture (nouvel avis, publication, suppression) : la Storefront API ne
+ * permet pas d'écrire — il faut l'Admin API. App « Avis produit — Admin API »
+ * créée le 27/07/2026 via le Dev Dashboard Shopify (scopes read_metaobjects +
  * write_metaobjects). Ce nouveau Dev Dashboard ne révèle plus de token
  * statique : on échange un Client ID + Client Secret contre un access token
  * de 24h à chaque appel (voir getAdminAccessToken ci-dessous). Variables
@@ -24,6 +30,7 @@
  */
 
 import { shopifyFetch } from './shopify';
+import { trackReviewSubmission } from './klaviyo';
 
 const METAOBJECT_TYPE = 'avis_produit';
 const ADMIN_API_VERSION = '2025-01';
@@ -244,10 +251,9 @@ export interface NewReviewInput {
 }
 
 /**
- * Crée un nouvel avis et le publie immédiatement (statut Actif) : il
- * apparaît sur le site dès sa soumission, sans validation manuelle. Pour
- * revenir à une modération manuelle, remettre le statut plus bas sur
- * 'DRAFT'.
+ * Crée un nouvel avis en statut Brouillon (invisible sur le site) et notifie
+ * Bronté par email avec un lien de publication / suppression en un clic —
+ * voir moderate() plus bas et /api/reviews/moderate.
  */
 export async function submitReview(input: NewReviewInput): Promise<void> {
   const { productGid, rating, body, authorName, title } = input;
@@ -278,12 +284,81 @@ export async function submitReview(input: NewReviewInput): Promise<void> {
     metaobject: {
       type: METAOBJECT_TYPE,
       fields,
-      capabilities: { publishable: { status: 'ACTIVE' } },
+      capabilities: { publishable: { status: 'DRAFT' } },
     },
   });
 
-  const { userErrors } = data.metaobjectCreate;
+  const { metaobject, userErrors } = data.metaobjectCreate;
   if (userErrors.length > 0) {
     throw new Error(userErrors.map((e) => e.message).join(', '));
   }
+
+  // Notification best-effort : n'échoue jamais la soumission de l'avis si
+  // Klaviyo est indisponible ou mal configuré. Voir lib/klaviyo.ts.
+  try {
+    const notif = await trackReviewSubmission({
+      reviewId: metaobject?.id ?? '',
+      productGid,
+      rating,
+      authorName,
+      title,
+      body,
+    });
+    if (!notif.ok) console.error('[reviews] notification Klaviyo échouée', notif.error);
+  } catch (err) {
+    console.error('[reviews] notification Klaviyo échouée', err);
+  }
+}
+
+// ----------------------------------------------------------------------------
+// Modération — appelée depuis /api/reviews/moderate (lien cliqué dans l'email)
+// ----------------------------------------------------------------------------
+
+const SET_REVIEW_STATUS_MUTATION = `
+  mutation SetReviewStatus($id: ID!, $metaobject: MetaobjectUpdateInput!) {
+    metaobjectUpdate(id: $id, metaobject: $metaobject) {
+      metaobject { id }
+      userErrors { field message code }
+    }
+  }
+`;
+
+interface SetReviewStatusResponse {
+  metaobjectUpdate: {
+    metaobject: { id: string } | null;
+    userErrors: { field: string[]; message: string; code: string }[];
+  };
+}
+
+/** Publie un avis en Brouillon (le rend visible sur le site). */
+export async function publishReview(id: string): Promise<void> {
+  const data = await shopifyAdminFetch<SetReviewStatusResponse>(SET_REVIEW_STATUS_MUTATION, {
+    id,
+    metaobject: { capabilities: { publishable: { status: 'ACTIVE' } } },
+  });
+  const { userErrors } = data.metaobjectUpdate;
+  if (userErrors.length > 0) throw new Error(userErrors.map((e) => e.message).join(', '));
+}
+
+const DELETE_REVIEW_MUTATION = `
+  mutation DeleteReview($id: ID!) {
+    metaobjectDelete(id: $id) {
+      deletedId
+      userErrors { field message code }
+    }
+  }
+`;
+
+interface DeleteReviewResponse {
+  metaobjectDelete: {
+    deletedId: string | null;
+    userErrors: { field: string[]; message: string; code: string }[];
+  };
+}
+
+/** Rejette un avis : suppression définitive du Brouillon. */
+export async function rejectReview(id: string): Promise<void> {
+  const data = await shopifyAdminFetch<DeleteReviewResponse>(DELETE_REVIEW_MUTATION, { id });
+  const { userErrors } = data.metaobjectDelete;
+  if (userErrors.length > 0) throw new Error(userErrors.map((e) => e.message).join(', '));
 }

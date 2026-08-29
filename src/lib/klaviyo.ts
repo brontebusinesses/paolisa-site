@@ -164,6 +164,83 @@ async function trackNewsletterSignupEvent(
  *
  * Référence : https://developers.klaviyo.com/en/reference/create_event
  */
+
+/**
+ * Déclenche un événement « Product Review Submitted » à chaque nouvel avis
+ * (voir lib/reviews.ts). Les avis naissent en Brouillon (invisibles sur le
+ * site) — cet événement notifie Bronté par email avec deux liens cliquables
+ * (publish_url / reject_url, propriétés de l'événement) qui appellent
+ * /api/reviews/moderate en un clic, sans passer par l'admin Shopify.
+ * N'échoue jamais bruyamment : appelée en best-effort depuis submitReview.
+ */
+export async function trackReviewSubmission(input: {
+  reviewId: string;
+  productGid: string;
+  rating: number;
+  authorName: string;
+  title?: string;
+  body: string;
+}): Promise<{ ok: true } | { ok: false; error: string }> {
+  if (!apiKey) {
+    return { ok: false, error: 'KLAVIYO_API_KEY manquante.' };
+  }
+
+  const siteBase = 'https://paolisa.eu';
+  const encodedId = encodeURIComponent(input.reviewId);
+  const publishUrl = `${siteBase}/api/reviews/moderate?id=${encodedId}&action=publish`;
+  const rejectUrl = `${siteBase}/api/reviews/moderate?id=${encodedId}&action=reject`;
+
+  const eventBody = {
+    data: {
+      type: 'event',
+      attributes: {
+        properties: {
+          product_gid: input.productGid,
+          rating: input.rating,
+          author_name: input.authorName,
+          title: input.title ?? '(sans titre)',
+          body: input.body,
+          publish_url: publishUrl,
+          reject_url: rejectUrl,
+        },
+        time: new Date().toISOString(),
+        metric: {
+          data: {
+            type: 'metric',
+            attributes: { name: 'Product Review Submitted' },
+          },
+        },
+        profile: {
+          data: {
+            type: 'profile',
+            attributes: { email: 'collabs@paolisa.eu' },
+          },
+        },
+      },
+    },
+  };
+
+  try {
+    const res = await fetch(`${KLAVIYO_BASE}/events/`, {
+      method: 'POST',
+      headers: baseHeaders(),
+      body: JSON.stringify(eventBody),
+    });
+
+    if (res.status === 202 || res.status === 200) {
+      return { ok: true };
+    }
+
+    const text = await res.text();
+    return { ok: false, error: `Klaviyo ${res.status} : ${text.slice(0, 300)}` };
+  } catch (err) {
+    return {
+      ok: false,
+      error: err instanceof Error ? err.message : 'Unknown Klaviyo error',
+    };
+  }
+}
+
 export async function trackContactSubmission(input: {
   email: string;
   name?: string;
