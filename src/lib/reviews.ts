@@ -105,6 +105,16 @@ interface MetaobjectsResponse {
 }
 
 /**
+ * Ne garde que le premier mot d'un nom (« Belinda Di Bella » -> « Belinda »).
+ * Utilisé uniquement à l'affichage public, jamais en écriture.
+ */
+function firstNameOnly(fullName: string | null | undefined): string | null {
+  if (!fullName) return null;
+  const first = fullName.trim().split(/\s+/)[0];
+  return first || null;
+}
+
+/**
  * Avis publiés pour un produit donné (gid Shopify), triés du plus récent au
  * plus ancien. La Storefront API ne renvoie que les metaobjects publiés
  * (statut ACTIVE) sur un accès PUBLIC_READ — pas de filtre de statut à faire
@@ -131,7 +141,10 @@ export async function getPublishedReviews(productGid: string): Promise<ProductRe
         rating: Number(node.rating?.value ?? 0),
         title: node.title?.value ?? null,
         body: node.body?.value ?? '',
-        authorName: node.author_name?.value ?? 'Client',
+        // Affichage public : prénom seul (confidentialité — demandé le
+        // 29/08/2026). Le nom complet reste stocké tel quel côté Shopify
+        // (utile en admin), seul le rendu sur le site le tronque.
+        authorName: firstNameOnly(node.author_name?.value) ?? 'Client',
         submittedAt: node.submitted_at?.value ?? null,
       });
     }
