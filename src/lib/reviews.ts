@@ -5,9 +5,9 @@
  * Stockage : Metaobjects Shopify, type "avis_produit" (créé dans l'admin
  * Shopify le 27/07/2026 — Contenu > Définitions de metaobjects). Champs :
  *   rating (1-5), title, body, author_name, product (référence produit),
- *   submitted_at. Capacité "publishable" : chaque avis naît en Brouillon,
- *   Bronté le publie à la main dans Contenu > Avis produit pour le rendre
- *   visible sur le site (aucun outil de modération externe).
+ *   submitted_at. Capacité "publishable" : chaque avis est publié
+ *   automatiquement (statut Actif) dès sa soumission, sans validation
+ *   manuelle (aucun outil de modération, ni humaine ni automatique).
  *
  * Lecture (avis publiés) : Storefront API — le metaobject a l'accès
  * storefront PUBLIC_READ, donc on réutilise le token public déjà en place
@@ -112,14 +112,20 @@ export async function getPublishedReviews(productGid: string): Promise<ProductRe
     const variables: { first: number; after: string | null } = { first: 100, after };
     const data: MetaobjectsResponse = await shopifyFetch<MetaobjectsResponse>(REVIEWS_QUERY, variables);
     for (const { node } of data.metaobjects.edges) {
-      if (node.product.value !== productGid) continue;
+      // Certains champs (ex. title, optionnel) reviennent à `null` — et non
+      // un objet { value: null } — côté Storefront API quand ils n'ont
+      // jamais été renseignés. D'où l'optional chaining sur CHAQUE champ,
+      // pas seulement sur .value (cause du bug « Cannot read properties of
+      // null (reading 'value') » constaté le 29/08/2026 dès le premier avis
+      // publié sans titre).
+      if (node.product?.value !== productGid) continue;
       results.push({
         id: node.id,
-        rating: Number(node.rating.value ?? 0),
-        title: node.title.value,
-        body: node.body.value ?? '',
-        authorName: node.author_name.value ?? 'Client',
-        submittedAt: node.submitted_at.value,
+        rating: Number(node.rating?.value ?? 0),
+        title: node.title?.value ?? null,
+        body: node.body?.value ?? '',
+        authorName: node.author_name?.value ?? 'Client',
+        submittedAt: node.submitted_at?.value ?? null,
       });
     }
     hasNextPage = data.metaobjects.pageInfo.hasNextPage;
@@ -238,8 +244,10 @@ export interface NewReviewInput {
 }
 
 /**
- * Crée un nouvel avis, toujours en statut Brouillon. Il n'apparaît sur le
- * site qu'après publication manuelle par Bronté dans l'admin Shopify.
+ * Crée un nouvel avis et le publie immédiatement (statut Actif) : il
+ * apparaît sur le site dès sa soumission, sans validation manuelle. Pour
+ * revenir à une modération manuelle, remettre le statut plus bas sur
+ * 'DRAFT'.
  */
 export async function submitReview(input: NewReviewInput): Promise<void> {
   const { productGid, rating, body, authorName, title } = input;
@@ -270,7 +278,7 @@ export async function submitReview(input: NewReviewInput): Promise<void> {
     metaobject: {
       type: METAOBJECT_TYPE,
       fields,
-      capabilities: { publishable: { status: 'DRAFT' } },
+      capabilities: { publishable: { status: 'ACTIVE' } },
     },
   });
 
