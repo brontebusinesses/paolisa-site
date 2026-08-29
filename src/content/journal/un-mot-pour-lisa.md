@@ -3,6 +3,8 @@ title: 'Un mot pour Lisa'
 excerpt: 'Les ventes sont encore petites. Les signaux, eux, ne le sont pas.'
 date: 2026-08-16
 readingTime: '2 MIN'
+image: '/journal/cover-un-mot-pour-lisa.jpg'
+imageAlt: 'Journal Paolisa — Lisa.'
 ---
 
 Lisa, je voulais te donner des nouvelles.

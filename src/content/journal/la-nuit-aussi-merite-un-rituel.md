@@ -3,6 +3,8 @@ title: 'La nuit aussi mérite un rituel'
 excerpt: 'Une gamme pensée pour le soir arrive. Rendez-vous le 16 septembre.'
 date: 2026-08-29
 readingTime: '2 MIN'
+image: '/journal/cover-la-nuit-aussi-merite-un-rituel.jpg'
+imageAlt: 'Journal Paolisa — La nuit.'
 ---
 
 En coulisses, depuis quelques semaines, je prépare la suite.
