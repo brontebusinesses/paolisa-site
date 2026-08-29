@@ -4,7 +4,7 @@ excerpt: 'Réchauffer. Presser. Attendre. Trois gestes, dans cet ordre, et rien 
 date: 2026-04-05
 readingTime: '3 MIN'
 image: '/journal/cover-le-rituel-des-trois-gestes.jpg'
-imageAlt: 'Main qui tient un flacon Paolisa devant une fenêtre'
+imageAlt: 'Journal Paolisa — Trois gestes.'
 ---
 
 L'efficacité d'un soin tient autant à la formule qu'au geste qui l'applique. Voici le rituel — il dure quarante secondes, peut-être cinquante les jours où on traîne.

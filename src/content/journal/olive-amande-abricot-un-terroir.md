@@ -4,7 +4,7 @@ excerpt: 'Cinq huiles, cinq géographies. Une hiérarchie sensorielle pensée co
 date: 2026-04-20
 readingTime: '6 MIN'
 image: '/journal/cover-olive-amande-abricot-un-terroir.jpg'
-imageAlt: 'Oliveraie sous lumière du soir'
+imageAlt: 'Journal Paolisa — Terroir.'
 draft: true
 ---
 

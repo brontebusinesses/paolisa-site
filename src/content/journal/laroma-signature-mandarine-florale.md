@@ -4,7 +4,7 @@ excerpt: 'Pourquoi un parfum dans une huile de soin — et pourquoi celui-là, d
 date: 2026-03-12
 readingTime: '5 MIN'
 image: '/journal/cover-laroma-signature-mandarine-florale.jpg'
-imageAlt: 'Mandarines coupées sur une table en marbre'
+imageAlt: 'Journal Paolisa — Mandarine.'
 ---
 
 L'aroma d'une huile de soin n'est pas un parfum. Ce n'est pas non plus rien.

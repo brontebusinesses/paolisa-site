@@ -4,7 +4,7 @@ excerpt: 'Trois gouttes, qu''on réchauffe entre les paumes. Une pression devant
 date: 2026-05-07
 readingTime: '4 MIN'
 image: '/journal/cover-pourquoi-une-huile-le-matin.jpg'
-imageAlt: 'Lumière du matin sur une fenêtre'
+imageAlt: 'Journal Paolisa — Le matin.'
 ---
 
 Le matin, la peau a soif. Pas de la soif qu'on traite avec un sérum — la soif d'un geste qui prépare la journée.
