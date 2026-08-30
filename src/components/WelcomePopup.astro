@@ -5,7 +5,8 @@
  * footer. Rendu une fois dans BaseLayout.
  *
  * Comportement :
- *  - Apparaît 3s après l'arrivée sur une page, sauf sur /panier, /merci, /compte.
+ *  - Apparaît 3s après l'arrivée sur la page d'accueil UNIQUEMENT (plus sur
+ *    les autres pages, pour ne pas répéter l'offre partout — footer only ailleurs).
  *  - Une seule fois : dès qu'il s'affiche, un flag est écrit en localStorage
  *    (paolisa_welcome_popup) qui coupe toute réapparition pendant 21 jours.
  *  - Dès inscription confirmée (redirection ?newsletter=ok), le flag passe
@@ -81,7 +82,10 @@ import Button from './Button.astro';
     var KEY = 'paolisa_welcome_popup';
     var SUPPRESS_MS = 21 * 24 * 60 * 60 * 1000; // 21 jours
     var DELAY_MS = 3000; // 3s, comme demandé
-    var EXCLUDED_PATHS = ['/panier', '/merci', '/compte'];
+    // Restreint à l'écran d'accueil uniquement (demande Bronté 30/08) : le
+    // pop-up ne doit plus apparaître sur les autres pages, seule l'inscription
+    // en pied de page reste disponible ailleurs.
+    var INCLUDED_PATHS = ['/'];
 
     function readState() {
       try {
@@ -113,7 +117,7 @@ import Button from './Button.astro';
 
     if (state && state.subscribed) return;
     if (state && state.at && now - state.at < SUPPRESS_MS) return;
-    if (EXCLUDED_PATHS.indexOf(window.location.pathname) !== -1) return;
+    if (INCLUDED_PATHS.indexOf(window.location.pathname) === -1) return;
 
     function bind() {
       var overlay = document.getElementById('paolisa-welcome-popup');

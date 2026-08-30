@@ -13,6 +13,7 @@ import QuantitySelector from '../../components/QuantitySelector.astro';
 import Accordion from '../../components/Accordion.astro';
 import ProductCard from '../../components/ProductCard.astro';
 import AvisProduit from '../../components/AvisProduit.astro';
+import Input from '../../components/Input.astro';
 import { getProduct, productList, gammeList, productLabel } from '../../lib/products';
 import { productGidForSlug } from '../../lib/reviews';
 import { buildPdpTabs } from '../../lib/pdp-tabs';
@@ -117,24 +118,104 @@ const related = gammeList().filter((p) => p.slug !== product.slug).slice(0, 3);
                   </p>
                 </>
               ) : storeOpen && !product.available ? (
-                <div class="border border-line-subtle p-6 md:p-8 mb-6">
+                <div id="restock-block" class="border border-line-subtle p-6 md:p-8 mb-6">
                   <p class="mono-label mb-3">— ÉPUISÉ —</p>
-                  <p class="body-l text-ink-secondary">
-                    Cette pièce est en rupture pour le moment. Inscrivez-vous à la newsletter pour être prévenue de son retour.
+                  <p class="body-l text-ink-secondary mb-6">
+                    Cette pièce est en rupture pour le moment. Laissez votre email pour être prévenue dès son retour.
                   </p>
+
+                  <div data-restock-ok class="hidden border-t border-line-subtle pt-4 mb-6" role="status">
+                    <p class="mono-label text-ink-primary mb-1">— BIEN REÇU —</p>
+                    <p class="body-m text-ink-secondary">Vous serez prévenue par email dès que ce produit revient en stock.</p>
+                  </div>
+                  <div data-restock-erreur class="hidden border-t border-line-subtle pt-4 mb-6" role="alert">
+                    <p class="mono-label text-ink-primary mb-1">— ERREUR —</p>
+                    <p class="body-m text-ink-secondary">Vérifiez votre adresse email et réessayez.</p>
+                  </div>
+
+                  <form method="post" action="/api/newsletter" class="space-y-4" data-restock-form>
+                    <input type="hidden" name="source" value="waitlist" />
+                    <input type="hidden" name="return" value={product.href} />
+                    <div>
+                      <label class="sr-only" for="restock-email">Votre email</label>
+                      <Input
+                        type="email"
+                        name="email"
+                        id="restock-email"
+                        placeholder="VOTRE EMAIL"
+                        required
+                        ariaLabel="Votre adresse email"
+                        autocomplete="email"
+                      />
+                    </div>
+                    <Button variant="primary" type="submit" fullWidth>
+                      ME PRÉVENIR DU RETOUR →
+                    </Button>
+                  </form>
                 </div>
               ) : (
-                <div class="border border-line-subtle p-6 md:p-8 mb-6">
+                <div id="restock-block" class="border border-line-subtle p-6 md:p-8 mb-6">
                   <p class="mono-label mb-3">— BIENTÔT DISPONIBLE —</p>
-                  <p class="body-l text-ink-secondary">
-                    Ce produit rejoint bientôt la boutique. Inscrivez-vous à la newsletter pour être prévenue.
+                  <p class="body-l text-ink-secondary mb-6">
+                    Ce produit rejoint bientôt la boutique. Laissez votre email pour être prévenue à sa sortie.
                   </p>
+
+                  <div data-restock-ok class="hidden border-t border-line-subtle pt-4 mb-6" role="status">
+                    <p class="mono-label text-ink-primary mb-1">— BIEN REÇU —</p>
+                    <p class="body-m text-ink-secondary">Vous serez prévenue par email dès la sortie de ce produit.</p>
+                  </div>
+                  <div data-restock-erreur class="hidden border-t border-line-subtle pt-4 mb-6" role="alert">
+                    <p class="mono-label text-ink-primary mb-1">— ERREUR —</p>
+                    <p class="body-m text-ink-secondary">Vérifiez votre adresse email et réessayez.</p>
+                  </div>
+
+                  <form method="post" action="/api/newsletter" class="space-y-4" data-restock-form>
+                    <input type="hidden" name="source" value="waitlist" />
+                    <input type="hidden" name="return" value={product.href} />
+                    <div>
+                      <label class="sr-only" for="restock-email-2">Votre email</label>
+                      <Input
+                        type="email"
+                        name="email"
+                        id="restock-email-2"
+                        placeholder="VOTRE EMAIL"
+                        required
+                        ariaLabel="Votre adresse email"
+                        autocomplete="email"
+                      />
+                    </div>
+                    <Button variant="primary" type="submit" fullWidth>
+                      ME PRÉVENIR À LA SORTIE →
+                    </Button>
+                  </form>
                 </div>
               )
             }
+
+            <a href="/diagnostic" class="mono-label text-ink-tertiary hover:text-ink-primary block">
+              PAS SÛRE QUE CE SOIT LE BON PRODUIT ? → FAIRE LE DIAGNOSTIC
+            </a>
           </div>
         </aside>
       </div>
+
+      <script is:inline>
+        (function () {
+          var params = new URLSearchParams(window.location.search);
+          var status = params.get('newsletter');
+          if (status !== 'ok' && status !== 'erreur') return;
+
+          var ok = document.querySelector('[data-restock-ok]');
+          var erreur = document.querySelector('[data-restock-erreur]');
+          var form = document.querySelector('[data-restock-form]');
+          if (status === 'ok' && ok) {
+            ok.classList.remove('hidden');
+            form && form.classList.add('hidden');
+          } else if (status === 'erreur' && erreur) {
+            erreur.classList.remove('hidden');
+          }
+        })();
+      </script>
 
       {/* Onglets */}
       <div class="mt-20 md:mt-32 grid grid-cols-1 md:grid-cols-12 gap-8 md:gap-16">
