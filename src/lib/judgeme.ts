@@ -21,6 +21,8 @@ const IDS: Record<string, string> = {
   'creme': '15840333791564',
   'solaire-teinte': '15855525757260',
   'stick-solaire': '15840718946636',
+  'patchs-yeux': '15975026852172',
+  'patchs-yeux-fatigue': '15975308591436',
 };
 
 /**

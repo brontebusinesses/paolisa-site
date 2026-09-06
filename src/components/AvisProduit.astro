@@ -27,8 +27,12 @@ const { productId } = Astro.props;
 
         <ul class="border-t border-line-subtle mb-16" data-avis-liste />
 
-        <div class="max-w-md">
-          <button type="button" class="mono-label text-ink-primary hover:opacity-70" data-avis-toggle>
+        <div class="max-w-md transition-shadow duration-700 rounded-sm" data-avis-cta id="laisser-un-avis">
+          <button
+            type="button"
+            class="inline-flex items-center justify-center font-mono uppercase tracking-[0.18em] text-[10px] leading-none transition-colors duration-200 ease-in-out px-6 py-4 min-h-[48px] md:px-8 md:py-[18px] bg-transparent text-ink-primary border border-ink-primary hover:bg-ink-primary hover:text-ink-inverse"
+            data-avis-toggle
+          >
             — LAISSER UN AVIS
           </button>
 
@@ -263,14 +267,37 @@ const { productId } = Astro.props;
   /**
    * Ouvre le formulaire automatiquement si l'URL contient ?avis=1 — permet
    * d'envoyer un lien direct « laisser un avis » à un client par email
-   * (ex: /produit/serum?avis=1#avis).
+   * (ex: /produit/serum?avis=1#laisser-un-avis).
+   *
+   * Corrige le 06/09/2026 : l'ancre #avis (haut du bloc « AVIS CLIENTS »)
+   * amenait la cliente au-dessus de la liste des avis déjà publiés — le
+   * bouton « LAISSER UN AVIS », lui, restait plus bas, hors champ si la
+   * liste était longue. On cible maintenant directement la carte CTA
+   * (#laisser-un-avis), on centre le scroll dessus, et un bref halo
+   * (halo autour de la carte, ~1,5 s) attire l'œil dès l'arrivée.
    */
   function maybeAutoOpenForm(root: HTMLElement) {
     const params = new URLSearchParams(window.location.search);
     if (params.get('avis') !== '1') return;
+
+    const cta = root.querySelector<HTMLElement>('[data-avis-cta]');
     const wrapper = root.querySelector<HTMLElement>('[data-avis-form-wrapper]');
     wrapper?.classList.remove('hidden');
-    root.scrollIntoView({ behavior: 'smooth', block: 'start' });
+
+    const target = cta ?? root;
+    target.scrollIntoView({ behavior: 'smooth', block: 'center' });
+
+    if (cta) {
+      window.setTimeout(() => {
+        cta.classList.add('ring-2', 'ring-ink-primary');
+        window.setTimeout(() => {
+          cta.classList.remove('ring-2', 'ring-ink-primary');
+        }, 1500);
+      }, 400);
+    }
+
+    const firstStar = root.querySelector<HTMLButtonElement>('[data-avis-star]');
+    firstStar?.focus({ preventScroll: true });
   }
 
   document.querySelectorAll<HTMLElement>('[data-avis-produit]').forEach((root) => {
