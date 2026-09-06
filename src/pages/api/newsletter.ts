@@ -4,6 +4,8 @@
  * Form fields :
  *   email  : string, requis
  *   source : string, optionnel — utilisé pour distinguer footer vs in-article
+ *   origine, origine_premiere : string, optionnels — canal d'acquisition
+ *     (« instagram / story · notte »), remplis côté client par lib/attribution.ts
  *
  * Réponse : 303 redirect vers la même page avec ?newsletter=ok|erreur|deja-inscrit
  */
@@ -28,6 +30,9 @@ export const POST: APIRoute = async ({ request, redirect }) => {
   // Page de retour optionnelle — le formulaire peut passer ?return=/journal/foo
   const returnTo = String(formData.get('return') ?? '/');
   const birthday = String(formData.get('birthday') ?? '').trim();
+  // Origine de la visite, posée par lib/attribution.ts au chargement de la page.
+  const origine = String(formData.get('origine') ?? '').slice(0, 120);
+  const originePremiere = String(formData.get('origine_premiere') ?? '').slice(0, 120);
 
   if (!isValidEmail(email)) {
     return redirect(returnTo + '?newsletter=erreur', 303);
@@ -47,7 +52,13 @@ export const POST: APIRoute = async ({ request, redirect }) => {
           ? 'Site paolisa.eu — pop-up de bienvenue'
           : 'Site paolisa.eu — footer';
 
-  const result = await subscribeNewsletter(email, sourceLabel, sourceKey, /^\d{4}-\d{2}-\d{2}$/.test(birthday) ? birthday : undefined);
+  const result = await subscribeNewsletter(
+    email,
+    sourceLabel,
+    sourceKey,
+    /^\d{4}-\d{2}-\d{2}$/.test(birthday) ? birthday : undefined,
+    { courante: origine, premiere: originePremiere }
+  );
 
   if (result.ok) {
     return redirect(returnTo + '?newsletter=ok', 303);

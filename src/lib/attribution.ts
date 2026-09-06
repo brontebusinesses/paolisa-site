@@ -215,3 +215,71 @@ export function parametresOrigine(): string {
 
   return p.toString();
 }
+
+/** Étiquette lisible d'une origine : « instagram / story · notte ». */
+function etiquette(o: Origine | null): string {
+  if (!o) return '';
+  const base = [o.source, o.medium].filter(Boolean).join(' / ');
+  return o.campagne ? `${base} · ${o.campagne}` : base;
+}
+
+/**
+ * Étiquettes prêtes à être envoyées avec un formulaire.
+ * `courante` = le canal qui a amené la visiteuse aujourd'hui.
+ * `premiere` = le canal qui l'a fait découvrir la marque.
+ */
+export function etiquettesOrigine(): { courante: string; premiere: string } {
+  capturerOrigine();
+  return {
+    courante: etiquette(origineCourante()),
+    premiere: etiquette(originePremiere()),
+  };
+}
+
+/**
+ * Ajoute l'origine aux formulaires d'inscription newsletter, sous forme de
+ * champs cachés. Appelée au chargement de chaque page, puis rejouée à l'envoi
+ * pour couvrir les formulaires ajoutés après coup (pop-up, retour en stock).
+ *
+ * Un seul point d'injection pour les six formulaires du site, et pour ceux
+ * qui viendront.
+ */
+export function injecterOrigineDansFormulaires(): void {
+  if (typeof document === 'undefined') return;
+
+  const remplir = (form: HTMLFormElement): void => {
+    const { courante, premiere } = etiquettesOrigine();
+    const poser = (nom: string, valeur: string): void => {
+      if (!valeur) return;
+      let champ = form.querySelector<HTMLInputElement>(`input[name="${nom}"]`);
+      if (!champ) {
+        champ = document.createElement('input');
+        champ.type = 'hidden';
+        champ.name = nom;
+        form.appendChild(champ);
+      }
+      champ.value = valeur;
+    };
+    poser('origine', courante);
+    poser('origine_premiere', premiere);
+  };
+
+  const cible = (el: Element | null): HTMLFormElement | null => {
+    if (!(el instanceof HTMLFormElement)) return null;
+    return el.getAttribute('action')?.includes('/api/newsletter') ? el : null;
+  };
+
+  document.querySelectorAll('form').forEach((f) => {
+    const form = cible(f);
+    if (form) remplir(form);
+  });
+
+  document.addEventListener(
+    'submit',
+    (e) => {
+      const form = cible(e.target as Element);
+      if (form) remplir(form);
+    },
+    true
+  );
+}

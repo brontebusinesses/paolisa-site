@@ -23,6 +23,17 @@ export const isKlaviyoConfigured = (): boolean => Boolean(apiKey && listId);
 export type NewsletterSourceKey = 'footer' | 'waitlist' | 'article' | 'popup';
 
 /**
+ * Canal d'acquisition, tel que lib/attribution.ts l'a détecté côté client.
+ * `courante` = ce qui a amené l'inscrite aujourd'hui, `premiere` = ce qui lui
+ * a fait découvrir la marque. Les deux diffèrent souvent, et c'est justement
+ * l'information utile : Instagram fait découvrir, l'email fait acheter.
+ */
+export interface OrigineInscription {
+  courante: string;
+  premiere: string;
+}
+
+/**
  * Inscrit un email à la liste newsletter avec consentement.
  * Référence : https://developers.klaviyo.com/en/reference/subscribe_profiles
  *
@@ -37,7 +48,8 @@ export async function subscribeNewsletter(
   email: string,
   source = 'Site paolisa.eu — formulaire footer',
   sourceKey: NewsletterSourceKey = 'footer',
-  birthday?: string
+  birthday?: string,
+  origine?: OrigineInscription
 ): Promise<{ ok: true } | { ok: false; error: string }> {
   if (!isKlaviyoConfigured()) {
     return { ok: false, error: 'KLAVIYO_API_KEY ou KLAVIYO_LIST_ID manquante.' };
@@ -54,7 +66,11 @@ export async function subscribeNewsletter(
               type: 'profile',
               attributes: {
                 email,
-                ...(birthday ? { properties: { Birthday: birthday } } : {}),
+                properties: {
+                  ...(birthday ? { Birthday: birthday } : {}),
+                  ...(origine?.courante ? { 'Origine inscription': origine.courante } : {}),
+                  ...(origine?.premiere ? { 'Origine premiere visite': origine.premiere } : {}),
+                },
                 subscriptions: {
                   email: {
                     marketing: {
@@ -91,7 +107,7 @@ export async function subscribeNewsletter(
     if (res.status === 202 || res.status === 200) {
       // Tracking événement source — ne bloque pas l'inscription si ça échoue.
       try {
-        await trackNewsletterSignupEvent(email, sourceKey, source);
+        await trackNewsletterSignupEvent(email, sourceKey, source, origine);
       } catch (eventErr) {
         console.error('[klaviyo] event tracking failed (non-blocking)', eventErr);
       }
@@ -118,7 +134,8 @@ export async function subscribeNewsletter(
 async function trackNewsletterSignupEvent(
   email: string,
   sourceKey: NewsletterSourceKey,
-  sourceLabel: string
+  sourceLabel: string,
+  origine?: OrigineInscription
 ): Promise<void> {
   const eventBody = {
     data: {
@@ -128,6 +145,8 @@ async function trackNewsletterSignupEvent(
           source: sourceKey,
           source_label: sourceLabel,
           page: sourceKey === 'waitlist' ? '/huile/no-01' : '/',
+          origine: origine?.courante || 'inconnue',
+          origine_premiere: origine?.premiere || 'inconnue',
         },
         time: new Date().toISOString(),
         metric: {
