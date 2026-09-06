@@ -55,6 +55,12 @@ const canonicalURL = new URL(Astro.url.pathname, Astro.site ?? 'https://paolisa.
     />
 
     <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
+
+    <!-- Origine de la visite : enregistree des l'arrivee, rattachee au panier au checkout. -->
+    <script>
+      import { capturerOrigine } from '../lib/attribution';
+      capturerOrigine();
+    </script>
   </head>
   <body data-hero-overlay={heroOverlay ? 'true' : 'false'}>
     <slot />

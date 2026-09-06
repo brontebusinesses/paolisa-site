@@ -3,6 +3,8 @@
  * panier localement, et on ne bascule vers le checkout Shopify qu'au paiement
  * (via un permalink /cart/{variant}:{qty},…).
  */
+import { parametresOrigine } from './attribution';
+
 export interface CartLine {
   variantId: string;
   slug: string;
@@ -75,10 +77,16 @@ export function remainingForFree(): number {
   return Math.max(0, FREE_SHIPPING_CENTS - subtotalCents());
 }
 
-/** Permalink Shopify : construit le panier puis redirige vers le checkout. */
+/**
+ * Permalink Shopify : construit le panier puis redirige vers le checkout.
+ * L'origine de la visite (Instagram, Pinterest, newsletter…) est attachée au
+ * lien, pour que la commande arrive dans l'admin Shopify avec sa provenance.
+ */
 export function checkoutUrl(): string {
   const cart = getCart();
   if (!cart.length) return '#';
   const items = cart.map((l) => `${l.variantId}:${l.qty}`).join(',');
-  return `https://${SHOP}/cart/${items}?return_to=/checkout`;
+  const origine = parametresOrigine();
+  const suffixe = origine ? `&${origine}` : '';
+  return `https://${SHOP}/cart/${items}?return_to=/checkout${suffixe}`;
 }
