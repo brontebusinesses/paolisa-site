@@ -143,6 +143,14 @@ const { productId } = Astro.props;
     const average = reviews.reduce((sum, r) => sum + r.rating, 0) / reviews.length;
     resume.textContent = `${starsToText(average)}  ${average.toFixed(1)} / 5 · ${reviews.length} avis`;
 
+    // Même note reportée à côté du prix, en haut de la fiche produit. Elle
+    // reste masquée tant qu'il n'y a aucun avis : mieux vaut rien qu'un zéro.
+    const noteHaut = document.querySelector<HTMLElement>('[data-avis-note-haut]');
+    if (noteHaut) {
+      noteHaut.textContent = `${starsToText(average)} ${average.toFixed(1)}/5 · ${reviews.length} avis`;
+      noteHaut.classList.remove('hidden');
+    }
+
     liste.innerHTML = '';
     for (const review of reviews) {
       const li = document.createElement('li');

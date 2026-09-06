@@ -13,6 +13,7 @@ import QuantitySelector from '../../components/QuantitySelector.astro';
 import Accordion from '../../components/Accordion.astro';
 import ProductCard from '../../components/ProductCard.astro';
 import AvisProduit from '../../components/AvisProduit.astro';
+import BarreAchat from '../../components/BarreAchat.astro';
 import Input from '../../components/Input.astro';
 import { getProduct, productList, gammeList, productLabel } from '../../lib/products';
 import { productGidForSlug } from '../../lib/reviews';
@@ -44,45 +45,45 @@ const related = gammeList().filter((p) => p.slug !== product.slug).slice(0, 3);
 
   <main>
     <section class="container-paolisa pt-8 md:pt-12 pb-20 md:pb-32">
-      <div class="grid grid-cols-1 md:grid-cols-12 gap-8 md:gap-16">
-        {/* Galerie */}
-        <div class="md:col-span-7">
-          <div class="grid grid-cols-1 gap-3 md:gap-4">
-            <div class="relative w-full aspect-[4/5] overflow-hidden arch bg-bg-tertiary">
-              <img src={product.images[0]} alt={product.title} class="absolute inset-0 w-full h-full object-cover" />
-            </div>
-            {
-              product.images.length > 1 && (
-                <div class="grid grid-cols-2 gap-3 md:gap-4">
-                  {product.images.slice(1).map((src, i) => (
-                    <div class="relative w-full aspect-square overflow-hidden bg-bg-tertiary">
-                      <img src={src} alt={`${product.title} — vue ${i + 2}`} class="absolute inset-0 w-full h-full object-cover" loading="lazy" />
-                    </div>
-                  ))}
-                </div>
-              )
-            }
+      {/*
+        Sur mobile, l'ordre est photo principale, bloc d'achat, puis photos
+        secondaires : le nom et le prix doivent apparaître dès le premier
+        écran. Sur desktop, la mise en page d'origine est conservée, la
+        colonne de droite couvrant les deux rangées.
+      */}
+      <div class="grid grid-cols-1 md:grid-cols-12 gap-8 md:gap-x-16 md:gap-y-4">
+        {/* Photo principale */}
+        <div class="order-1 md:order-none md:col-span-7">
+          <div class="relative w-full aspect-square md:aspect-[4/5] overflow-hidden arch bg-bg-tertiary">
+            <img src={product.images[0]} alt={product.title} class="absolute inset-0 w-full h-full object-cover" />
           </div>
         </div>
 
         {/* Bloc info — sticky desktop */}
-        <aside class="md:col-span-5">
+        <aside class="order-2 md:order-none md:col-span-5 md:row-span-2">
           <div class="md:sticky md:top-[120px] md:max-w-md">
             <p class="mono-label mb-4">{label} / {product.category}</p>
             <h1 class="display-m mb-1">{product.title}</h1>
             <p class="body-m text-ink-tertiary mb-4">{product.subtitle}</p>
             <p class="mono-label text-ink-tertiary mb-4">{product.format}</p>
 
-            {/* Lien vers le bloc avis en bas */}
-            {reviewProductId && (
-              <a href="#avis" class="mono-label text-ink-tertiary hover:text-ink-primary block mb-6">
-                → LIRE LES AVIS
-              </a>
-            )}
-
-            <p class="font-mono text-[18px] tracking-[0.05em] text-ink-primary mb-8">
+            <p class="font-mono text-[18px] tracking-[0.05em] text-ink-primary mb-3">
               {product.priceLabel}
             </p>
+
+            {/*
+              La note remonte à côté du prix. Pour une marque encore inconnue,
+              c'est la seule preuve qu'une autre personne a essayé, et elle
+              n'a aucun effet si elle attend en bas de page. Remplie par le
+              script d'AvisProduit, à partir du même appel : pas de requête
+              supplémentaire, et rien ne s'affiche s'il n'y a aucun avis.
+            */}
+            {reviewProductId && (
+              <a href="#avis" class="flex flex-wrap items-baseline gap-x-3 gap-y-1 mb-8 group">
+                <span class="font-mono text-[13px] tracking-[0.05em] text-ink-primary hidden" data-avis-note-haut />
+                <span class="mono-label text-ink-tertiary group-hover:text-ink-primary">→ LIRE LES AVIS</span>
+              </a>
+            )}
 
             <p class="body-l text-ink-secondary mb-8 max-w-prose">
               {product.longDescription}
@@ -197,6 +198,19 @@ const related = gammeList().filter((p) => p.slug !== product.slug).slice(0, 3);
             </a>
           </div>
         </aside>
+
+        {/* Photos secondaires */}
+        {product.images.length > 1 && (
+          <div class="order-3 md:order-none md:col-span-7">
+            <div class="grid grid-cols-2 gap-3 md:gap-4">
+              {product.images.slice(1).map((src, i) => (
+                <div class="relative w-full aspect-square overflow-hidden bg-bg-tertiary">
+                  <img src={src} alt={`${product.title} — vue ${i + 2}`} class="absolute inset-0 w-full h-full object-cover" loading="lazy" />
+                </div>
+              ))}
+            </div>
+          </div>
+        )}
       </div>
 
       <script is:inline>
@@ -264,6 +278,10 @@ const related = gammeList().filter((p) => p.slug !== product.slug).slice(0, 3);
         </div>
       </div>
     </section>
+
+    {storeOpen && product.available && (
+      <BarreAchat titre={product.title} prix={product.priceLabel} />
+    )}
   </main>
 
   <Footer />

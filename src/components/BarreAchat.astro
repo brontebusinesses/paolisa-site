@@ -1,0 +1,105 @@
+---
+/**
+ * <BarreAchat /> — barre d'achat collante, mobile uniquement.
+ *
+ * Pourquoi : sur un téléphone, le bouton d'ajout au panier se trouve à environ
+ * 1,4 écran de défilement sous l'arrivée. Une visiteuse venue d'Instagram doit
+ * donc décider de descendre avant même de savoir qu'elle peut acheter. Cette
+ * barre rend le prix et le bouton disponibles à tout moment, dès qu'on a
+ * dépassé le bloc d'achat.
+ *
+ * Elle ne duplique aucune logique : son bouton renvoie l'envoi du formulaire
+ * [data-add-to-cart] déjà présent sur la page, quantité comprise. Le panier,
+ * le badge et le mini-panier continuent de venir de Cart.astro.
+ *
+ * Invisible sur desktop, où le bloc d'achat est déjà collant dans sa colonne.
+ */
+interface Props {
+  titre: string;
+  prix: string;
+}
+const { titre, prix } = Astro.props;
+---
+
+<div
+  data-barre-achat
+  class="md:hidden fixed inset-x-0 bottom-0 z-50 bg-bg-primary border-t border-line-subtle translate-y-[200%] pointer-events-none transition-transform duration-300 ease-out motion-reduce:transition-none"
+  aria-hidden="true"
+>
+  <div class="flex items-center gap-4 px-4 py-3" style="padding-bottom: calc(0.75rem + env(safe-area-inset-bottom));">
+    <div class="min-w-0 flex-1">
+      <p class="body-m text-ink-primary truncate">{titre}</p>
+      <p class="font-mono text-[13px] tracking-[0.05em] text-ink-secondary">{prix}</p>
+    </div>
+    <button
+      type="button"
+      data-barre-achat-bouton
+      disabled
+      class="shrink-0 inline-flex items-center justify-center font-mono uppercase tracking-[0.18em] text-[10px] leading-none px-6 py-4 min-h-[48px] bg-ink-primary text-ink-inverse transition-opacity duration-200 hover:opacity-80 disabled:opacity-100"
+    >
+      AJOUTER →
+    </button>
+  </div>
+</div>
+
+<script>
+  const barre = document.querySelector<HTMLElement>('[data-barre-achat]');
+  const bouton = document.querySelector<HTMLButtonElement>('[data-barre-achat-bouton]');
+  const form = document.querySelector<HTMLFormElement>('[data-add-to-cart]');
+
+  if (barre && bouton && form) {
+    let visible = false;
+
+    const afficher = (oui: boolean): void => {
+      if (oui === visible) return;
+      visible = oui;
+      barre.classList.toggle('translate-y-[200%]', !oui);
+      barre.classList.toggle('pointer-events-none', !oui);
+      barre.setAttribute('aria-hidden', oui ? 'false' : 'true');
+      bouton.disabled = !oui;
+    };
+
+    // La barre apparaît quand le bloc d'achat est sorti par le haut, et
+    // disparaît dès qu'il revient à l'écran : deux boutons visibles en même
+    // temps n'aident personne.
+    //
+    // Volontairement une écoute de défilement plutôt qu'un IntersectionObserver :
+    // celui-ci ne se déclenche qu'au franchissement d'un seuil, donc un saut
+    // (ancre, position restaurée au retour en arrière, défilement rapide) peut
+    // passer du dessous au dessus sans jamais le notifier.
+    // La bannière de consentement occupe le même bas d'écran, et elle est
+    // justement affichée pendant toute la première visite, celle qui compte.
+    // On empile plutôt que de masquer : la barre se pose juste au-dessus.
+    const banniere = document.getElementById('paolisa-cookie-consent');
+    const decaler = (): void => {
+      const h = banniere ? banniere.getBoundingClientRect().height : 0;
+      barre.style.bottom = h > 0 ? `${Math.round(h)}px` : '';
+    };
+
+    let enAttente = false;
+    const evaluer = (): void => {
+      enAttente = false;
+      decaler();
+      afficher(form.getBoundingClientRect().bottom < 0);
+    };
+    const planifier = (): void => {
+      if (enAttente) return;
+      enAttente = true;
+      requestAnimationFrame(evaluer);
+    };
+
+    addEventListener('scroll', planifier, { passive: true });
+    addEventListener('resize', planifier, { passive: true });
+    // Émis par <CookieConsent /> quand la bannière disparaît.
+    document.addEventListener('paolisa:consent', planifier);
+    if (banniere && 'ResizeObserver' in window) {
+      new ResizeObserver(planifier).observe(banniere);
+    }
+    evaluer();
+
+    bouton.addEventListener('click', () => {
+      // Renvoie le formulaire réel : même quantité, même chemin, même toast.
+      form.requestSubmit();
+    });
+  }
+</script>
