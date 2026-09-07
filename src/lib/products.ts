@@ -540,8 +540,8 @@ export const products: Record<string, Product> = {
     ],
     shopifyHandle: 'anti-age-hydrogel-eye-patches',
     shopifyVariantId: '58377596633420',
-    available: false,
-    status: 'ÉPUISÉ — BIENTÔT DE RETOUR',
+    available: true,
+    status: 'DISPONIBLE',
     actives: [
       'Niacinamide (B3) — éclat, teint unifié',
       'Acide hyaluronique — hydrate et repulpe',
