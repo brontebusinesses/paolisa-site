@@ -10,12 +10,14 @@ import NoticeBar from '../components/NoticeBar.astro';
 import Header from '../components/Header.astro';
 import Footer from '../components/Footer.astro';
 import ProductCard from '../components/ProductCard.astro';
-import { essentials, solaires, craquages, productLabel } from '../lib/products';
+import { essentials, solaires, notte, craquages, productLabel } from '../lib/products';
 import { isStoreOpen } from '../lib/store-status';
 
 const essentiels = essentials();
 const solaireProducts = solaires();
 const solaireCols = Math.min(solaireProducts.length, 4) || 1;
+const notteProducts = notte();
+const notteCols = Math.min(notteProducts.length, 4) || 1;
 const craquageProducts = craquages();
 const craquageCols = Math.min(craquageProducts.length, 4) || 1;
 const storeOpen = isStoreOpen();
@@ -35,12 +37,13 @@ const storeOpen = isStoreOpen();
           <p class="mono-label mb-4">— L'INVENTAIRE —</p>
           <h1 class="display-l mb-4">La gamme</h1>
           <p class="body-l text-ink-secondary max-w-prose">
-            Le rituel se lit dans l'ordre. Un numéro par geste — le sérum d'abord,
+            Le rituel se lit dans l'ordre. Un numéro par geste, le sérum d'abord,
             puis le regard, puis le soin. Les solaires, eux, s'ajoutent au gré des
-            saisons. Chaque produit trouve sa place dans le geste du matin.
+            saisons. Le soir a son propre rituel, LA NOTTE, pour préparer la peau
+            à la nuit.
           </p>
         </div>
-        <p class="mono-label">[ 06 PRODUITS ]</p>
+        <p class="mono-label">[ 12 PRODUITS ]</p>
       </div>
 
       {/* Les Essentiels */}
@@ -102,6 +105,39 @@ const storeOpen = isStoreOpen();
           ))
         }
       </div>
+
+      {/* LA NOTTE */}
+      <div class="flex items-center gap-4 mb-8 mt-16 md:mt-24">
+        <p class="mono-label whitespace-nowrap text-ink-primary">LA NOTTE : LE RITUEL DU SOIR</p>
+        <span class="flex-1 border-t border-line-subtle"></span>
+      </div>
+      <div
+        class="grid w-fit max-w-full gap-px bg-line-faint border border-line-faint"
+        style={`grid-template-columns: repeat(${notteCols}, minmax(200px, 284px));`}
+      >
+        {
+          notteProducts.map((p) => (
+            <ProductCard
+              href={p.href}
+              image={p.cardImage}
+              imageAlt={p.title}
+              eyebrow={`${productLabel(p)} / ${p.category}`}
+              title={p.title}
+              subtitle={p.subtitle}
+              price={p.priceLabel}
+              status={p.status}
+              quickAdd={storeOpen && p.available}
+              variantId={p.shopifyVariantId}
+              slug={p.slug}
+              priceCents={p.priceCents}
+              accentColor={p.accentColor}
+            />
+          ))
+        }
+      </div>
+      <p class="mono-micro text-ink-tertiary mt-4">
+        N°02 EST LE CONTOUR DU MATIN, N°07 CELUI DU SOIR. N°03 CRÈME LISSANTE EST LA CRÈME DE JOUR, N°08 CELLE DE NUIT.
+      </p>
 
       {/* Petits Craquages */}
       {
