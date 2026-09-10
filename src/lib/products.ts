@@ -12,7 +12,7 @@
  * PANIER : `shopifyVariantId` = variante postée sur /cart/add. Vérifié 07/07/2026.
  */
 
-export type Tier = 'essentiel' | 'solaire' | 'craquage';
+export type Tier = 'essentiel' | 'solaire' | 'craquage' | 'nuit';
 
 export const ACCENTS = {
   vert: '#1FA85C',
@@ -23,6 +23,7 @@ export const ACCENTS = {
   ecru: '#ECE6D8',
   poudre: '#F2B8C6',
   chartreuse: '#CBDB39',
+  ocre: '#C9975B',
 } as const;
 
 
@@ -641,20 +642,362 @@ export const products: Record<string, Product> = {
       'Convient aux peaux normales à sèches',
     ],
   },
+
+  /* ===================== LA NOTTE : LE RITUEL DU SOIR ===================== */
+
+  'mousse-nettoyante': {
+    slug: 'mousse-nettoyante',
+    href: '/produit/mousse-nettoyante',
+    tier: 'nuit',
+    number: null,
+    category: 'NETTOYANT',
+    ritual: 'PREMIER GESTE',
+    title: 'Mousse nettoyante',
+    subtitle: "double nettoyage · avant l'huile-lait",
+    format: '150 ml',
+    priceCents: 2600,
+    priceLabel: '26 €',
+    shortDescription:
+      "Le premier geste du soir. Une mousse légère qui dissout le maquillage et les impuretés du jour, sans tirailler la peau.",
+    longDescription:
+      "Se rince à l'eau claire et laisse la peau fraîche et souple, prête pour l'huile-lait démaquillante. Le double nettoyage qui ouvre le rituel du soir.",
+    accentColor: ACCENTS.vert,
+    accentName: 'Vert',
+    cardImage: '/hero/hero-mousse-nettoyante.jpg',
+    images: [
+      '/pdp/mousse-nettoyante-1.jpg',
+      '/pdp/mousse-nettoyante-2.jpg',
+    ],
+    shopifyHandle: 'cleansing-foam',
+    shopifyVariantId: '58749014147404',
+    available: true,
+    status: 'DISPONIBLE',
+    actives: [
+      'Cocamidopropyl bétaïne : nettoie en douceur',
+      'Eau de rose : hydrate, rafraîchit',
+      'Calendula : nourrit',
+    ],
+    inci: [
+      'Aqua', 'Cocamidopropyl Betaine', 'Rosa Damascena (Rose) Flower Water*', 'Glycerin',
+      'Sucrose Cocoate', 'Sodium Levulinate', 'Lactic Acid', 'Sodium Anisate',
+      'Calendula Officinalis (Calendula) Flower Extract*', 'Chamomilla Recutita (Camomile) Flower Extract*',
+      'Parfum', 'Benzyl Alcohol', 'Sodium Benzoate', 'Potassium Sorbate',
+    ],
+    // * Ingrédients issus de l'agriculture biologique. Liste transcrite le 10/09/2026
+    // depuis la fiche INCI publique du fabricant (onglet INCI, pas l'onglet Overview).
+    certifications: ['Vegan', 'Fabriquée en Europe'],
+  },
+
+  'huile-lait-demaquillante': {
+    slug: 'huile-lait-demaquillante',
+    href: '/produit/huile-lait-demaquillante',
+    tier: 'nuit',
+    number: 'N°04',
+    category: 'DÉMAQUILLANT',
+    ritual: 'DEUXIÈME GESTE',
+    title: 'Huile-lait démaquillante',
+    subtitle: 'texture huile-en-lait · peaux sensibles',
+    format: '150 ml',
+    priceCents: 2800,
+    priceLabel: '28 €',
+    shortDescription:
+      "La texture change au contact de l'eau : une huile devient lait, et le maquillage part sans frotter.",
+    longDescription:
+      "Formulée pour les peaux sensibles, elle nourrit sans laisser de film gras. Calendula et argousier accompagnent le geste. COSMOS Organic, 100 % d'origine naturelle, 39 % bio.",
+    accentColor: ACCENTS.ocre,
+    accentName: 'Ocre',
+    accentDarkText: true,
+    cardImage: '/hero/hero-huile-lait-demaquillante.jpg',
+    images: [
+      '/pdp/huile-lait-demaquillante-1.jpg',
+      '/pdp/huile-lait-demaquillante-2.jpg',
+    ],
+    shopifyHandle: 'sensitive-skin-oil-to-milk-cleanser',
+    shopifyVariantId: '58749025059148',
+    available: true,
+    status: 'DISPONIBLE',
+    actives: [
+      'Huile de tournesol bio : nourrit sans film gras',
+      'Calendula : nourrit',
+      'Argousier : riche en vitamine C',
+    ],
+    inci: [
+      'Caprylic/Capric Triglyceride', 'Glycerin', 'Helianthus Annuus (Sunflower) Seed Oil*', 'Aqua',
+      'Sucrose Laurate', 'Sucrose Palmitate', 'Alcohol', 'Tocopherol', 'Mica (CI 77019)', 'Parfum',
+      'Chamomilla Recutita (Camomile) Flower Extract*', 'Hippophae Rhamnoides (Sea Buckthorn) Fruit Extract*',
+      'Rubus Chamaemorus (Cloudberry) Fruit Extract*', 'CI 77491 (Iron Oxides)', 'Glycolipids',
+      'Limonene', 'Linalyl Acetate',
+    ],
+    // * Ingrédients issus de l'agriculture biologique. Liste transcrite le 10/09/2026
+    // depuis la fiche INCI publique du fabricant (onglet INCI, pas l'onglet Overview).
+    certifications: ['COSMOS Organic', "100 % d'origine naturelle", '39 % bio', 'Vegan'],
+  },
+
+  'tonique': {
+    slug: 'tonique',
+    href: '/produit/tonique',
+    tier: 'nuit',
+    number: 'N°05',
+    category: 'TONIQUE',
+    ritual: 'TROISIÈME GESTE',
+    title: 'Tonique hydratant',
+    subtitle: 'eau de rose · sans parfum ajouté',
+    format: '200 ml',
+    priceCents: 2100,
+    priceLabel: '21 €',
+    shortDescription:
+      "Un tonique à l'eau de rose et à l'acide hyaluronique, sans parfum ajouté.",
+    longDescription:
+      "Il referme le geste du démaquillage et prépare la peau à recevoir la suite du rituel. 99 % d'origine naturelle, 7 % bio, COSMOS Natural.",
+    accentColor: ACCENTS.bleu,
+    accentName: 'Bleu',
+    cardImage: '/hero/hero-tonique.jpg',
+    images: [
+      '/pdp/tonique-1.jpg',
+      '/pdp/tonique-2.jpg',
+    ],
+    shopifyHandle: 'hydrating-toner',
+    shopifyVariantId: '58749019193676',
+    available: true,
+    status: 'DISPONIBLE',
+    actives: [
+      'Eau de rose : hydrate',
+      'Acide hyaluronique (sodium hyaluronate) : repulpe',
+      'Sans parfum ajouté',
+    ],
+    inci: [
+      'Aqua/Water',
+      'Rosa Damascena Flower Water*',
+      'Glycerin**',
+      'Sodium PCA',
+      'Benzyl Alcohol',
+      'Chamomilla Recutita (Camomile) Flower Extract*',
+      'Fragaria Ananassa (Strawberry) Fruit Extract*',
+      'Sodium Benzoate',
+      'Potassium Sorbate',
+      'Sodium Hyaluronate',
+      'Lactic Acid',
+    ],
+    certifications: ['COSMOS Natural', "99 % d'origine naturelle", '7 % bio', 'Sans parfum ajouté', 'Vegan'],
+  },
+
+  'concentre-nuit': {
+    slug: 'concentre-nuit',
+    href: '/produit/concentre-nuit',
+    tier: 'nuit',
+    number: 'N°06',
+    category: 'CONCENTRÉ',
+    ritual: 'QUATRIÈME GESTE',
+    title: 'Concentré nuit',
+    subtitle: 'gel hydratation intense · acide hyaluronique',
+    format: '30 ml',
+    priceCents: 3200,
+    priceLabel: '32 €',
+    shortDescription:
+      "Un gel concentré en acide hyaluronique à deux poids moléculaires, pour une hydratation en profondeur pendant la nuit.",
+    longDescription:
+      "La peau retrouve du plein, les petites lignes de déshydratation s'estompent. 99 % d'origine naturelle, 11 % bio.",
+    accentColor: ACCENTS.rose,
+    accentName: 'Rose',
+    cardImage: '/hero/hero-concentre-nuit.jpg',
+    images: [
+      '/pdp/concentre-nuit-1.jpg',
+      '/pdp/concentre-nuit-2.jpg',
+    ],
+    shopifyHandle: 'double-hydration-boost-gel-ha',
+    shopifyVariantId: '58749026828620',
+    available: true,
+    status: 'DISPONIBLE',
+    actives: [
+      "Acide hyaluronique à deux poids moléculaires : hydratation en profondeur",
+      "Jus d'aloe : hydrate",
+      'Extrait de thé blanc : antioxydant',
+    ],
+    inci: [
+      'Aloe Barbadensis (Aloe) Leaf Juice*',
+      'Pentylene Glycol',
+      'Butylene Glycol',
+      'Glycerin**',
+      'Sodium PCA',
+      'Aqua/Water',
+      'Propanediol',
+      'Cellulose Gum',
+      'Parfum/Fragrance',
+      'Algin',
+      'Camellia Sinensis (White Tea) Leaf Extract*',
+      'Salvia Officinalis (Sage) Leaf Extract*',
+      'Hydrolyzed Hyaluronic Acid',
+      'Lactic Acid',
+      'Sodium Hyaluronate',
+      'Sodium Phytate',
+      'Rhamnose',
+      'Glucose',
+      'Glucuronic Acid',
+      'Linalyl Acetate***',
+    ],
+    certifications: ['COSMOS Natural', "99 % d'origine naturelle", '11 % bio', 'Vegan'],
+  },
+
+  'contour-nuit': {
+    slug: 'contour-nuit',
+    href: '/produit/contour-nuit',
+    tier: 'nuit',
+    number: 'N°07',
+    category: 'YEUX',
+    ritual: 'CINQUIÈME GESTE',
+    title: 'Contour nuit',
+    subtitle: 'le contour du soir · protège le collagène',
+    format: '15 ml',
+    priceCents: 3300,
+    priceLabel: '33 €',
+    shortDescription:
+      'Le contour du soir, à ne pas confondre avec le N°02 du matin.',
+    longDescription:
+      "Une crème soyeuse qui lisse et protège le collagène déjà présent dans la peau, grâce au dipalmitoyl hydroxyproline. Les céramides renforcent la barrière de cette zone si fine. 100 % d'origine naturelle, 18 % bio.",
+    accentColor: ACCENTS.jaune,
+    accentName: 'Jaune',
+    accentDarkText: true,
+    cardImage: '/hero/hero-contour-nuit.jpg',
+    images: [
+      '/pdp/contour-nuit-1.jpg',
+      '/pdp/contour-nuit-2.jpg',
+    ],
+    shopifyHandle: 'smoothing-eye-cream',
+    shopifyVariantId: '58748990619980',
+    available: true,
+    status: 'DISPONIBLE',
+    actives: [
+      'Dipalmitoyl hydroxyproline : protège le collagène',
+      'Céramides : renforce la barrière',
+      'Beurre de karité : nourrit',
+    ],
+    inci: [
+      'Aloe Barbadensis (Aloe) Leaf Juice*',
+      'Simmondsia Chinensis (Jojoba) Seed Oil*',
+      'Glycerin**',
+      'Pentylene Glycol',
+      'Polyglyceryl-6 Stearate',
+      'Cetearyl Alcohol',
+      'Isoamyl Laurate',
+      'Dipalmitoyl Hydroxyproline',
+      'Sodium PCA',
+      'Parfum/Fragrance',
+      'Polyglyceryl-6 Behenate',
+      'Cellulose',
+      'Butyrospermum Parkii (Shea) Butter*',
+      'Caprylic/Capric Triglyceride',
+      'Palmitic Acid',
+      'Stearic Acid',
+      'Xanthan Gum',
+      'Aesculus Hippocastanum (Horse Chestnut) Seed Extract',
+      'Camellia Sinensis (Black Tea) Leaf Extract*',
+      'Ascorbyl Palmitate',
+      'Glycosphingolipids',
+      'Tocopherol',
+      'Glycolipids',
+      'Aqua/Water',
+      'Hydrolysed Hyaluronic Acid',
+      'Sodium Hyaluronate',
+      'Sodium Phytate',
+      'Potassium Hydroxide',
+      'Escin',
+      'Limonene***',
+      'Linalool***',
+      'Coumarin***',
+      'Geraniol***',
+    ],
+    certifications: ['COSMOS Natural', "100 % d'origine naturelle", '18 % bio', 'Vegan'],
+  },
+
+  'creme-nuit': {
+    slug: 'creme-nuit',
+    href: '/produit/creme-nuit',
+    tier: 'nuit',
+    number: 'N°08',
+    category: 'CRÈME',
+    ritual: 'SIXIÈME GESTE',
+    title: 'Crème de nuit',
+    subtitle: 'la crème de nuit du rituel · céramides',
+    format: '50 ml',
+    priceCents: 3500,
+    priceLabel: '35 €',
+    shortDescription:
+      'La crème de nuit du rituel, à ne pas confondre avec le N°03 du matin.',
+    longDescription:
+      "Céramides, beurre de cacao et de karité nourrissent la peau pendant qu'elle se régénère. Texture riche, absorption lente, pensée pour la fin de journée. 99 % d'origine naturelle, 27 % bio.",
+    accentColor: ACCENTS.chartreuse,
+    accentName: 'Chartreuse',
+    accentDarkText: true,
+    cardImage: '/hero/hero-creme-nuit.jpg',
+    images: [
+      '/pdp/creme-nuit-1.jpg',
+      '/pdp/creme-nuit-2.jpg',
+    ],
+    shopifyHandle: 'ceramide-barrier-night-cream',
+    shopifyVariantId: '58749029581132',
+    available: true,
+    status: 'DISPONIBLE',
+    actives: [
+      'Céramides : renforce la barrière',
+      'Beurre de cacao et de karité : nourrit en profondeur',
+      'Huile de jojoba : nourrit',
+    ],
+    inci: [
+      'Aloe Barbadensis (Aloe) Leaf Juice*',
+      'Theobroma Cacao (Cocoa) Seed Butter*',
+      'Simmondsia Chinensis (Jojoba) Seed Oil*',
+      'Helianthus Annuus (Sunflower) Seed Oil*',
+      'Dicaprylyl Carbonate',
+      'Pentylene Glycol',
+      'Polyglyceryl-6 Stearate',
+      'Cetearyl Alcohol',
+      'Glycerin**',
+      'Helianthus Annuus (Sunflower) Seed Cera',
+      'Butyrospermum Parkii (Shea) Butter*',
+      'Olea Europaea (Olive) Oil Unsaponifiables',
+      'Sodium PCA',
+      'Palmitic Acid',
+      'Stearic Acid',
+      'Polyglyceryl-6 Behenate',
+      'Parfum/Fragrance',
+      'Cellulose',
+      'Rhus Verniciflua Peel Cera/Rhus Succedanea Fruit Cera',
+      'Shorea Robusta Resin',
+      'Hippophae Rhamnoides (Sea Buckthorn) Fruit Extract*',
+      'Xanthan Gum',
+      'Paeonia Lactiflora (Peony) Root Extract',
+      'Sambucus Nigra (Elder) Fruit Extract*',
+      'Vaccinium Macrocarpon (Cranberry) Seed Oil*',
+      'Glycosphingolipids',
+      'Glycolipids',
+      'Aqua/Water',
+      'Sodium Phytate',
+      'Ascorbyl Palmitate',
+      'Tocopherol',
+      'Lactic Acid',
+      'Sodium Hyaluronate',
+      'Linalool***',
+      'Limonene***',
+    ],
+    certifications: ['COSMOS Natural', "99 % d'origine naturelle", '27 % bio', 'Vegan'],
+  },
 };
 
-const ORDER = ['serum', 'contour-yeux', 'no-01', 'creme', 'solaire-teinte', 'stick-solaire', 'patchs-yeux', 'patchs-yeux-fatigue'];
+const ORDER = ['serum', 'contour-yeux', 'no-01', 'creme', 'solaire-teinte', 'stick-solaire', 'patchs-yeux', 'patchs-yeux-fatigue', 'mousse-nettoyante', 'huile-lait-demaquillante', 'tonique', 'concentre-nuit', 'contour-nuit', 'creme-nuit'];
 
 export const getProduct = (slug: string): Product | undefined => products[slug];
 export const productList = (): Product[] => ORDER.map((s) => products[s]).filter(Boolean);
 export const essentials = (): Product[] => productList().filter((p) => p.tier === 'essentiel');
 export const solaires = (): Product[] => productList().filter((p) => p.tier === 'solaire');
 export const craquages = (): Product[] => productList().filter((p) => p.tier === 'craquage');
-/** La gamme « officielle » (essentiels + solaires), sans les Petits Craquages —
+export const notte = (): Product[] => productList().filter((p) => p.tier === 'nuit');
+/** La gamme « officielle » (essentiels + solaires), sans les Petits Craquages :
  *  à utiliser pour le hero d'accueil et les cross-sell « compléter le rituel ». */
 export const gammeList = (): Product[] => productList().filter((p) => p.tier !== 'craquage');
 
 export const productLabel = (p: Product): string => {
   if (p.number) return p.texture ? `${p.number} · ${p.texture}` : p.number;
-  return p.tier === 'craquage' ? 'PETITS CRAQUAGES' : 'SOLAIRE';
+  if (p.tier === 'craquage') return 'PETITS CRAQUAGES';
+  if (p.tier === 'nuit') return 'LA NOTTE';
+  return 'SOLAIRE';
 };
