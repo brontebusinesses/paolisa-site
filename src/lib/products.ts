@@ -811,12 +811,15 @@ export const products: Record<string, Product> = {
       "La peau retrouve du plein, les petites lignes de déshydratation s'estompent. 99 % d'origine naturelle, 11 % bio.",
     accentColor: ACCENTS.rose,
     accentName: 'Rose',
+    // cardImage : la seule photo "flacon seul" recue pour ce produit est en fait la
+    // photo marbre (identique a homeImage) ; en attendant une vraie photo fond beige
+    // flacon seul, on utilise la photo boite + flacon comme vignette (jamais de marbre
+    // sur la grille /gamme ni la fiche produit, cf. consigne de Bronte du 10/09).
     cardImage: '/hero/hero-concentre-nuit.jpg',
     homeImage: '/hero/hero-concentre-nuit-marbre.jpg',
     images: [
       '/pdp/concentre-nuit-1.jpg',
       '/pdp/concentre-nuit-2.jpg',
-      '/pdp/concentre-nuit-3.jpg',
     ],
     shopifyHandle: 'double-hydration-boost-gel-ha',
     shopifyVariantId: '58749026828620',
