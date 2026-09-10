@@ -4,9 +4,16 @@
  * Système « rituel numéroté » : N°01 Sérum → N°02 Contour → N°03 Huile/Crème,
  * puis Les Solaires (non numérotés).
  *
- * IMAGES — deux usages distincts :
- *   • `cardImage` = vignette STUDIO (fond gris uniforme, flacon seul) → utilisée
- *     sur les CARTES (home, page gamme, cross-sell).
+ * IMAGES, trois usages distincts :
+ *   • `cardImage` = vignette STUDIO (fond gris uniforme, flacon seul ; fond beige
+ *     pour LA NOTTE) → utilisée sur les CARTES (page gamme, cross-sell), et sur la
+ *     home quand `homeImage` n'est pas défini.
+ *   • `homeImage` (optionnel) = vignette spécifique à la home (HeroGamme), quand
+ *     elle doit différer de `cardImage`. Utilisé pour LA NOTTE : photo marbre en
+ *     home, photo fond beige sur la grille /gamme et la fiche produit. Convention
+ *     donnée par Bronté le 10/09/2026 : "page de garde = marbre, page produit =
+ *     fond beige". Laisser vide si aucune photo marbre n'existe encore pour ce
+ *     produit (fallback automatique sur `cardImage`).
  *   • `images[]`  = photos SHOPIFY (plusieurs vues) → utilisées sur les FICHES (PDP).
  *
  * PANIER : `shopifyVariantId` = variante postée sur /cart/add. Vérifié 07/07/2026.
@@ -46,8 +53,10 @@ export interface Product {
   accentName: string;
   accentInverted?: boolean;
   accentDarkText?: boolean;
-  /** Vignette studio (fond gris) — cartes / home. */
+  /** Vignette studio (fond gris, ou fond beige pour LA NOTTE), cartes / home (fallback). */
   cardImage: string;
+  /** Vignette spécifique home (marbre, LA NOTTE), remplace cardImage sur HeroGamme si définie. */
+  homeImage?: string;
   /** Photos Shopify (plusieurs vues) — fiche produit (PDP). */
   images: string[];
   shopifyHandle: string;
@@ -664,6 +673,7 @@ export const products: Record<string, Product> = {
     accentColor: ACCENTS.vert,
     accentName: 'Vert',
     cardImage: '/hero/hero-mousse-nettoyante.jpg',
+    homeImage: '/hero/hero-mousse-nettoyante-marbre.jpg',
     images: [
       '/pdp/mousse-nettoyante-1.jpg',
       '/pdp/mousse-nettoyante-2.jpg',
@@ -708,6 +718,7 @@ export const products: Record<string, Product> = {
     accentName: 'Ocre',
     accentDarkText: true,
     cardImage: '/hero/hero-huile-lait-demaquillante.jpg',
+    // homeImage : pas encore de photo marbre pour ce produit, fallback sur cardImage (beige) en attendant.
     images: [
       '/pdp/huile-lait-demaquillante-1.jpg',
       '/pdp/huile-lait-demaquillante-2.jpg',
@@ -752,6 +763,7 @@ export const products: Record<string, Product> = {
     accentColor: ACCENTS.bleu,
     accentName: 'Bleu',
     cardImage: '/hero/hero-tonique.jpg',
+    homeImage: '/hero/hero-tonique-marbre.jpg',
     images: [
       '/pdp/tonique-1.jpg',
       '/pdp/tonique-2.jpg',
@@ -800,9 +812,11 @@ export const products: Record<string, Product> = {
     accentColor: ACCENTS.rose,
     accentName: 'Rose',
     cardImage: '/hero/hero-concentre-nuit.jpg',
+    homeImage: '/hero/hero-concentre-nuit-marbre.jpg',
     images: [
       '/pdp/concentre-nuit-1.jpg',
       '/pdp/concentre-nuit-2.jpg',
+      '/pdp/concentre-nuit-3.jpg',
     ],
     shopifyHandle: 'double-hydration-boost-gel-ha',
     shopifyVariantId: '58749026828620',
@@ -858,9 +872,11 @@ export const products: Record<string, Product> = {
     accentName: 'Jaune',
     accentDarkText: true,
     cardImage: '/hero/hero-contour-nuit.jpg',
+    // homeImage : pas encore de photo marbre pour ce produit, fallback sur cardImage (beige) en attendant.
     images: [
       '/pdp/contour-nuit-1.jpg',
       '/pdp/contour-nuit-2.jpg',
+      '/pdp/contour-nuit-3.jpg',
     ],
     shopifyHandle: 'smoothing-eye-cream',
     shopifyVariantId: '58748990619980',
@@ -929,9 +945,12 @@ export const products: Record<string, Product> = {
     accentName: 'Chartreuse',
     accentDarkText: true,
     cardImage: '/hero/hero-creme-nuit.jpg',
+    // homeImage : seule photo marbre reçue = boîte + dos (INCI), pas une vignette flacon exploitable telle quelle.
+    // Fallback sur cardImage (beige) en attendant une photo marbre flacon seul.
     images: [
       '/pdp/creme-nuit-1.jpg',
       '/pdp/creme-nuit-2.jpg',
+      '/pdp/creme-nuit-3.jpg',
     ],
     shopifyHandle: 'ceramide-barrier-night-cream',
     shopifyVariantId: '58749029581132',

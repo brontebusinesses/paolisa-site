@@ -52,7 +52,7 @@ const storeOpen = isStoreOpen();
             <div class="group relative">
               <a href={p.href} class="block px-3 md:px-4 pt-5 pb-6 hover:bg-bg-tertiary transition-colors duration-200 ease-in-out">
                 <div class="relative w-full aspect-[3/4] overflow-hidden bg-bg-primary" style="border-radius:120px 120px 3px 3px; border: 1px solid #4B3729">
-                  <img src={p.cardImage} alt={p.title} class="absolute inset-0 w-full h-full object-cover" loading="lazy" />
+                  <img src={p.homeImage ?? p.cardImage} alt={p.title} class="absolute inset-0 w-full h-full object-cover" loading="lazy" />
                 </div>
                 <p class="mono-micro text-ink-tertiary mt-4">{productLabel(p)}</p>
                 <p class="display-s mt-1">{p.title}</p>
@@ -71,7 +71,7 @@ const storeOpen = isStoreOpen();
                         data-slug={p.slug}
                         data-title={p.title}
                         data-price={p.priceCents}
-                        data-image={p.cardImage}
+                        data-image={p.homeImage ?? p.cardImage}
                         data-href={p.href}
                         class="pointer-events-auto w-full bg-bg-dark text-ink-inverse font-mono uppercase tracking-[0.1em] text-[10px] py-2 opacity-0 translate-y-2 group-hover:opacity-100 group-hover:translate-y-0 focus-visible:opacity-100 focus-visible:translate-y-0 transition-all duration-200 ease-out hover:bg-ink-secondary"
                       >
@@ -87,7 +87,7 @@ const storeOpen = isStoreOpen();
                       data-slug={p.slug}
                       data-title={p.title}
                       data-price={p.priceCents}
-                      data-image={p.cardImage}
+                      data-image={p.homeImage ?? p.cardImage}
                       data-href={p.href}
                       aria-label={`Ajouter ${p.title} au panier`}
                       class="md:hidden absolute bottom-4 right-3 w-9 h-9 rounded-full bg-bg-dark text-ink-inverse flex items-center justify-center text-[18px] leading-none hover:bg-ink-secondary active:scale-95 transition"
