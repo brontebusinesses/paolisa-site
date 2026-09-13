@@ -44,12 +44,24 @@ export interface OrigineInscription {
  *
  * Renvoie { ok: true } en succès, { ok: false, error } en cas d'échec.
  */
+export interface WaitlistContext {
+  /** Titre du produit attendu, ex. "Concentré nuit" — vide si non précisé. */
+  product: string;
+  /** product.tier du catalogue (essentiel/solaire/craquage/nuit) — "nuit" =
+   *  LA NOTTE, permet de cibler toute la gamme en une seule condition Klaviyo
+   *  plutôt que de lister les 6 titres produit un par un. */
+  group: string;
+  /** Chemin de la fiche produit d'origine, ex. "/produit/concentre-nuit". */
+  page: string;
+}
+
 export async function subscribeNewsletter(
   email: string,
   source = 'Site paolisa.eu — formulaire footer',
   sourceKey: NewsletterSourceKey = 'footer',
   birthday?: string,
-  origine?: OrigineInscription
+  origine?: OrigineInscription,
+  waitlist?: WaitlistContext
 ): Promise<{ ok: true } | { ok: false; error: string }> {
   if (!isKlaviyoConfigured()) {
     return { ok: false, error: 'KLAVIYO_API_KEY ou KLAVIYO_LIST_ID manquante.' };
@@ -107,7 +119,7 @@ export async function subscribeNewsletter(
     if (res.status === 202 || res.status === 200) {
       // Tracking événement source — ne bloque pas l'inscription si ça échoue.
       try {
-        await trackNewsletterSignupEvent(email, sourceKey, source, origine);
+        await trackNewsletterSignupEvent(email, sourceKey, source, origine, waitlist);
       } catch (eventErr) {
         console.error('[klaviyo] event tracking failed (non-blocking)', eventErr);
       }
@@ -135,7 +147,8 @@ async function trackNewsletterSignupEvent(
   email: string,
   sourceKey: NewsletterSourceKey,
   sourceLabel: string,
-  origine?: OrigineInscription
+  origine?: OrigineInscription,
+  waitlist?: WaitlistContext
 ): Promise<void> {
   const eventBody = {
     data: {
@@ -144,9 +157,11 @@ async function trackNewsletterSignupEvent(
         properties: {
           source: sourceKey,
           source_label: sourceLabel,
-          page: sourceKey === 'waitlist' ? '/huile/no-01' : '/',
+          page: waitlist?.page || (sourceKey === 'waitlist' ? '/huile/no-01' : '/'),
           origine: origine?.courante || 'inconnue',
           origine_premiere: origine?.premiere || 'inconnue',
+          ...(waitlist?.product ? { waitlist_product: waitlist.product } : {}),
+          ...(waitlist?.group ? { waitlist_group: waitlist.group } : {}),
         },
         time: new Date().toISOString(),
         metric: {

@@ -113,6 +113,8 @@ const related = gammeList().filter((p) => p.slug !== product.slug).slice(0, 3);
                   <form method="post" action="/api/newsletter" class="space-y-4" data-restock-form>
                     <input type="hidden" name="source" value="waitlist" />
                     <input type="hidden" name="return" value={product.href} />
+                    <input type="hidden" name="product" value={product.title} />
+                    <input type="hidden" name="group" value={product.tier} />
                     <div>
                       <label class="sr-only" for="restock-email-nuit">Votre email</label>
                       <Input
@@ -173,6 +175,8 @@ const related = gammeList().filter((p) => p.slug !== product.slug).slice(0, 3);
                   <form method="post" action="/api/newsletter" class="space-y-4" data-restock-form>
                     <input type="hidden" name="source" value="waitlist" />
                     <input type="hidden" name="return" value={product.href} />
+                    <input type="hidden" name="product" value={product.title} />
+                    <input type="hidden" name="group" value={product.tier} />
                     <div>
                       <label class="sr-only" for="restock-email">Votre email</label>
                       <Input
@@ -209,6 +213,8 @@ const related = gammeList().filter((p) => p.slug !== product.slug).slice(0, 3);
                   <form method="post" action="/api/newsletter" class="space-y-4" data-restock-form>
                     <input type="hidden" name="source" value="waitlist" />
                     <input type="hidden" name="return" value={product.href} />
+                    <input type="hidden" name="product" value={product.title} />
+                    <input type="hidden" name="group" value={product.tier} />
                     <div>
                       <label class="sr-only" for="restock-email-2">Votre email</label>
                       <Input
