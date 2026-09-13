@@ -5,16 +5,19 @@
  * puis Les Solaires (non numérotés).
  *
  * IMAGES, trois usages distincts :
- *   • `cardImage` = vignette STUDIO (fond gris uniforme, flacon seul ; fond beige
- *     pour LA NOTTE) → utilisée sur les CARTES (page gamme, cross-sell), et sur la
- *     home (bande LA NOTTE) quand `homeImage` n'est pas défini.
+ *   • `cardImage` = vignette STUDIO (fond gris uniforme, flacon seul ; pour LA NOTTE :
+ *     marbre pour les produits qui ont une vraie photo marbre, fond beige sinon) →
+ *     utilisée sur les CARTES (page gamme, cross-sell), et sur la home (bande
+ *     LA NOTTE) quand `homeImage` n'est pas défini.
  *   • `homeImage` (optionnel) = vignette spécifique à la home, quand elle doit
- *     différer de `cardImage`. Non utilisé pour l'instant sur LA NOTTE : Bronté a
- *     tranché le 13/09/2026 de garder les mêmes photos fond beige que la grille
- *     /gamme sur la home aussi (cohérence sur les 6 produits plutôt que du marbre
- *     partiel sur seulement 3 d'entre eux). D'anciennes photos marbre restent dans
- *     public/hero/*-marbre.jpg si besoin de les réutiliser un jour.
- *   • `images[]`  = photos SHOPIFY (plusieurs vues) → utilisées sur les FICHES (PDP).
+ *     différer de `cardImage`. Non utilisé actuellement (repli sur `cardImage`
+ *     partout). Décision définitive de Bronté le 13/09/2026 (soir) après un premier
+ *     essai "beige partout" annulé le jour même : marbre sur la grille /gamme ET la
+ *     home pour mousse nettoyante, tonique et concentré nuit (seuls produits avec une
+ *     vraie photo marbre) ; fond beige pour les 3 autres (huile-lait démaquillante,
+ *     contour nuit, crème de nuit) en attendant leur photo marbre.
+ *   • `images[]`  = photos SHOPIFY (plusieurs vues) → utilisées sur les FICHES (PDP),
+ *     jamais de marbre ici (uniquement fond beige/studio).
  *
  * PANIER : `shopifyVariantId` = variante postée sur /cart/add. Vérifié 07/07/2026.
  */
@@ -677,7 +680,9 @@ export const products: Record<string, Product> = {
       "Se rince à l'eau claire et laisse la peau fraîche et souple, prête pour l'huile-lait démaquillante. Le double nettoyage qui ouvre le rituel du soir.",
     accentColor: ACCENTS.vert,
     accentName: 'Vert',
-    cardImage: '/hero/hero-mousse-nettoyante.jpg',
+    // cardImage : marbre (Bronte a tranche le 13/09/2026 : grille /gamme et home en marbre
+    // pour les produits qui ont une vraie photo marbre, fond beige sinon en attendant).
+    cardImage: '/hero/hero-mousse-nettoyante-marbre.jpg',
     images: [
       '/pdp/mousse-nettoyante-1.jpg',
       '/pdp/mousse-nettoyante-2.jpg',
@@ -722,8 +727,8 @@ export const products: Record<string, Product> = {
     accentColor: ACCENTS.ocre,
     accentName: 'Ocre',
     accentDarkText: true,
+    // cardImage : fond beige en attendant une vraie photo marbre pour ce produit (cf. entete du fichier).
     cardImage: '/hero/hero-huile-lait-demaquillante.jpg',
-    // homeImage : non utilise, photo fond beige gardee sur la home aussi (decision Bronte du 13/09/2026, cf. entete du fichier).
     images: [
       '/pdp/huile-lait-demaquillante-1.jpg',
       '/pdp/huile-lait-demaquillante-2.jpg',
@@ -768,7 +773,8 @@ export const products: Record<string, Product> = {
       "Il referme le geste du démaquillage et prépare la peau à recevoir la suite du rituel. 99 % d'origine naturelle, 7 % bio, COSMOS Natural.",
     accentColor: ACCENTS.bleu,
     accentName: 'Bleu',
-    cardImage: '/hero/hero-tonique.jpg',
+    // cardImage : marbre (cf. entete du fichier, decision du 13/09/2026).
+    cardImage: '/hero/hero-tonique-marbre.jpg',
     images: [
       '/pdp/tonique-1.jpg',
       '/pdp/tonique-2.jpg',
@@ -817,12 +823,10 @@ export const products: Record<string, Product> = {
       "La peau retrouve du plein, les petites lignes de déshydratation s'estompent. 99 % d'origine naturelle, 11 % bio.",
     accentColor: ACCENTS.rose,
     accentName: 'Rose',
-    // cardImage : la seule photo "flacon seul" recue pour ce produit est en fait la
-    // photo marbre ; en attendant une vraie photo fond beige flacon seul, on utilise
-    // la photo boite + flacon comme vignette. homeImage retiree le 13/09/2026 (Bronte
-    // a choisi les photos fond beige, coherentes avec les 5 autres produits, plutot
-    // que le marbre pour ce produit seul).
-    cardImage: '/hero/hero-concentre-nuit.jpg',
+    // cardImage : marbre (cf. entete du fichier, decision du 13/09/2026). C'est en fait
+    // la seule photo "flacon seul" jamais recue pour ce produit (la version fond beige
+    // n'existe pas), ce qui tombe bien maintenant que la grille /gamme accepte le marbre.
+    cardImage: '/hero/hero-concentre-nuit-marbre.jpg',
     images: [
       '/pdp/concentre-nuit-1.jpg',
       '/pdp/concentre-nuit-2.jpg',
@@ -881,8 +885,8 @@ export const products: Record<string, Product> = {
     accentColor: ACCENTS.jaune,
     accentName: 'Jaune',
     accentDarkText: true,
+    // cardImage : fond beige en attendant une vraie photo marbre pour ce produit (cf. entete du fichier).
     cardImage: '/hero/hero-contour-nuit.jpg',
-    // homeImage : non utilise, photo fond beige gardee sur la home aussi (decision Bronte du 13/09/2026, cf. entete du fichier).
     images: [
       '/pdp/contour-nuit-1.jpg',
       '/pdp/contour-nuit-2.jpg',
@@ -955,8 +959,8 @@ export const products: Record<string, Product> = {
     accentColor: ACCENTS.chartreuse,
     accentName: 'Chartreuse',
     accentDarkText: true,
+    // cardImage : fond beige en attendant une vraie photo marbre pour ce produit (cf. entete du fichier).
     cardImage: '/hero/hero-creme-nuit.jpg',
-    // homeImage : non utilise, photo fond beige gardee sur la home aussi (decision Bronte du 13/09/2026, cf. entete du fichier).
     images: [
       '/pdp/creme-nuit-1.jpg',
       '/pdp/creme-nuit-2.jpg',
