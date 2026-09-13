@@ -3,26 +3,45 @@
  * <NotteTeaser /> — bande d'annonce pour LA NOTTE, juste sous <GammeOnglet />.
  * Même forme que la bande gamme (mono-label + display-m + statut à droite),
  * pour rester cohérent avec le système existant plutôt qu'ajouter un nouveau
- * style. À retirer (ou fondre dans <GammeOnglet />) une fois LA NOTTE lancée
- * et intégrée à la gamme habituelle, le 16/09/2026.
+ * style. Rangée de 6 vignettes ajoutée le 13/09/2026 (photos fond beige,
+ * mêmes cardImage que la page /gamme, cf. products.ts) pour donner un aperçu
+ * visuel avant le clic. À retirer (ou fondre dans <GammeOnglet />) une fois
+ * LA NOTTE lancée et intégrée à la gamme habituelle, le 16/09/2026.
  */
+import { notte } from '../lib/products';
+
 interface Props {
   status?: string;
 }
 const { status = 'DISPONIBLE LE 16.09' } = Astro.props;
+const notteProducts = notte();
 ---
 
 <section class="bg-bg-primary border-b border-line-subtle" aria-label="La Notte, nouvelle gamme">
   <div class="container-paolisa">
     <a
       href="/gamme#la-notte"
-      class="flex items-center justify-between gap-6 py-8 md:py-10 hover:opacity-70 transition-opacity duration-150 ease-in-out"
+      class="flex flex-col gap-6 py-8 md:py-10 hover:opacity-70 transition-opacity duration-150 ease-in-out"
     >
-      <span>
-        <span class="mono-label text-ink-primary block">LA NOTTE</span>
-        <span class="display-m block mt-2">Notre nouvelle gamme</span>
-      </span>
-      <span class="mono-label whitespace-nowrap">{status} &nbsp;→</span>
+      <div class="flex items-center justify-between gap-6">
+        <span>
+          <span class="mono-label text-ink-primary block">LA NOTTE</span>
+          <span class="display-m block mt-2">Notre nouvelle gamme</span>
+        </span>
+        <span class="mono-label whitespace-nowrap">{status} &nbsp;→</span>
+      </div>
+      <div class="grid grid-cols-6 gap-1.5 md:gap-3 max-w-md">
+        {notteProducts.map((p) => (
+          <div class="aspect-square overflow-hidden border border-line-faint bg-bg-primary">
+            <img
+              src={p.homeImage ?? p.cardImage}
+              alt={p.title}
+              class="w-full h-full object-cover"
+              loading="lazy"
+            />
+          </div>
+        ))}
+      </div>
     </a>
   </div>
 </section>

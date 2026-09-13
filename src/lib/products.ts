@@ -7,13 +7,13 @@
  * IMAGES, trois usages distincts :
  *   • `cardImage` = vignette STUDIO (fond gris uniforme, flacon seul ; fond beige
  *     pour LA NOTTE) → utilisée sur les CARTES (page gamme, cross-sell), et sur la
- *     home quand `homeImage` n'est pas défini.
- *   • `homeImage` (optionnel) = vignette spécifique à la home (HeroGamme), quand
- *     elle doit différer de `cardImage`. Utilisé pour LA NOTTE : photo marbre en
- *     home, photo fond beige sur la grille /gamme et la fiche produit. Convention
- *     donnée par Bronté le 10/09/2026 : "page de garde = marbre, page produit =
- *     fond beige". Laisser vide si aucune photo marbre n'existe encore pour ce
- *     produit (fallback automatique sur `cardImage`).
+ *     home (bande LA NOTTE) quand `homeImage` n'est pas défini.
+ *   • `homeImage` (optionnel) = vignette spécifique à la home, quand elle doit
+ *     différer de `cardImage`. Non utilisé pour l'instant sur LA NOTTE : Bronté a
+ *     tranché le 13/09/2026 de garder les mêmes photos fond beige que la grille
+ *     /gamme sur la home aussi (cohérence sur les 6 produits plutôt que du marbre
+ *     partiel sur seulement 3 d'entre eux). D'anciennes photos marbre restent dans
+ *     public/hero/*-marbre.jpg si besoin de les réutiliser un jour.
  *   • `images[]`  = photos SHOPIFY (plusieurs vues) → utilisées sur les FICHES (PDP).
  *
  * PANIER : `shopifyVariantId` = variante postée sur /cart/add. Vérifié 07/07/2026.
@@ -678,7 +678,6 @@ export const products: Record<string, Product> = {
     accentColor: ACCENTS.vert,
     accentName: 'Vert',
     cardImage: '/hero/hero-mousse-nettoyante.jpg',
-    homeImage: '/hero/hero-mousse-nettoyante-marbre.jpg',
     images: [
       '/pdp/mousse-nettoyante-1.jpg',
       '/pdp/mousse-nettoyante-2.jpg',
@@ -724,7 +723,7 @@ export const products: Record<string, Product> = {
     accentName: 'Ocre',
     accentDarkText: true,
     cardImage: '/hero/hero-huile-lait-demaquillante.jpg',
-    // homeImage : pas encore de photo marbre pour ce produit, fallback sur cardImage (beige) en attendant.
+    // homeImage : non utilise, photo fond beige gardee sur la home aussi (decision Bronte du 13/09/2026, cf. entete du fichier).
     images: [
       '/pdp/huile-lait-demaquillante-1.jpg',
       '/pdp/huile-lait-demaquillante-2.jpg',
@@ -770,7 +769,6 @@ export const products: Record<string, Product> = {
     accentColor: ACCENTS.bleu,
     accentName: 'Bleu',
     cardImage: '/hero/hero-tonique.jpg',
-    homeImage: '/hero/hero-tonique-marbre.jpg',
     images: [
       '/pdp/tonique-1.jpg',
       '/pdp/tonique-2.jpg',
@@ -820,11 +818,11 @@ export const products: Record<string, Product> = {
     accentColor: ACCENTS.rose,
     accentName: 'Rose',
     // cardImage : la seule photo "flacon seul" recue pour ce produit est en fait la
-    // photo marbre (identique a homeImage) ; en attendant une vraie photo fond beige
-    // flacon seul, on utilise la photo boite + flacon comme vignette (jamais de marbre
-    // sur la grille /gamme ni la fiche produit, cf. consigne de Bronte du 10/09).
+    // photo marbre ; en attendant une vraie photo fond beige flacon seul, on utilise
+    // la photo boite + flacon comme vignette. homeImage retiree le 13/09/2026 (Bronte
+    // a choisi les photos fond beige, coherentes avec les 5 autres produits, plutot
+    // que le marbre pour ce produit seul).
     cardImage: '/hero/hero-concentre-nuit.jpg',
-    homeImage: '/hero/hero-concentre-nuit-marbre.jpg',
     images: [
       '/pdp/concentre-nuit-1.jpg',
       '/pdp/concentre-nuit-2.jpg',
@@ -884,7 +882,7 @@ export const products: Record<string, Product> = {
     accentName: 'Jaune',
     accentDarkText: true,
     cardImage: '/hero/hero-contour-nuit.jpg',
-    // homeImage : pas encore de photo marbre pour ce produit, fallback sur cardImage (beige) en attendant.
+    // homeImage : non utilise, photo fond beige gardee sur la home aussi (decision Bronte du 13/09/2026, cf. entete du fichier).
     images: [
       '/pdp/contour-nuit-1.jpg',
       '/pdp/contour-nuit-2.jpg',
@@ -958,8 +956,7 @@ export const products: Record<string, Product> = {
     accentName: 'Chartreuse',
     accentDarkText: true,
     cardImage: '/hero/hero-creme-nuit.jpg',
-    // homeImage : seule photo marbre reçue = boîte + dos (INCI), pas une vignette flacon exploitable telle quelle.
-    // Fallback sur cardImage (beige) en attendant une photo marbre flacon seul.
+    // homeImage : non utilise, photo fond beige gardee sur la home aussi (decision Bronte du 13/09/2026, cf. entete du fichier).
     images: [
       '/pdp/creme-nuit-1.jpg',
       '/pdp/creme-nuit-2.jpg',
