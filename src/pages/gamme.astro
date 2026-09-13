@@ -113,8 +113,8 @@ const storeOpen = isStoreOpen();
         <span class="flex-1 border-t border-line-subtle"></span>
       </div>
       <div
-        class="grid w-fit max-w-full gap-px bg-line-faint border border-line-faint"
-        style={`grid-template-columns: repeat(${notteCols}, minmax(200px, 284px));`}
+        class="notte-grid grid w-full md:w-fit max-w-full gap-px bg-line-faint border border-line-faint"
+        style={`--notte-cols: ${notteCols};`}
       >
         {
           notteProducts.map((p) => (
@@ -181,3 +181,17 @@ const storeOpen = isStoreOpen();
 
   <Footer />
 </BaseLayout>
+
+<style>
+  /* LA NOTTE : 2 colonnes fluides sur mobile pour tenir sur l'ecran,
+     puis le nombre de colonnes calcule (notteCols) a partir de md. */
+  .notte-grid {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+  @media (min-width: 768px) {
+    .notte-grid {
+      grid-template-columns: repeat(var(--notte-cols), minmax(200px, 284px));
+    }
+  }
+</style>
+
