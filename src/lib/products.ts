@@ -62,6 +62,11 @@ export interface Product {
   shopifyHandle: string;
   shopifyVariantId: string;
   available: boolean;
+  /** Pre-lancement : produit visible mais pas encore achetable (page produit
+   *  affiche un message "bientot disponible" avec liste d'attente, distinct de
+   *  "epuise"). Utilise pour LA NOTTE avant le 16/09/2026, a retirer (ou repasser
+   *  a false) le jour du lancement en meme temps que available: true. */
+  comingSoon?: boolean;
   status: string;
   actives: string[];
   inci?: string[];
@@ -680,8 +685,9 @@ export const products: Record<string, Product> = {
     ],
     shopifyHandle: 'cleansing-foam',
     shopifyVariantId: '58749014147404',
-    available: true,
-    status: 'DISPONIBLE',
+    available: false,
+    comingSoon: true,
+    status: 'DISPONIBLE LE 16.09',
     actives: [
       'Cocamidopropyl bétaïne : nettoie en douceur',
       'Eau de rose : hydrate, rafraîchit',
@@ -725,8 +731,9 @@ export const products: Record<string, Product> = {
     ],
     shopifyHandle: 'sensitive-skin-oil-to-milk-cleanser',
     shopifyVariantId: '58749025059148',
-    available: true,
-    status: 'DISPONIBLE',
+    available: false,
+    comingSoon: true,
+    status: 'DISPONIBLE LE 16.09',
     actives: [
       'Huile de tournesol bio : nourrit sans film gras',
       'Calendula : nourrit',
@@ -770,8 +777,9 @@ export const products: Record<string, Product> = {
     ],
     shopifyHandle: 'hydrating-toner',
     shopifyVariantId: '58749019193676',
-    available: true,
-    status: 'DISPONIBLE',
+    available: false,
+    comingSoon: true,
+    status: 'DISPONIBLE LE 16.09',
     actives: [
       'Eau de rose : hydrate',
       'Acide hyaluronique (sodium hyaluronate) : repulpe',
@@ -823,8 +831,9 @@ export const products: Record<string, Product> = {
     ],
     shopifyHandle: 'double-hydration-boost-gel-ha',
     shopifyVariantId: '58749026828620',
-    available: true,
-    status: 'DISPONIBLE',
+    available: false,
+    comingSoon: true,
+    status: 'DISPONIBLE LE 16.09',
     actives: [
       "Acide hyaluronique à deux poids moléculaires : hydratation en profondeur",
       "Jus d'aloe : hydrate",
@@ -883,8 +892,9 @@ export const products: Record<string, Product> = {
     ],
     shopifyHandle: 'smoothing-eye-cream',
     shopifyVariantId: '58748990619980',
-    available: true,
-    status: 'DISPONIBLE',
+    available: false,
+    comingSoon: true,
+    status: 'DISPONIBLE LE 16.09',
     actives: [
       'Dipalmitoyl hydroxyproline : protège le collagène',
       'Céramides : renforce la barrière',
@@ -957,8 +967,9 @@ export const products: Record<string, Product> = {
     ],
     shopifyHandle: 'ceramide-barrier-night-cream',
     shopifyVariantId: '58749029581132',
-    available: true,
-    status: 'DISPONIBLE',
+    available: false,
+    comingSoon: true,
+    status: 'DISPONIBLE LE 16.09',
     actives: [
       'Céramides : renforce la barrière',
       'Beurre de cacao et de karité : nourrit en profondeur',

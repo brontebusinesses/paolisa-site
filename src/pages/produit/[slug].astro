@@ -94,7 +94,43 @@ const related = gammeList().filter((p) => p.slug !== product.slug).slice(0, 3);
             </ul>
 
             {
-              storeOpen && product.available ? (
+              product.comingSoon ? (
+                <div id="restock-block" class="border border-line-subtle p-6 md:p-8 mb-6">
+                  <p class="mono-label mb-3">— BIENTÔT DISPONIBLE —</p>
+                  <p class="body-l text-ink-secondary mb-6">
+                    Ce produit rejoint la gamme LA NOTTE le 16 septembre. Laissez votre email pour être prévenue dès sa sortie.
+                  </p>
+
+                  <div data-restock-ok class="hidden border-t border-line-subtle pt-4 mb-6" role="status">
+                    <p class="mono-label text-ink-primary mb-1">— BIEN REÇU —</p>
+                    <p class="body-m text-ink-secondary">Vous serez prévenue par email dès la sortie de ce produit.</p>
+                  </div>
+                  <div data-restock-erreur class="hidden border-t border-line-subtle pt-4 mb-6" role="alert">
+                    <p class="mono-label text-ink-primary mb-1">— ERREUR —</p>
+                    <p class="body-m text-ink-secondary">Vérifiez votre adresse email et réessayez.</p>
+                  </div>
+
+                  <form method="post" action="/api/newsletter" class="space-y-4" data-restock-form>
+                    <input type="hidden" name="source" value="waitlist" />
+                    <input type="hidden" name="return" value={product.href} />
+                    <div>
+                      <label class="sr-only" for="restock-email-nuit">Votre email</label>
+                      <Input
+                        type="email"
+                        name="email"
+                        id="restock-email-nuit"
+                        placeholder="VOTRE EMAIL"
+                        required
+                        ariaLabel="Votre adresse email"
+                        autocomplete="email"
+                      />
+                    </div>
+                    <Button variant="primary" type="submit" fullWidth>
+                      ME PRÉVENIR À LA SORTIE →
+                    </Button>
+                  </form>
+                </div>
+              ) : storeOpen && product.available ? (
                 <>
                   <form
                     class="mb-6"

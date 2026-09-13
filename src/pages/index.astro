@@ -1,7 +1,7 @@
 ---
 /**
  * Home — hero éditorial (août 2026).
- * NoticeBar → Header → HeroAccueil → GammeOnglet → OrigineTeaser → TrioBar →
+ * NoticeBar → Header → HeroAccueil → GammeOnglet → NotteTeaser → OrigineTeaser → TrioBar →
  * Manifesto → CompositionList → JournalTeaser → Footer.
  *
  * La grille de produits ne s'affiche plus en haut de page : le hero pose
@@ -17,6 +17,7 @@ import NoticeBar from '../components/NoticeBar.astro';
 import Header from '../components/Header.astro';
 import HeroAccueil from '../components/HeroAccueil.astro';
 import GammeOnglet from '../components/GammeOnglet.astro';
+import NotteTeaser from '../components/NotteTeaser.astro';
 import OrigineTeaser from '../components/OrigineTeaser.astro';
 import TrioBar from '../components/TrioBar.astro';
 import Manifesto from '../components/Manifesto.astro';
@@ -68,6 +69,8 @@ const ingredientPrinciples = [
     <HeroAccueil cta={{ label: 'FAIRE LE DIAGNOSTIC →', href: '/diagnostic' }} />
 
     <GammeOnglet />
+
+    <NotteTeaser />
 
     <OrigineTeaser />
 
