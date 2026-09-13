@@ -17,7 +17,8 @@ const essentiels = essentials();
 const solaireProducts = solaires();
 const solaireCols = Math.min(solaireProducts.length, 4) || 1;
 const notteProducts = notte();
-const notteCols = Math.min(notteProducts.length, 4) || 1;
+// 6 produits : 3 colonnes pour deux rangees completes (4 laissait 2 cases vides sur la 2e rangee).
+const notteCols = notteProducts.length % 3 === 0 ? 3 : Math.min(notteProducts.length, 4) || 1;
 const craquageProducts = craquages();
 const craquageCols = Math.min(craquageProducts.length, 4) || 1;
 const storeOpen = isStoreOpen();
