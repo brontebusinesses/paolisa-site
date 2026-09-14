@@ -1,25 +1,35 @@
 ---
 /**
- * Diagnostic — « Trouvez votre rituel » (août 2026).
+ * Diagnostic : « Trouvez votre rituel » (septembre 2026).
  *
  * Trois questions, chacune portant un critère d'achat réel :
  *   1. Ce qu'on veut travailler  → décide le cœur de la routine
- *   2. La peau au quotidien      → tranche entre l'huile et la crème
+ *   2. La peau au quotidien      → tranche entre l'huile, la crème et le concentré
  *   3. La protection solaire     → ajoute (ou non) un solaire, et lequel
  *
- * La routine fait 2, 3 ou 4 produits selon les réponses — on ne force pas un
- * nombre fixe, et la grille du résultat s'ajuste (voir .result-grid).
+ * La routine fait 2 ou 3 produits selon les réponses, jamais plus : le cœur
+ * de routine reste à deux produits maximum, et le solaire, quand il s'ajoute,
+ * complète sans jamais dépasser trois. La grille du résultat s'ajuste au
+ * nombre exact (voir .result-grid).
  *
- * Les correspondances suivent les fiches produits :
+ * Les correspondances suivent la composition et l'effet sur la peau, jamais
+ * le moment de la journée : le diagnostic mélange sans distinction la gamme
+ * du matin et la gamme LA NOTTE.
  *   • Contour des yeux et Crème lissante partagent le Bidens Pilosa 2 %
  *     (alternative au rétinol) → c'est le duo « rides ».
- *   • Patchs anti-fatigue = antioxydants, le geste d'après nuit courte.
- *   • Patchs anti-âge = niacinamide + acide hyaluronique, les ridules.
+ *   • Contour des yeux et Patchs anti-âge ciblent tous deux les ridules,
+ *     par l'hydratation et le repulpage du contour.
+ *   • Patchs anti-fatigue (antioxydants) et Contour nuit (protection du
+ *     collagène, céramides) répondent aux cernes : l'un dans l'instant,
+ *     l'autre en soin de fond qui renforce la barrière.
+ *   • Concentré nuit (acide hyaluronique à deux poids moléculaires) est
+ *     l'option hydratation pour une peau qui va bien au quotidien.
  *
- * Aucune dépendance externe : les huit produits candidats sont rendus côté
+ * Aucune dépendance externe : les dix produits candidats sont rendus côté
  * serveur (donc l'ajout rapide de Cart.astro les voit au chargement), et le
  * script ne fait qu'afficher les retenus et les remettre dans l'ordre.
- * Source unique : products.ts — prix, liens et photos ne peuvent pas diverger.
+ * Source unique : products.ts, pour que prix, liens et photos ne puissent
+ * pas diverger.
  */
 import BaseLayout from '../layouts/BaseLayout.astro';
 import NoticeBar from '../components/NoticeBar.astro';
@@ -39,7 +49,7 @@ const steps: Step[] = [
     key: 'objectif',
     step: 1,
     title: 'Qu’aimeriez-vous travailler en priorité ?',
-    help: 'Une seule réponse — c’est elle qui décide du cœur de votre routine.',
+    help: 'Une seule réponse : c’est elle qui décide du cœur de votre routine.',
     options: [
       { value: 'cernes', label: 'Mes cernes', detail: 'Un regard fatigué, des poches au réveil' },
       { value: 'ridules', label: 'Les ridules du regard', detail: 'Ces petites lignes au coin de l’œil' },
@@ -62,7 +72,7 @@ const steps: Step[] = [
     key: 'solaire',
     step: 3,
     title: 'Et la protection solaire ?',
-    help: 'Dernier critère : il ajoute — ou non — un solaire à votre routine, et décide lequel.',
+    help: 'Dernier critère : il ajoute, ou non, un solaire à votre routine, et décide lequel.',
     options: [
       { value: 'deja', label: 'J’en ai déjà une', detail: 'Je suis équipée de ce côté-là' },
       { value: 'dehors', label: 'Non, et je suis souvent dehors', detail: 'Sport, terrasse, randonnée, plein soleil' },
@@ -113,6 +123,16 @@ const candidates: { slug: string; reason: string }[] = [
     reason:
       'Niacinamide et acide hyaluronique en hydrogel : quinze minutes pour hydrater et lisser l’aspect des ridules du contour.',
   },
+  {
+    slug: 'contour-nuit',
+    reason:
+      'Dipalmitoyl hydroxyproline et céramides : protège le collagène déjà présent et renforce la barrière du contour, avec du beurre de karité pour nourrir en profondeur.',
+  },
+  {
+    slug: 'concentre-nuit',
+    reason:
+      'Acide hyaluronique à deux poids moléculaires, jus d’aloe et thé blanc antioxydant : un gel qui hydrate en profondeur sans laisser de film.',
+  },
 ];
 
 const cards = candidates
@@ -135,8 +155,8 @@ const cards = candidates
         <h1 class="display-l mb-6">Trouvez votre rituel.</h1>
         <p class="body-l text-ink-secondary max-w-prose">
           Trois questions : ce que vous voulez travailler, votre peau, votre
-          exposition. On en déduit vos produits — deux, trois ou quatre, selon
-          vos réponses. Jamais plus qu’il n’en faut.
+          exposition. On en déduit vos produits, deux ou trois selon vos
+          réponses. Jamais plus qu’il n’en faut.
         </p>
       </header>
 
@@ -264,7 +284,7 @@ const cards = candidates
 </BaseLayout>
 
 <style>
-  /* La grille du résultat suit le nombre de produits retenus (2, 3 ou 4) :
+  /* La grille du résultat suit le nombre de produits retenus (2 ou 3) :
      sans ça, une routine de 2 produits laisserait une case vide couleur filet. */
   .result-grid {
     display: grid;
@@ -334,25 +354,30 @@ const cards = candidates
       backBtn?.classList.toggle('hidden', current === 0);
     };
 
-    /** Le soin hydratant : crème pour les peaux qui brillent, huile sinon. */
-    const soin = () => (answers.peau === 'mixte' ? 'creme' : 'no-01');
+    /** Le soin hydratant : crème pour les peaux qui brillent, concentré
+     *  hydratant pour une peau qui va bien, huile pour les peaux qui tiraillent. */
+    const soin = () =>
+      answers.peau === 'mixte' ? 'creme' : answers.peau === 'normale' ? 'concentre-nuit' : 'no-01';
 
     /** Le solaire ajouté par la question 3 — ou rien. */
     const solaire = () =>
       answers.solaire === 'dehors' ? 'stick-solaire' : answers.solaire === 'ville' ? 'solaire-teinte' : null;
 
-    /** Chaque objectif déclenche son propre cœur de routine. */
+    /** Chaque objectif déclenche son propre cœur de routine, choisi sur la
+     *  composition et l’effet des produits, jamais sur le moment de la
+     *  journée. Deux produits au cœur au maximum, le solaire ajoute le
+     *  troisième : jamais plus de trois au total. */
     const compute = () => {
       let core: string[];
       switch (answers.objectif) {
         case 'cernes':
-          core = ['contour-yeux', 'patchs-yeux-fatigue'];
+          core = ['patchs-yeux-fatigue', 'contour-nuit'];
           break;
         case 'ridules':
           core = ['contour-yeux', 'patchs-yeux'];
           break;
         case 'rides':
-          core = ['serum', 'contour-yeux', 'creme'];
+          core = ['contour-yeux', 'creme'];
           break;
         default:
           core = ['serum', soin()];
@@ -373,14 +398,16 @@ const cards = candidates
 
       const coeur =
         answers.objectif === 'cernes'
-          ? 'le contour des yeux tous les matins, les patchs pour les lendemains difficiles'
+          ? 'les patchs apaisent et ravivent l’éclat dans l’instant, le contour nuit protège le collagène déjà présent et renforce la barrière au quotidien'
           : answers.objectif === 'ridules'
-            ? 'le contour des yeux au quotidien, les patchs deux fois par semaine'
+            ? 'le contour des yeux et les patchs partagent le même terrain : hydrater et lisser l’aspect des ridules'
             : answers.objectif === 'rides'
-              ? 'le sérum prépare, le contour traite la zone qui marque en premier, la crème lisse le reste — les deux derniers avec le même actif'
+              ? 'le contour des yeux et la crème partagent le même actif, l’alternative douce au rétinol, chacun sur sa zone'
               : chosen.includes('creme')
-                ? 'le sérum et la crème lissante, une texture légère pour une peau qui brille'
-                : 'le sérum et l’huile visage, nourrissante sans être grasse';
+                ? 'le sérum prépare la peau, la crème lissante hydrate sans laisser de film, pour une peau qui brille'
+                : chosen.includes('concentre-nuit')
+                  ? 'le sérum prépare la peau, le concentré en acide hyaluronique hydrate en profondeur sans effet gras'
+                  : 'le sérum et l’huile visage, nourrissante sans être grasse';
 
       const fin =
         answers.solaire === 'dehors'
@@ -429,7 +456,7 @@ const cards = candidates
       });
 
       if (resultTitle) {
-        resultTitle.textContent = chosen.length === 2 ? 'Vos deux produits.' : chosen.length === 3 ? 'Vos trois produits.' : 'Vos quatre produits.';
+        resultTitle.textContent = chosen.length === 2 ? 'Vos deux produits.' : 'Vos trois produits.';
       }
       if (summary) summary.textContent = summarize(chosen);
 
