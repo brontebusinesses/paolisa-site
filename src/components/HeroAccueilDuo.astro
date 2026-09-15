@@ -1,0 +1,157 @@
+---
+/**
+ * <HeroAccueilDuo /> — hero d'accueil « duo jour/nuit » (15/09/2026).
+ *
+ * Remplace le hero photo unique (<HeroAccueil />, conservé mais plus utilisé
+ * sur la home) : présente d'emblée les deux rituels, LE MATIN et LA NOTTE,
+ * côte à côte avec leurs vrais produits en photo détourée. Chaque moitié est
+ * un seul lien cliquable vers la gamme correspondante — inutile de viser un
+ * petit bouton.
+ *
+ * Design : aucune nouvelle couleur. Le fond (bg-secondary / bg-tertiary),
+ * le contour encre 1px et les coins en arche reprennent exactement le
+ * traitement déjà en place sur <HeroGamme /> et <ProductCard />. Le badge
+ * "NOUVEAU" reprend l'accent corail du catalogue (ACCENTS.corail dans
+ * lib/products.ts), déjà utilisé comme couleur de marque, pas une couleur
+ * inventée pour ce composant.
+ *
+ * Tailles relatives des flacons calées à la main par Bronté (retour vocal,
+ * 09/2026) : le tonique et la mousse sont les plus grands (~1 / 0.98), le
+ * contour nuit le plus petit (~0.51), la crème lissante domine le jour
+ * (~0.88), sérum et stick solaire similaires (~0.59 / 0.58) — une seule
+ * échelle commune aux deux côtés pour rester proportionnel matin/soir.
+ *
+ * Le CTA diagnostic qui vivait ici (rejeté par Bronté, « on ne le voit
+ * pas ») a été déplacé plus bas sur la home, juste sous « Découvrir toute
+ * la gamme » : voir <DiagnosticTeaser /> dans index.astro.
+ */
+interface Props {
+  notteStatus?: string;
+}
+const { notteStatus = 'DISPONIBLE LE 16.09' } = Astro.props;
+---
+
+<section class="hero-duo bg-bg-primary" aria-label="Les deux rituels, matin et soir">
+  <div class="container-paolisa pt-8 md:pt-14 pb-12 md:pb-16">
+    <div class="grid md:grid-cols-2 md:divide-x md:divide-line-subtle">
+      {/* ===================== JOUR ===================== */}
+      <a
+        href="/gamme"
+        class="hero-duo-panel group flex flex-col items-center text-center pb-10 md:pb-0 md:pr-12"
+        aria-label="Découvrir le rituel du matin"
+      >
+        <p class="mono-label text-ink-tertiary mb-6">LA GAMME DU MATIN</p>
+
+        <div class="hero-duo-frame hero-duo-frame--jour w-full bg-bg-secondary">
+          <div class="hero-duo-lineup">
+            <img src="/hero/duo/serum.png" alt="" class="hero-duo-img hero-duo-img--serum" loading="eager" width="332" height="900" />
+            <img src="/hero/duo/creme-lissante.png" alt="" class="hero-duo-img hero-duo-img--creme" loading="eager" width="247" height="900" />
+            <img src="/hero/duo/stick-solaire.png" alt="" class="hero-duo-img hero-duo-img--stick" loading="eager" width="267" height="900" />
+          </div>
+        </div>
+
+        <p class="display-s mt-8 max-w-[26ch]">Niacinamide, alternative au rétinol, SPF.</p>
+        <p class="mono-label text-ink-tertiary mt-5 group-hover:opacity-70 transition-opacity duration-150 ease-in-out">
+          VOIR LES 6 RÉFÉRENCES &nbsp;→
+        </p>
+      </a>
+
+      {/* ===================== NUIT (LA NOTTE) ===================== */}
+      <a
+        href="/gamme#la-notte"
+        class="hero-duo-panel group flex flex-col items-center text-center pt-12 pb-2 md:pt-0 md:pl-12 border-t md:border-t-0 border-line-subtle"
+        aria-label="Découvrir LA NOTTE, le rituel du soir"
+      >
+        <p class="mono-label text-ink-tertiary mb-6 flex items-center gap-3">
+          <span class="hero-duo-badge">NOUVEAU</span>
+          LA NOTTE — LE RITUEL DU SOIR
+        </p>
+
+        <div class="hero-duo-frame hero-duo-frame--nuit w-full bg-bg-tertiary">
+          <div class="hero-duo-lineup">
+            <img src="/hero/duo/mousse.png" alt="" class="hero-duo-img hero-duo-img--mousse" loading="eager" width="279" height="900" />
+            <img src="/hero/duo/contour-nuit.png" alt="" class="hero-duo-img hero-duo-img--contour" loading="eager" width="276" height="653" />
+            <img src="/hero/duo/tonique.png" alt="" class="hero-duo-img hero-duo-img--tonique" loading="eager" width="261" height="900" />
+          </div>
+        </div>
+
+        <p class="display-s mt-8 max-w-[26ch]">Nourrissant, protection du collagène.</p>
+        <p class="mono-label text-ink-tertiary mt-3">{notteStatus}</p>
+        <p class="mono-label text-ink-tertiary mt-5 group-hover:opacity-70 transition-opacity duration-150 ease-in-out">
+          VOIR LES 6 RÉFÉRENCES &nbsp;→
+        </p>
+      </a>
+    </div>
+  </div>
+</section>
+
+<style>
+  .hero-duo-panel {
+    transition: opacity 150ms ease-in-out;
+  }
+  .hero-duo-panel:hover {
+    opacity: 0.85;
+  }
+
+  .hero-duo-frame {
+    position: relative;
+    border: 1px solid #4b3729;
+    border-radius: 160px 160px 4px 4px;
+    overflow: hidden;
+    display: flex;
+    align-items: flex-end;
+    justify-content: center;
+    height: 260px;
+  }
+
+  .hero-duo-lineup {
+    display: flex;
+    align-items: flex-end;
+    justify-content: center;
+    gap: 22px;
+    padding-bottom: 5%;
+  }
+
+  .hero-duo-img {
+    width: auto;
+    filter: drop-shadow(0 10px 10px rgba(75, 55, 41, 0.18));
+  }
+
+  /* Jour — une seule échelle commune avec la nuit (tonique = référence). */
+  .hero-duo-img--serum { height: 112px; }
+  .hero-duo-img--creme { height: 167px; }
+  .hero-duo-img--stick { height: 110px; }
+
+  /* Nuit */
+  .hero-duo-img--mousse { height: 186px; }
+  .hero-duo-img--contour { height: 96px; }
+  .hero-duo-img--tonique { height: 190px; }
+
+  .hero-duo-badge {
+    display: inline-flex;
+    align-items: center;
+    padding: 3px 10px;
+    border-radius: 999px;
+    background: #ff6b5e;
+    color: #fff;
+    font-family: '"JetBrains Mono"', ui-monospace, monospace;
+    font-size: 0.59375rem;
+    letter-spacing: 0.18em;
+  }
+
+  @media (min-width: 768px) {
+    .hero-duo-frame {
+      height: 340px;
+      border-radius: 220px 220px 6px 6px;
+    }
+    .hero-duo-lineup {
+      gap: 40px;
+    }
+    .hero-duo-img--serum { height: 177px; }
+    .hero-duo-img--creme { height: 264px; }
+    .hero-duo-img--stick { height: 174px; }
+    .hero-duo-img--mousse { height: 294px; }
+    .hero-duo-img--contour { height: 152px; }
+    .hero-duo-img--tonique { height: 300px; }
+  }
+</style>
