@@ -660,6 +660,67 @@ export const products: Record<string, Product> = {
     ],
   },
 
+  'patchs-yeux-cafeine': {
+    slug: 'patchs-yeux-cafeine',
+    href: '/produit/patchs-yeux-cafeine',
+    tier: 'craquage',
+    number: null,
+    category: 'YEUX',
+    ritual: 'PETIT CRAQUAGE',
+    title: 'Patchs énergisants',
+    subtitle: 'caféine & vitamine C · 7 paires',
+    format: '7 g / 0,25 oz',
+    priceCents: 2900,
+    priceLabel: '29 €',
+    shortDescription:
+      "Le geste énergisant du matin. Deux patchs hydrogel, quinze minutes, pour un regard réveillé et défatigué.",
+    longDescription:
+      "La caféine décongestionne et lisse l'aspect des poches, la vitamine C ravive l'éclat, tandis que le panthénol et la glycérine hydratent et apaisent la zone du regard. Texture fraîche et gélifiée, façon rituel K-beauty.",
+    accentColor: ACCENTS.bleu,
+    accentName: 'Bleu',
+    cardImage: '/hero/hero-patchs-yeux-cafeine.jpg',
+    images: [
+      '/pdp/patchs-yeux-cafeine-1.jpg',
+      '/pdp/patchs-yeux-cafeine-2.jpg',
+    ],
+    shopifyHandle: 'caffeine-vitamin-c-energizing-hydrogel-eye-patches',
+    shopifyVariantId: '58810979287372',
+    available: true,
+    status: 'DISPONIBLE',
+    actives: [
+      'Caféine — décongestionne, lisse les poches',
+      "Vitamine C — ravive l'éclat",
+      'Panthénol & glycérine — hydratent, apaisent',
+    ],
+    inci: [
+      'Aqua/Water',
+      'Glycerin',
+      'Chondrus Crispus',
+      'Panthenol',
+      'Glucomannan',
+      'Sucrose',
+      'Maltodextrin',
+      'Phenethyl Alcohol',
+      'Sodium Levulinate',
+      'p-Anisic Acid',
+      'Caffeine',
+      'Rosa Gallica Flower Extract',
+      'Sodium Hydroxide',
+      'Punica Granatum Flower Extract',
+      'Sodium Ascorbyl Phosphate',
+      'Citric Acid',
+      'Lactic Acid',
+      'Potassium Sorbate',
+      'Sodium Benzoate',
+    ],
+    certifications: [
+      'Vegan',
+      'Sans parfum',
+      'Testé sous contrôle dermatologique',
+      'Fabriqué en France',
+    ],
+  },
+
   /* ===================== LA NOTTE : LE RITUEL DU SOIR ===================== */
 
   'mousse-nettoyante': {
@@ -1017,7 +1078,7 @@ export const products: Record<string, Product> = {
   },
 };
 
-const ORDER = ['serum', 'contour-yeux', 'no-01', 'creme', 'solaire-teinte', 'stick-solaire', 'patchs-yeux', 'patchs-yeux-fatigue', 'mousse-nettoyante', 'huile-lait-demaquillante', 'tonique', 'concentre-nuit', 'contour-nuit', 'creme-nuit'];
+const ORDER = ['serum', 'contour-yeux', 'no-01', 'creme', 'solaire-teinte', 'stick-solaire', 'patchs-yeux', 'patchs-yeux-fatigue', 'patchs-yeux-cafeine', 'mousse-nettoyante', 'huile-lait-demaquillante', 'tonique', 'concentre-nuit', 'contour-nuit', 'creme-nuit'];
 
 export const getProduct = (slug: string): Product | undefined => products[slug];
 export const productList = (): Product[] => ORDER.map((s) => products[s]).filter(Boolean);
