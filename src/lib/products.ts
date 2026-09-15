@@ -13,9 +13,9 @@
  *     différer de `cardImage`. Non utilisé actuellement (repli sur `cardImage`
  *     partout). Décision définitive de Bronté le 13/09/2026 (soir) après un premier
  *     essai "beige partout" annulé le jour même : marbre sur la grille /gamme ET la
- *     home pour mousse nettoyante, tonique et concentré nuit (seuls produits avec une
- *     vraie photo marbre) ; fond beige pour les 3 autres (huile-lait démaquillante,
- *     contour nuit, crème de nuit) en attendant leur photo marbre.
+ *     home pour tous les produits LA NOTTE. Les 3 derniers (huile-lait démaquillante,
+ *     contour nuit, crème de nuit) ont reçu leur vraie photo marbre le 15/09/2026 ;
+ *     tous les produits de la gamme du soir sont donc désormais en marbre.
  *   • `images[]`  = photos SHOPIFY (plusieurs vues) → utilisées sur les FICHES (PDP),
  *     jamais de marbre ici (uniquement fond beige/studio).
  *
@@ -727,8 +727,8 @@ export const products: Record<string, Product> = {
     accentColor: ACCENTS.ocre,
     accentName: 'Ocre',
     accentDarkText: true,
-    // cardImage : fond beige en attendant une vraie photo marbre pour ce produit (cf. entete du fichier).
-    cardImage: '/hero/hero-huile-lait-demaquillante.jpg',
+    // cardImage : marbre (photo recue le 15/09/2026, cf. entete du fichier).
+    cardImage: '/hero/hero-huile-lait-demaquillante-marbre.jpg',
     images: [
       '/pdp/huile-lait-demaquillante-1.jpg',
       '/pdp/huile-lait-demaquillante-2.jpg',
@@ -885,8 +885,8 @@ export const products: Record<string, Product> = {
     accentColor: ACCENTS.jaune,
     accentName: 'Jaune',
     accentDarkText: true,
-    // cardImage : fond beige en attendant une vraie photo marbre pour ce produit (cf. entete du fichier).
-    cardImage: '/hero/hero-contour-nuit.jpg',
+    // cardImage : marbre (photo recue le 15/09/2026, cf. entete du fichier).
+    cardImage: '/hero/hero-contour-nuit-marbre.jpg',
     images: [
       '/pdp/contour-nuit-1.jpg',
       '/pdp/contour-nuit-2.jpg',
@@ -959,8 +959,8 @@ export const products: Record<string, Product> = {
     accentColor: ACCENTS.chartreuse,
     accentName: 'Chartreuse',
     accentDarkText: true,
-    // cardImage : fond beige en attendant une vraie photo marbre pour ce produit (cf. entete du fichier).
-    cardImage: '/hero/hero-creme-nuit.jpg',
+    // cardImage : marbre (photo recue le 15/09/2026, cf. entete du fichier).
+    cardImage: '/hero/hero-creme-nuit-marbre.jpg',
     images: [
       '/pdp/creme-nuit-1.jpg',
       '/pdp/creme-nuit-2.jpg',
