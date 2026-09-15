@@ -66,7 +66,7 @@ const BLOB_NIGHT =
 ---
 
 <section class="hero-duo bg-bg-primary" aria-label="Les deux rituels, matin et soir">
-  <div class="container-paolisa pt-4 md:pt-8 pb-10 md:pb-14">
+  <div class="container-paolisa pt-2 md:pt-8 pb-4 md:pb-14">
     <div class="hero-duo-cols">
       {/* ===================== JOUR ===================== */}
       <a
@@ -74,7 +74,7 @@ const BLOB_NIGHT =
         class="hero-duo-panel group"
         aria-label="Découvrir le rituel du matin"
       >
-        <p class="mono-label text-ink-tertiary mb-4 md:mb-6">LA GAMME DU MATIN</p>
+        <p class="mono-label text-ink-tertiary mb-1 md:mb-6">LA GAMME DU MATIN</p>
 
         <div class="hero-duo-blobbox hero-duo-blobbox--day">
           <svg class="hero-duo-blob" viewBox="0 0 246 200" preserveAspectRatio="none" aria-hidden="true">
@@ -88,11 +88,11 @@ const BLOB_NIGHT =
               <img src="/hero/duo/stick-solaire.png" alt="" class="hero-duo-img hero-duo-img--stick" loading="eager" width="267" height="900" />
             </div>
 
-            <p class="display-s mt-4 md:mt-6">Niacinamide, alternative au rétinol, SPF.</p>
+            <p class="display-s mt-3 md:mt-6">Niacinamide, alternative au rétinol, SPF.</p>
 
             <div class="hero-duo-cta">
               <span class="hero-duo-pill">LE RITUEL DU MATIN</span>
-              <p class="mono-label text-ink-tertiary mt-4 underline underline-offset-4 decoration-[0.5px] group-hover:opacity-70 transition-opacity duration-150 ease-in-out">
+              <p class="mono-label text-ink-tertiary mt-3 md:mt-4 underline underline-offset-4 decoration-[0.5px] group-hover:opacity-70 transition-opacity duration-150 ease-in-out">
                 Voir les 6 références
               </p>
             </div>
@@ -106,7 +106,7 @@ const BLOB_NIGHT =
         class="hero-duo-panel group"
         aria-label="Découvrir LA NOTTE, le rituel du soir"
       >
-        <p class="mono-label text-ink-tertiary mb-4 md:mb-6 flex items-center gap-3">
+        <p class="mono-label text-ink-tertiary mb-1 md:mb-6 flex items-center gap-3">
           <span class="hero-duo-badge">NOUVEAU</span>
           LA NOTTE — LE RITUEL DU SOIR
         </p>
@@ -123,12 +123,12 @@ const BLOB_NIGHT =
               <img src="/hero/duo/tonique.png" alt="" class="hero-duo-img hero-duo-img--tonique" loading="eager" width="261" height="900" />
             </div>
 
-            <p class="display-s mt-4 md:mt-6">Nourrissant, protection du collagène.</p>
+            <p class="display-s mt-3 md:mt-6">Nourrissant, protection du collagène.</p>
             <p class="mono-label text-ink-tertiary mt-2">{notteStatus}</p>
 
             <div class="hero-duo-cta">
               <span class="hero-duo-pill">LE RITUEL DU SOIR</span>
-              <p class="mono-label text-ink-tertiary mt-4 underline underline-offset-4 decoration-[0.5px] group-hover:opacity-70 transition-opacity duration-150 ease-in-out">
+              <p class="mono-label text-ink-tertiary mt-3 md:mt-4 underline underline-offset-4 decoration-[0.5px] group-hover:opacity-70 transition-opacity duration-150 ease-in-out">
                 Voir les 6 références
               </p>
             </div>
@@ -155,7 +155,7 @@ const BLOB_NIGHT =
   .hero-duo-cols {
     display: grid;
     grid-template-columns: 1fr;
-    row-gap: 40px;
+    row-gap: 8px;
   }
 
   .hero-duo-blobbox {
@@ -163,7 +163,7 @@ const BLOB_NIGHT =
     /* Hauteur pilotee par le ratio, pas fixee en dur : suffisamment
        genereuse pour ne jamais etre repoussee par le contenu (voir
        calcul en commentaire de composant). */
-    aspect-ratio: 1 / 1.3;
+    aspect-ratio: 1 / 1.05;
   }
 
   /* La bulle garde toujours ses proportions naturelles (viewBox 246x200,
@@ -173,14 +173,14 @@ const BLOB_NIGHT =
   .hero-duo-blob {
     position: absolute;
     top: 50%;
-    width: 160%;
+    width: 129%;
     aspect-ratio: 123 / 100;
     transform: translateY(-50%);
     z-index: 0;
     pointer-events: none;
   }
-  .hero-duo-blobbox--day .hero-duo-blob { left: -30%; }
-  .hero-duo-blobbox--night .hero-duo-blob { right: -30%; }
+  .hero-duo-blobbox--day .hero-duo-blob { left: -14.5%; }
+  .hero-duo-blobbox--night .hero-duo-blob { right: -14.5%; }
 
   .hero-duo-content {
     position: relative;
@@ -190,7 +190,7 @@ const BLOB_NIGHT =
     align-items: center;
     text-align: center;
     height: 100%;
-    padding: 27% 20px 20%;
+    padding: 22% 20px 16%;
   }
 
   .hero-duo-lineup {
@@ -205,15 +205,15 @@ const BLOB_NIGHT =
     filter: drop-shadow(0 8px 8px rgba(75, 55, 41, 0.16));
   }
 
-  .hero-duo-img--serum { height: 74px; }
-  .hero-duo-img--creme { height: 110px; }
-  .hero-duo-img--stick { height: 72px; }
-  .hero-duo-img--mousse { height: 122px; }
-  .hero-duo-img--contour { height: 62px; }
-  .hero-duo-img--tonique { height: 125px; }
+  .hero-duo-img--serum { height: 56px; }
+  .hero-duo-img--creme { height: 84px; }
+  .hero-duo-img--stick { height: 55px; }
+  .hero-duo-img--mousse { height: 94px; }
+  .hero-duo-img--contour { height: 47px; }
+  .hero-duo-img--tonique { height: 96px; }
 
   .hero-duo-cta {
-    margin-top: 14px;
+    margin-top: auto;
     display: flex;
     flex-direction: column;
     align-items: center;
@@ -265,7 +265,7 @@ const BLOB_NIGHT =
     .hero-duo-panel:first-child { position: relative; z-index: 0; }
 
     .hero-duo-content { padding: 25% 24px 18%; }
-    .hero-duo-cta { margin-top: 22px; }
+
     .hero-duo-lineup { gap: 28px; }
     .hero-duo-img--serum { height: 122px; }
     .hero-duo-img--creme { height: 184px; }
