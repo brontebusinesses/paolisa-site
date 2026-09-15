@@ -270,6 +270,16 @@ const related = gammeList().filter((p) => p.slug !== product.slug).slice(0, 3);
           } else if (status === 'erreur' && erreur) {
             erreur.classList.remove('hidden');
           }
+
+          var block = document.getElementById('restock-block');
+          block && block.scrollIntoView({ behavior: 'smooth', block: 'center' });
+
+          // Nettoie l'URL comme sur /huile/no-01 — sans ça, le Footer (qui lit
+          // aussi ?newsletter=) ignore cette page (voir handledByPage) mais le
+          // paramètre restait dans la barre d'adresse et refaisait apparaître
+          // le message à chaque rafraîchissement.
+          var cleanUrl = window.location.pathname + window.location.hash;
+          window.history.replaceState({}, document.title, cleanUrl);
         })();
       </script>
 

@@ -89,6 +89,7 @@ const essentiels = essentials();
       const path = window.location.pathname;
       const handledByPage =
         path.startsWith('/huile/') ||
+        path.startsWith('/produit/') ||
         path === '/contact';
 
       if (!handledByPage) {
