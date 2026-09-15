@@ -47,7 +47,7 @@ const BLOB_NIGHT =
 
         <div class="hero-duo-blobbox hero-duo-blobbox--day">
           <svg class="hero-duo-blob" viewBox="0 0 246 200" preserveAspectRatio="none" aria-hidden="true">
-            <path d={BLOB_DAY} fill="#F7E4D6" stroke="#4B3729" stroke-width="1" stroke-linejoin="round" />
+            <path d={BLOB_DAY} fill="#F7E4D6" stroke="#4B3729" stroke-width="0.6" stroke-linejoin="round" />
           </svg>
 
           <div class="hero-duo-content">
@@ -79,7 +79,7 @@ const BLOB_NIGHT =
 
         <div class="hero-duo-blobbox hero-duo-blobbox--night">
           <svg class="hero-duo-blob" viewBox="0 0 246 200" preserveAspectRatio="none" aria-hidden="true">
-            <path d={BLOB_NIGHT} fill="#E3DFF0" stroke="#4B3729" stroke-width="1" stroke-linejoin="round" />
+            <path d={BLOB_NIGHT} fill="#E3DFF0" stroke="#4B3729" stroke-width="0.6" stroke-linejoin="round" />
           </svg>
 
           <div class="hero-duo-content">
@@ -103,6 +103,10 @@ const BLOB_NIGHT =
 </section>
 
 <style>
+  .hero-duo {
+    overflow-x: hidden; /* les bulles debordent volontairement de leur colonne */
+  }
+
   .hero-duo-panel {
     display: block;
     transition: opacity 150ms ease-in-out;
@@ -114,22 +118,32 @@ const BLOB_NIGHT =
   .hero-duo-cols {
     display: grid;
     grid-template-columns: 1fr;
-    row-gap: 56px;
+    row-gap: 40px;
   }
 
   .hero-duo-blobbox {
     position: relative;
+    /* Hauteur pilotee par le ratio, pas fixee en dur : suffisamment
+       genereuse pour ne jamais etre repoussee par le contenu (voir
+       calcul en commentaire de composant). */
+    aspect-ratio: 1 / 1.3;
   }
 
+  /* La bulle garde toujours ses proportions naturelles (viewBox 246x200,
+     ratio ~1.23:1) : c'est ce qui evite qu'elle parte de travers / devienne
+     pointue quand la boite qui la contient n'a pas exactement le meme
+     ratio. Dimensionnee par la largeur, la hauteur suit toute seule. */
   .hero-duo-blob {
     position: absolute;
-    top: -18px;
-    left: 0;
-    width: 100%;
-    height: calc(100% + 36px);
+    top: 50%;
+    width: 160%;
+    aspect-ratio: 123 / 100;
+    transform: translateY(-50%);
     z-index: 0;
     pointer-events: none;
   }
+  .hero-duo-blobbox--day .hero-duo-blob { left: -30%; }
+  .hero-duo-blobbox--night .hero-duo-blob { right: -30%; }
 
   .hero-duo-content {
     position: relative;
@@ -138,38 +152,39 @@ const BLOB_NIGHT =
     flex-direction: column;
     align-items: center;
     text-align: center;
-    padding: 34px 24px 40px;
+    height: 100%;
+    padding: 36px 20px 40px;
   }
 
   .hero-duo-lineup {
     display: flex;
     align-items: flex-end;
     justify-content: center;
-    gap: 18px;
+    gap: 14px;
   }
 
   .hero-duo-img {
     width: auto;
-    filter: drop-shadow(0 10px 10px rgba(75, 55, 41, 0.18));
+    filter: drop-shadow(0 8px 8px rgba(75, 55, 41, 0.16));
   }
 
-  .hero-duo-img--serum { height: 110px; }
-  .hero-duo-img--creme { height: 164px; }
-  .hero-duo-img--stick { height: 108px; }
-  .hero-duo-img--mousse { height: 182px; }
-  .hero-duo-img--contour { height: 94px; }
-  .hero-duo-img--tonique { height: 186px; }
+  .hero-duo-img--serum { height: 92px; }
+  .hero-duo-img--creme { height: 137px; }
+  .hero-duo-img--stick { height: 90px; }
+  .hero-duo-img--mousse { height: 152px; }
+  .hero-duo-img--contour { height: 78px; }
+  .hero-duo-img--tonique { height: 156px; }
 
   .hero-duo-pill {
     display: inline-flex;
     align-items: center;
     justify-content: center;
-    margin-top: 22px;
-    padding: 13px 22px;
+    margin-top: 16px;
+    padding: 12px 20px;
     background: #4b3729;
     color: #fbf8f1;
     font-family: '"JetBrains Mono"', ui-monospace, monospace;
-    font-size: 0.625rem;
+    font-size: 0.59375rem;
     letter-spacing: 0.18em;
   }
 
@@ -185,41 +200,29 @@ const BLOB_NIGHT =
     letter-spacing: 0.18em;
   }
 
-  @media (max-width: 767px) {
-    .hero-duo-blobbox { min-height: 460px; }
-  }
-
   @media (min-width: 768px) {
-    .hero-duo-cols {
-      grid-template-columns: 1fr 1fr;
-      column-gap: 0;
-      row-gap: 0;
-      align-items: start;
+    .hero-duo-blobbox {
+      aspect-ratio: 1 / 1.18;
     }
 
-    .hero-duo-blobbox { min-height: 620px; }
-
-    /* Les deux bulles se chevauchent au centre, comme sur le mockup :
-       chacune déborde de ~14% vers l'autre moitié. Le calque décoratif
-       (pointer-events:none) ne perturbe jamais le clic sur l'autre lien. */
-    .hero-duo-blobbox--day .hero-duo-blob {
-      left: -4%;
-      width: 122%;
-    }
-    .hero-duo-blobbox--night .hero-duo-blob {
-      left: auto;
-      right: -4%;
-      width: 122%;
-    }
+    /* Chaque bulle deborde vers le centre pour chevaucher l'autre, comme
+       sur le mockup : la nuit (plus loin dans le HTML) se pose par-dessus
+       le jour dans la zone commune. Calque decoratif (pointer-events:none),
+       ne perturbe jamais le clic sur l'autre lien. */
+    .hero-duo-blob { width: 145%; }
+    .hero-duo-blobbox--day .hero-duo-blob { left: -22%; }
+    .hero-duo-blobbox--night .hero-duo-blob { right: -22%; }
     .hero-duo-panel:last-child { position: relative; z-index: 1; }
     .hero-duo-panel:first-child { position: relative; z-index: 0; }
 
-    .hero-duo-lineup { gap: 36px; }
-    .hero-duo-img--serum { height: 172px; }
-    .hero-duo-img--creme { height: 258px; }
-    .hero-duo-img--stick { height: 170px; }
-    .hero-duo-img--mousse { height: 286px; }
-    .hero-duo-img--contour { height: 148px; }
-    .hero-duo-img--tonique { height: 292px; }
+    .hero-duo-content { padding: 56px 24px 64px; }
+    .hero-duo-lineup { gap: 28px; }
+    .hero-duo-img--serum { height: 153px; }
+    .hero-duo-img--creme { height: 229px; }
+    .hero-duo-img--stick { height: 151px; }
+    .hero-duo-img--mousse { height: 255px; }
+    .hero-duo-img--contour { height: 132px; }
+    .hero-duo-img--tonique { height: 260px; }
+    .hero-duo-pill { margin-top: 24px; padding: 13px 22px; font-size: 0.625rem; }
   }
 </style>
