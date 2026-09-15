@@ -688,9 +688,9 @@ export const products: Record<string, Product> = {
     available: true,
     status: 'DISPONIBLE',
     actives: [
-      'Caféine — décongestionne, lisse les poches',
-      "Vitamine C — ravive l'éclat",
-      'Panthénol & glycérine — hydratent, apaisent',
+      'Caféine : décongestionne, lisse les poches',
+      "Vitamine C : ravive l'éclat",
+      'Panthénol & glycérine : hydratent, apaisent',
     ],
     inci: [
       'Aqua/Water',
