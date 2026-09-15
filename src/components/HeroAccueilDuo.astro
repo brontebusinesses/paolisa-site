@@ -38,6 +38,20 @@
  * available/comingSoon basculent en meme temps dans lib/products.ts
  * pour que les fiches produit proposent vraiment "AJOUTER AU PANIER"
  * au lieu de la liste d'attente.
+ *
+ * Ajustement du 15/09 (4e retour, "on les voit a moitie" sur le bouton
+ * et le lien) : le padding de .hero-duo-content a ete recalcule a partir
+ * de la vraie geometrie du contour SVG (extraction programmatique des
+ * points de BLOB_DAY/BLOB_NIGHT, mesure de la marge reellement dispo
+ * entre le bord de la boite et le contour a chaque abscisse utile), pas
+ * a l'oeil. Verdict : le contour est beaucoup plus proche du bord de la
+ * boite pres du centre horizontal qu'on ne le pensait, d'ou un padding
+ * top/bottom bien plus genereux (en % de LARGEUR, cf. calcul dans la
+ * regle .hero-duo-content), des produits encore reduits d'environ 10 %,
+ * et des marges de texte resserrees pour que tout tienne dans la boite.
+ * N'a pas pu etre verifie visuellement dans cet environnement (pas de
+ * navigateur qui atteint l'apercu local) : a verifier sur le prochain
+ * apercu Vercel.
  */
 interface Props {
   notteStatus?: string;
@@ -74,7 +88,7 @@ const BLOB_NIGHT =
               <img src="/hero/duo/stick-solaire.png" alt="" class="hero-duo-img hero-duo-img--stick" loading="eager" width="267" height="900" />
             </div>
 
-            <p class="display-s mt-6 md:mt-8">Niacinamide, alternative au rétinol, SPF.</p>
+            <p class="display-s mt-4 md:mt-6">Niacinamide, alternative au rétinol, SPF.</p>
 
             <div class="hero-duo-cta">
               <span class="hero-duo-pill">LE RITUEL DU MATIN</span>
@@ -109,7 +123,7 @@ const BLOB_NIGHT =
               <img src="/hero/duo/tonique.png" alt="" class="hero-duo-img hero-duo-img--tonique" loading="eager" width="261" height="900" />
             </div>
 
-            <p class="display-s mt-6 md:mt-8">Nourrissant, protection du collagène.</p>
+            <p class="display-s mt-4 md:mt-6">Nourrissant, protection du collagène.</p>
             <p class="mono-label text-ink-tertiary mt-2">{notteStatus}</p>
 
             <div class="hero-duo-cta">
@@ -176,7 +190,7 @@ const BLOB_NIGHT =
     align-items: center;
     text-align: center;
     height: 100%;
-    padding: 48px 20px 40px;
+    padding: 27% 20px 20%;
   }
 
   .hero-duo-lineup {
@@ -191,15 +205,15 @@ const BLOB_NIGHT =
     filter: drop-shadow(0 8px 8px rgba(75, 55, 41, 0.16));
   }
 
-  .hero-duo-img--serum { height: 82px; }
-  .hero-duo-img--creme { height: 122px; }
-  .hero-duo-img--stick { height: 80px; }
-  .hero-duo-img--mousse { height: 135px; }
-  .hero-duo-img--contour { height: 69px; }
-  .hero-duo-img--tonique { height: 139px; }
+  .hero-duo-img--serum { height: 74px; }
+  .hero-duo-img--creme { height: 110px; }
+  .hero-duo-img--stick { height: 72px; }
+  .hero-duo-img--mousse { height: 122px; }
+  .hero-duo-img--contour { height: 62px; }
+  .hero-duo-img--tonique { height: 125px; }
 
   .hero-duo-cta {
-    margin-top: auto;
+    margin-top: 14px;
     display: flex;
     flex-direction: column;
     align-items: center;
@@ -250,14 +264,15 @@ const BLOB_NIGHT =
     .hero-duo-panel:last-child { position: relative; z-index: 1; }
     .hero-duo-panel:first-child { position: relative; z-index: 0; }
 
-    .hero-duo-content { padding: 72px 24px 64px; }
+    .hero-duo-content { padding: 25% 24px 18%; }
+    .hero-duo-cta { margin-top: 22px; }
     .hero-duo-lineup { gap: 28px; }
-    .hero-duo-img--serum { height: 136px; }
-    .hero-duo-img--creme { height: 204px; }
-    .hero-duo-img--stick { height: 134px; }
-    .hero-duo-img--mousse { height: 227px; }
-    .hero-duo-img--contour { height: 117px; }
-    .hero-duo-img--tonique { height: 231px; }
+    .hero-duo-img--serum { height: 122px; }
+    .hero-duo-img--creme { height: 184px; }
+    .hero-duo-img--stick { height: 121px; }
+    .hero-duo-img--mousse { height: 204px; }
+    .hero-duo-img--contour { height: 105px; }
+    .hero-duo-img--tonique { height: 208px; }
     .hero-duo-pill { padding: 13px 22px; font-size: 0.625rem; }
   }
 </style>
