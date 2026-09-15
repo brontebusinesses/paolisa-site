@@ -21,6 +21,17 @@
  * <DiagnosticTeaser /> dans index.astro. Les pastilles "LE RITUEL DU
  * MATIN/SOIR" ici sont décoratives (span, pas un lien) : tout le panneau
  * est déjà cliquable, un <a> imbriqué serait invalide en HTML.
+ *
+ * Ajustements du 15/09 (3e retour de Bronté, message vocal) : contour
+ * plus fin (stroke-width 0.6 -> 0.35), produits reduits d'environ 10 %
+ * + padding-top augmente pour garder de la marge avec le contour
+ * irregulier de la bulle (ils depassaient legerement en haut), et le
+ * groupe bouton + lien ("Voir les 6 references") deplace dans un wrapper
+ * .hero-duo-cta avec margin-top:auto pour etre aligne sur la meme ligne
+ * entre jour et nuit, meme si la nuit a une ligne de statut en plus au-
+ * dessus. Le texte "DISPONIBLE LE 16.09" n'a PAS ete change : son message
+ * s'est coupe avant la fin, question posee dans le chat sur le wording
+ * exact et sur les fiches produits LA NOTTE dans lib/products.ts.
  */
 interface Props {
   notteStatus?: string;
@@ -47,7 +58,7 @@ const BLOB_NIGHT =
 
         <div class="hero-duo-blobbox hero-duo-blobbox--day">
           <svg class="hero-duo-blob" viewBox="0 0 246 200" preserveAspectRatio="none" aria-hidden="true">
-            <path d={BLOB_DAY} fill="#F7E4D6" stroke="#4B3729" stroke-width="0.6" stroke-linejoin="round" />
+            <path d={BLOB_DAY} fill="#F7E4D6" stroke="#4B3729" stroke-width="0.35" stroke-linejoin="round" />
           </svg>
 
           <div class="hero-duo-content">
@@ -58,10 +69,13 @@ const BLOB_NIGHT =
             </div>
 
             <p class="display-s mt-6 md:mt-8">Niacinamide, alternative au rétinol, SPF.</p>
-            <span class="hero-duo-pill">LE RITUEL DU MATIN</span>
-            <p class="mono-label text-ink-tertiary mt-4 underline underline-offset-4 decoration-[0.5px] group-hover:opacity-70 transition-opacity duration-150 ease-in-out">
-              Voir les 6 références
-            </p>
+
+            <div class="hero-duo-cta">
+              <span class="hero-duo-pill">LE RITUEL DU MATIN</span>
+              <p class="mono-label text-ink-tertiary mt-4 underline underline-offset-4 decoration-[0.5px] group-hover:opacity-70 transition-opacity duration-150 ease-in-out">
+                Voir les 6 références
+              </p>
+            </div>
           </div>
         </div>
       </a>
@@ -79,7 +93,7 @@ const BLOB_NIGHT =
 
         <div class="hero-duo-blobbox hero-duo-blobbox--night">
           <svg class="hero-duo-blob" viewBox="0 0 246 200" preserveAspectRatio="none" aria-hidden="true">
-            <path d={BLOB_NIGHT} fill="#E3DFF0" stroke="#4B3729" stroke-width="0.6" stroke-linejoin="round" />
+            <path d={BLOB_NIGHT} fill="#E3DFF0" stroke="#4B3729" stroke-width="0.35" stroke-linejoin="round" />
           </svg>
 
           <div class="hero-duo-content">
@@ -90,11 +104,14 @@ const BLOB_NIGHT =
             </div>
 
             <p class="display-s mt-6 md:mt-8">Nourrissant, protection du collagène.</p>
-            <p class="mono-label text-ink-tertiary mt-2 mb-4">{notteStatus}</p>
-            <span class="hero-duo-pill">LE RITUEL DU SOIR</span>
-            <p class="mono-label text-ink-tertiary mt-4 underline underline-offset-4 decoration-[0.5px] group-hover:opacity-70 transition-opacity duration-150 ease-in-out">
-              Voir les 6 références
-            </p>
+            <p class="mono-label text-ink-tertiary mt-2">{notteStatus}</p>
+
+            <div class="hero-duo-cta">
+              <span class="hero-duo-pill">LE RITUEL DU SOIR</span>
+              <p class="mono-label text-ink-tertiary mt-4 underline underline-offset-4 decoration-[0.5px] group-hover:opacity-70 transition-opacity duration-150 ease-in-out">
+                Voir les 6 références
+              </p>
+            </div>
           </div>
         </div>
       </a>
@@ -153,7 +170,7 @@ const BLOB_NIGHT =
     align-items: center;
     text-align: center;
     height: 100%;
-    padding: 36px 20px 40px;
+    padding: 48px 20px 40px;
   }
 
   .hero-duo-lineup {
@@ -168,18 +185,24 @@ const BLOB_NIGHT =
     filter: drop-shadow(0 8px 8px rgba(75, 55, 41, 0.16));
   }
 
-  .hero-duo-img--serum { height: 92px; }
-  .hero-duo-img--creme { height: 137px; }
-  .hero-duo-img--stick { height: 90px; }
-  .hero-duo-img--mousse { height: 152px; }
-  .hero-duo-img--contour { height: 78px; }
-  .hero-duo-img--tonique { height: 156px; }
+  .hero-duo-img--serum { height: 82px; }
+  .hero-duo-img--creme { height: 122px; }
+  .hero-duo-img--stick { height: 80px; }
+  .hero-duo-img--mousse { height: 135px; }
+  .hero-duo-img--contour { height: 69px; }
+  .hero-duo-img--tonique { height: 139px; }
+
+  .hero-duo-cta {
+    margin-top: auto;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+  }
 
   .hero-duo-pill {
     display: inline-flex;
     align-items: center;
     justify-content: center;
-    margin-top: 16px;
     padding: 12px 20px;
     background: #4b3729;
     color: #fbf8f1;
@@ -221,14 +244,14 @@ const BLOB_NIGHT =
     .hero-duo-panel:last-child { position: relative; z-index: 1; }
     .hero-duo-panel:first-child { position: relative; z-index: 0; }
 
-    .hero-duo-content { padding: 56px 24px 64px; }
+    .hero-duo-content { padding: 72px 24px 64px; }
     .hero-duo-lineup { gap: 28px; }
-    .hero-duo-img--serum { height: 153px; }
-    .hero-duo-img--creme { height: 229px; }
-    .hero-duo-img--stick { height: 151px; }
-    .hero-duo-img--mousse { height: 255px; }
-    .hero-duo-img--contour { height: 132px; }
-    .hero-duo-img--tonique { height: 260px; }
-    .hero-duo-pill { margin-top: 24px; padding: 13px 22px; font-size: 0.625rem; }
+    .hero-duo-img--serum { height: 136px; }
+    .hero-duo-img--creme { height: 204px; }
+    .hero-duo-img--stick { height: 134px; }
+    .hero-duo-img--mousse { height: 227px; }
+    .hero-duo-img--contour { height: 117px; }
+    .hero-duo-img--tonique { height: 231px; }
+    .hero-duo-pill { padding: 13px 22px; font-size: 0.625rem; }
   }
 </style>
