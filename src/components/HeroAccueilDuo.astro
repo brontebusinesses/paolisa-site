@@ -1,0 +1,301 @@
+---
+/**
+ * <HeroAccueilDuo /> — hero d'accueil « duo jour/nuit » (15/09/2026).
+ *
+ * Fidèle au mockup final validé par Bronté (v25) : deux grandes bulles
+ * organiques pêche/lavande qui se chevauchent au centre, quasiment pleine
+ * hauteur, avec les produits ET le texte (accroche, bouton, lien) posés
+ * DANS la bulle plutôt qu'en dessous. Chaque moitié reste un seul lien
+ * cliquable vers la gamme correspondante.
+ *
+ * Ajustement du 15/09 (2e retour de Bronté, "fais comme les previews") :
+ * la première version en code était bien plus petite et sage que le
+ * mockup (bulles réduites, séparées par une ligne, pas de bouton) — ce
+ * fichier corrige ça pour coller vraiment à l'image de référence.
+ *
+ * PEACH #F7E4D6 / LAVENDER #E3DFF0 : couleurs nouvelles, accord explicite
+ * de Bronté le 15/09/2026 (voir commit précédent). Contour encre #4B3729.
+ *
+ * Le CTA diagnostic (rejeté par Bronté en haut du hero, "on ne le voit
+ * pas") vit maintenant sous "Découvrir toute la gamme" : voir
+ * <DiagnosticTeaser /> dans index.astro. Les pastilles "LE RITUEL DU
+ * MATIN/SOIR" ici sont décoratives (span, pas un lien) : tout le panneau
+ * est déjà cliquable, un <a> imbriqué serait invalide en HTML.
+ *
+ * Ajustements du 15/09 (3e retour de Bronté, message vocal) : contour
+ * plus fin (stroke-width 0.6 -> 0.35), produits reduits d'environ 10 %
+ * + padding-top augmente pour garder de la marge avec le contour
+ * irregulier de la bulle (ils depassaient legerement en haut), et le
+ * groupe bouton + lien ("Voir les 6 references") deplace dans un wrapper
+ * .hero-duo-cta avec margin-top:auto pour etre aligne sur la meme ligne
+ * entre jour et nuit, meme si la nuit a une ligne de statut en plus au-
+ * dessus.
+ *
+ * Suite du 15/09 : Bronte a confirme que les 6 produits LA NOTTE sont
+ * deja actifs sur Shopify (verifie cote Shopify le 15/09 : les 6 fiches
+ * existent, statut ACTIVE, prix identiques a lib/products.ts). Le texte
+ * "DISPONIBLE LE 16.09" devient donc "DISPONIBLE DES MAINTENANT", et
+ * available/comingSoon basculent en meme temps dans lib/products.ts
+ * pour que les fiches produit proposent vraiment "AJOUTER AU PANIER"
+ * au lieu de la liste d'attente.
+ *
+ * Ajustement du 15/09 (4e retour, "on les voit a moitie" sur le bouton
+ * et le lien) : le padding de .hero-duo-content a ete recalcule a partir
+ * de la vraie geometrie du contour SVG (extraction programmatique des
+ * points de BLOB_DAY/BLOB_NIGHT, mesure de la marge reellement dispo
+ * entre le bord de la boite et le contour a chaque abscisse utile), pas
+ * a l'oeil. Verdict : le contour est beaucoup plus proche du bord de la
+ * boite pres du centre horizontal qu'on ne le pensait, d'ou un padding
+ * top/bottom bien plus genereux (en % de LARGEUR, cf. calcul dans la
+ * regle .hero-duo-content), des produits encore reduits d'environ 10 %,
+ * et des marges de texte resserrees pour que tout tienne dans la boite.
+ * N'a pas pu etre verifie visuellement dans cet environnement (pas de
+ * navigateur qui atteint l'apercu local) : a verifier sur le prochain
+ * apercu Vercel.
+ *
+ * Ajustements du 16/09 (6e retour) :
+ * - jour et nuit avaient des hauteurs de lineup differentes (le produit
+ *   le plus grand de chaque cote n'etait pas cale a la meme hauteur),
+ *   donc l'accroche texte n'etait pas alignee entre les deux colonnes
+ *   meme avec le CTA aligne en bas. Corrige en recalant les deux lineups
+ *   sur une meme hauteur maximale (proportions internes de chaque cote
+ *   conservees, juste mises a l'echelle), mobile et desktop.
+ * - le resserrement mobile du tour precedent (ratio 1.05) rendait la
+ *   bulle trop plate/plate ("c'est trop moche" selon Bronte) : revenu a
+ *   un compromis 1.2 (plus compact que l'original 1.3 mais qui garde une
+ *   vraie forme de bulle), avec le padding/la largeur de bulle recalcules
+ *   pour ce nouveau ratio (meme methode geometrique que le 4e retour).
+ * - sur mobile, LA NOTTE s'affiche desormais en premier (order CSS,
+ *   le HTML reste jour-avant-nuit pour ne pas toucher a la logique
+ *   z-index/overlap du desktop, qui repasse a jour-gauche/nuit-droite
+ *   des 768px).
+ * Verifie visuellement (capture Playwright locale, desktop + iPhone 13).
+ */
+interface Props {
+  notteStatus?: string;
+}
+const { notteStatus = 'DISPONIBLE DÈS MAINTENANT' } = Astro.props;
+
+const BLOB_DAY =
+  'M201.1 100.0 L202.0 103.5 L203.6 107.2 L205.4 111.1 L207.0 115.2 L208.1 119.3 L208.2 123.5 L207.4 127.5 L205.7 131.3 L203.6 134.9 L201.2 138.5 L198.9 142.0 L196.7 145.7 L194.7 149.6 L192.6 153.6 L190.3 157.6 L187.6 161.6 L184.6 165.4 L181.2 169.1 L177.6 172.7 L173.7 176.3 L169.8 180.1 L165.6 184.0 L161.1 187.9 L156.2 191.4 L150.8 194.4 L144.9 196.2 L138.7 196.7 L132.3 195.8 L126.0 193.6 L120.0 190.4 L114.5 186.8 L109.3 183.2 L104.5 180.1 L99.9 177.6 L95.2 175.8 L90.5 174.4 L85.7 173.3 L80.8 172.2 L75.9 171.0 L71.1 169.4 L66.4 167.6 L61.7 165.8 L57.0 163.8 L52.2 161.8 L47.3 159.6 L42.5 157.2 L38.1 154.4 L34.2 151.1 L31.3 147.2 L29.2 143.0 L28.0 138.4 L27.3 133.9 L26.7 129.4 L26.1 125.0 L25.2 120.8 L23.9 116.7 L22.7 112.6 L21.7 108.5 L21.4 104.2 L22.1 100.0 L23.9 95.9 L26.5 91.9 L29.6 88.3 L32.8 84.8 L35.6 81.5 L37.8 78.1 L39.3 74.6 L40.3 70.9 L41.1 67.0 L42.0 63.1 L43.3 59.2 L45.2 55.4 L47.6 51.9 L50.4 48.6 L53.4 45.4 L56.7 42.3 L60.0 39.2 L63.5 36.2 L67.2 33.3 L71.3 30.8 L75.7 28.8 L80.5 27.2 L85.4 26.1 L90.4 25.2 L95.2 24.1 L99.9 22.5 L104.6 20.2 L109.4 17.1 L114.5 13.3 L120.0 9.2 L126.0 5.4 L132.5 2.3 L139.3 0.3 L146.0 -0.3 L152.6 0.4 L158.7 2.2 L164.5 5.0 L169.8 8.3 L174.7 12.0 L179.2 15.9 L183.2 20.2 L186.7 24.7 L189.6 29.5 L191.8 34.6 L193.3 39.9 L194.3 45.2 L195.0 50.2 L195.8 54.8 L196.8 59.1 L198.2 63.0 L199.8 66.6 L201.5 70.2 L202.9 73.9 L203.8 77.7 L203.9 81.6 L203.4 85.5 L202.4 89.3 L201.5 93.0 L200.9 96.5 Z';
+
+const BLOB_NIGHT =
+  'M244.9 100.0 L242.3 105.3 L238.5 110.2 L234.1 114.8 L229.4 119.1 L224.8 123.0 L220.2 126.7 L215.8 130.1 L211.3 133.3 L206.9 136.3 L202.5 139.0 L198.2 141.6 L194.2 144.2 L190.7 146.9 L187.7 150.0 L185.0 153.3 L182.6 157.0 L180.0 160.8 L177.0 164.3 L173.4 167.4 L169.1 169.8 L164.4 171.4 L159.2 172.3 L154.0 172.7 L148.9 173.0 L144.0 173.5 L139.3 174.3 L134.6 175.6 L129.9 177.0 L125.0 178.4 L120.0 179.4 L114.9 179.7 L109.8 179.3 L104.9 178.2 L100.1 176.7 L95.5 174.9 L91.0 173.2 L86.5 171.6 L81.8 170.3 L77.1 169.0 L72.4 167.7 L67.7 166.0 L63.2 164.1 L59.0 161.7 L55.0 159.2 L51.1 156.5 L47.2 153.8 L43.1 151.1 L38.8 148.4 L34.6 145.5 L30.7 142.3 L27.4 138.7 L25.2 134.6 L24.1 130.2 L24.1 125.5 L24.9 120.9 L25.9 116.4 L26.7 112.1 L26.7 108.0 L25.7 104.1 L23.6 100.0 L20.9 95.7 L17.8 91.2 L14.9 86.3 L12.5 81.3 L11.0 76.1 L10.5 70.8 L10.7 65.6 L11.8 60.5 L13.5 55.5 L15.8 50.7 L18.8 46.1 L22.7 42.0 L27.5 38.6 L33.2 35.9 L39.6 34.1 L46.4 33.0 L53.4 32.6 L60.1 32.4 L66.3 32.2 L72.0 31.8 L77.1 31.0 L81.9 29.9 L86.6 28.7 L91.4 27.8 L96.3 27.4 L101.2 27.6 L106.2 28.5 L111.0 29.9 L115.6 31.4 L120.0 32.8 L124.2 33.7 L128.4 34.1 L132.7 34.0 L137.2 33.7 L141.8 33.3 L146.5 33.2 L151.1 33.5 L155.7 34.3 L160.1 35.4 L164.6 36.7 L169.1 38.0 L173.7 39.3 L178.6 40.7 L183.6 42.1 L188.5 43.8 L193.2 45.9 L197.6 48.5 L201.5 51.4 L205.2 54.6 L208.8 58.0 L212.7 61.3 L217.0 64.6 L222.0 67.9 L227.5 71.4 L233.1 75.1 L238.3 79.4 L242.5 84.1 L245.1 89.2 L245.9 94.6 Z';
+---
+
+<section class="hero-duo bg-bg-primary" aria-label="Les deux rituels, matin et soir">
+  <div class="container-paolisa pt-3 md:pt-8 pb-6 md:pb-14">
+    <div class="hero-duo-cols">
+      {/* ===================== JOUR ===================== */}
+      <a
+        href="/gamme"
+        class="hero-duo-panel group"
+        aria-label="Découvrir le rituel du matin"
+      >
+        <p class="mono-label text-ink-tertiary mb-2 md:mb-6">LA GAMME DU MATIN</p>
+
+        <div class="hero-duo-blobbox hero-duo-blobbox--day">
+          <svg class="hero-duo-blob" viewBox="0 0 246 200" preserveAspectRatio="none" aria-hidden="true">
+            <path d={BLOB_DAY} fill="#F7E4D6" stroke="#4B3729" stroke-width="0.35" stroke-linejoin="round" />
+          </svg>
+
+          <div class="hero-duo-content">
+            <div class="hero-duo-lineup">
+              <img src="/hero/duo/serum.png" alt="" class="hero-duo-img hero-duo-img--serum" loading="eager" width="332" height="900" />
+              <img src="/hero/duo/creme-lissante.png" alt="" class="hero-duo-img hero-duo-img--creme" loading="eager" width="247" height="900" />
+              <img src="/hero/duo/stick-solaire.png" alt="" class="hero-duo-img hero-duo-img--stick" loading="eager" width="267" height="900" />
+            </div>
+
+            <p class="display-s mt-3 md:mt-6">Niacinamide, alternative au rétinol, SPF.</p>
+
+            <div class="hero-duo-cta">
+              <span class="hero-duo-pill">LE RITUEL DU MATIN</span>
+              <p class="mono-label text-ink-tertiary mt-3 md:mt-4 underline underline-offset-4 decoration-[0.5px] group-hover:opacity-70 transition-opacity duration-150 ease-in-out">
+                Voir les 6 références
+              </p>
+            </div>
+          </div>
+        </div>
+      </a>
+
+      {/* ===================== NUIT (LA NOTTE) ===================== */}
+      <a
+        href="/gamme#la-notte"
+        class="hero-duo-panel group"
+        aria-label="Découvrir LA NOTTE, le rituel du soir"
+      >
+        <p class="mono-label text-ink-tertiary mb-2 md:mb-6 flex items-center gap-3">
+          LA NOTTE — LE RITUEL DU SOIR
+          <span class="hero-duo-badge">NOUVEAU</span>
+        </p>
+
+        <div class="hero-duo-blobbox hero-duo-blobbox--night">
+          <svg class="hero-duo-blob" viewBox="0 0 246 200" preserveAspectRatio="none" aria-hidden="true">
+            <path d={BLOB_NIGHT} fill="#E3DFF0" stroke="#4B3729" stroke-width="0.35" stroke-linejoin="round" />
+          </svg>
+
+          <div class="hero-duo-content">
+            <div class="hero-duo-lineup">
+              <img src="/hero/duo/mousse.png" alt="" class="hero-duo-img hero-duo-img--mousse" loading="eager" width="279" height="900" />
+              <img src="/hero/duo/contour-nuit.png" alt="" class="hero-duo-img hero-duo-img--contour" loading="eager" width="276" height="653" />
+              <img src="/hero/duo/tonique.png" alt="" class="hero-duo-img hero-duo-img--tonique" loading="eager" width="261" height="900" />
+            </div>
+
+            <p class="display-s mt-3 md:mt-6">Nourrissant, protection du collagène.</p>
+            <p class="mono-label text-ink-tertiary mt-2">{notteStatus}</p>
+
+            <div class="hero-duo-cta">
+              <span class="hero-duo-pill">LE RITUEL DU SOIR</span>
+              <p class="mono-label text-ink-tertiary mt-3 md:mt-4 underline underline-offset-4 decoration-[0.5px] group-hover:opacity-70 transition-opacity duration-150 ease-in-out">
+                Voir les 6 références
+              </p>
+            </div>
+          </div>
+        </div>
+      </a>
+    </div>
+  </div>
+</section>
+
+<style>
+  .hero-duo {
+    overflow-x: hidden; /* les bulles debordent volontairement de leur colonne */
+  }
+
+  .hero-duo-panel {
+    display: block;
+    transition: opacity 150ms ease-in-out;
+  }
+  .hero-duo-panel:hover {
+    opacity: 0.9;
+  }
+
+  .hero-duo-cols {
+    display: grid;
+    grid-template-columns: 1fr;
+    row-gap: 20px;
+  }
+
+  /* Sur mobile, LA NOTTE s'affiche en premier (demande de Bronte) : ordre
+     purement visuel, le HTML garde jour avant nuit. */
+  .hero-duo-panel:first-child { order: 2; }
+  .hero-duo-panel:last-child { order: 1; }
+
+  .hero-duo-blobbox {
+    position: relative;
+    /* Hauteur pilotee par le ratio, pas fixee en dur : suffisamment
+       genereuse pour ne jamais etre repoussee par le contenu (voir
+       calcul en commentaire de composant). */
+    aspect-ratio: 1 / 1.2;
+  }
+
+  /* La bulle garde toujours ses proportions naturelles (viewBox 246x200,
+     ratio ~1.23:1) : c'est ce qui evite qu'elle parte de travers / devienne
+     pointue quand la boite qui la contient n'a pas exactement le meme
+     ratio. Dimensionnee par la largeur, la hauteur suit toute seule. */
+  .hero-duo-blob {
+    position: absolute;
+    top: 50%;
+    width: 148%;
+    aspect-ratio: 123 / 100;
+    transform: translateY(-50%);
+    z-index: 0;
+    pointer-events: none;
+  }
+  .hero-duo-blobbox--day .hero-duo-blob { left: -24%; }
+  .hero-duo-blobbox--night .hero-duo-blob { right: -24%; }
+
+  .hero-duo-content {
+    position: relative;
+    z-index: 1;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    text-align: center;
+    height: 100%;
+    padding: 25% 20px 18%;
+  }
+
+  .hero-duo-lineup {
+    display: flex;
+    align-items: flex-end;
+    justify-content: center;
+    gap: 14px;
+  }
+
+  .hero-duo-img {
+    width: auto;
+    filter: drop-shadow(0 8px 8px rgba(75, 55, 41, 0.16));
+  }
+
+  .hero-duo-img--serum { height: 67px; }
+  .hero-duo-img--creme { height: 100px; }
+  .hero-duo-img--stick { height: 66px; }
+  .hero-duo-img--mousse { height: 97px; }
+  .hero-duo-img--contour { height: 50px; }
+  .hero-duo-img--tonique { height: 100px; }
+
+  .hero-duo-cta {
+    margin-top: auto;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+  }
+
+  .hero-duo-pill {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    padding: 12px 20px;
+    background: #4b3729;
+    color: #fbf8f1;
+    font-family: '"JetBrains Mono"', ui-monospace, monospace;
+    font-size: 0.59375rem;
+    letter-spacing: 0.18em;
+  }
+
+  .hero-duo-badge {
+    display: inline-flex;
+    align-items: center;
+    padding: 3px 10px;
+    border-radius: 999px;
+    background: #ff6b5e;
+    color: #fff;
+    font-family: '"JetBrains Mono"', ui-monospace, monospace;
+    font-size: 0.59375rem;
+    letter-spacing: 0.18em;
+  }
+
+  @media (min-width: 768px) {
+    .hero-duo-cols {
+      grid-template-columns: 1fr 1fr;
+      column-gap: 0;
+      row-gap: 0;
+    }
+
+    .hero-duo-blobbox {
+      aspect-ratio: 1 / 1.18;
+    }
+
+    /* Chaque bulle deborde vers le centre pour chevaucher l'autre, comme
+       sur le mockup : la nuit (plus loin dans le HTML) se pose par-dessus
+       le jour dans la zone commune. Calque decoratif (pointer-events:none),
+       ne perturbe jamais le clic sur l'autre lien. */
+    .hero-duo-blob { width: 145%; }
+    .hero-duo-blobbox--day .hero-duo-blob { left: -22%; }
+    .hero-duo-blobbox--night .hero-duo-blob { right: -22%; }
+    .hero-duo-panel:last-child { position: relative; z-index: 1; order: 2; }
+    .hero-duo-panel:first-child { position: relative; z-index: 0; order: 1; }
+
+    .hero-duo-content { padding: 25% 24px 18%; }
+
+    .hero-duo-lineup { gap: 28px; }
+    .hero-duo-img--serum { height: 130px; }
+    .hero-duo-img--creme { height: 196px; }
+    .hero-duo-img--stick { height: 129px; }
+    .hero-duo-img--mousse { height: 192px; }
+    .hero-duo-img--contour { height: 99px; }
+    .hero-duo-img--tonique { height: 196px; }
+    .hero-duo-pill { padding: 13px 22px; font-size: 0.625rem; }
+  }
+</style>
