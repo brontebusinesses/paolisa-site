@@ -150,8 +150,8 @@ const storeOpen = isStoreOpen();
               <a href="/petits-craquages" class="mono-label whitespace-nowrap hover:opacity-70">TOUT VOIR →</a>
             </div>
             <div
-              class="grid w-fit max-w-full gap-px bg-line-faint border border-line-faint"
-              style={`grid-template-columns: repeat(${craquageCols}, minmax(200px, 284px));`}
+              class="craquage-grid grid w-full md:w-fit max-w-full gap-px bg-line-faint border border-line-faint"
+              style={`--craquage-cols: ${craquageCols};`}
             >
               {
                 craquageProducts.map((p) => (
@@ -191,6 +191,16 @@ const storeOpen = isStoreOpen();
   @media (min-width: 768px) {
     .notte-grid {
       grid-template-columns: repeat(var(--notte-cols), minmax(200px, 284px));
+    }
+  }
+
+  /* PETITS CRAQUAGES : meme logique que LA NOTTE ci-dessus. */
+  .craquage-grid {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+  @media (min-width: 768px) {
+    .craquage-grid {
+      grid-template-columns: repeat(var(--craquage-cols), minmax(200px, 284px));
     }
   }
 </style>
