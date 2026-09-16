@@ -52,6 +52,24 @@
  * N'a pas pu etre verifie visuellement dans cet environnement (pas de
  * navigateur qui atteint l'apercu local) : a verifier sur le prochain
  * apercu Vercel.
+ *
+ * Ajustements du 16/09 (6e retour) :
+ * - jour et nuit avaient des hauteurs de lineup differentes (le produit
+ *   le plus grand de chaque cote n'etait pas cale a la meme hauteur),
+ *   donc l'accroche texte n'etait pas alignee entre les deux colonnes
+ *   meme avec le CTA aligne en bas. Corrige en recalant les deux lineups
+ *   sur une meme hauteur maximale (proportions internes de chaque cote
+ *   conservees, juste mises a l'echelle), mobile et desktop.
+ * - le resserrement mobile du tour precedent (ratio 1.05) rendait la
+ *   bulle trop plate/plate ("c'est trop moche" selon Bronte) : revenu a
+ *   un compromis 1.2 (plus compact que l'original 1.3 mais qui garde une
+ *   vraie forme de bulle), avec le padding/la largeur de bulle recalcules
+ *   pour ce nouveau ratio (meme methode geometrique que le 4e retour).
+ * - sur mobile, LA NOTTE s'affiche desormais en premier (order CSS,
+ *   le HTML reste jour-avant-nuit pour ne pas toucher a la logique
+ *   z-index/overlap du desktop, qui repasse a jour-gauche/nuit-droite
+ *   des 768px).
+ * Verifie visuellement (capture Playwright locale, desktop + iPhone 13).
  */
 interface Props {
   notteStatus?: string;
@@ -66,7 +84,7 @@ const BLOB_NIGHT =
 ---
 
 <section class="hero-duo bg-bg-primary" aria-label="Les deux rituels, matin et soir">
-  <div class="container-paolisa pt-2 md:pt-8 pb-4 md:pb-14">
+  <div class="container-paolisa pt-3 md:pt-8 pb-6 md:pb-14">
     <div class="hero-duo-cols">
       {/* ===================== JOUR ===================== */}
       <a
@@ -74,7 +92,7 @@ const BLOB_NIGHT =
         class="hero-duo-panel group"
         aria-label="Découvrir le rituel du matin"
       >
-        <p class="mono-label text-ink-tertiary mb-1 md:mb-6">LA GAMME DU MATIN</p>
+        <p class="mono-label text-ink-tertiary mb-2 md:mb-6">LA GAMME DU MATIN</p>
 
         <div class="hero-duo-blobbox hero-duo-blobbox--day">
           <svg class="hero-duo-blob" viewBox="0 0 246 200" preserveAspectRatio="none" aria-hidden="true">
@@ -106,7 +124,7 @@ const BLOB_NIGHT =
         class="hero-duo-panel group"
         aria-label="Découvrir LA NOTTE, le rituel du soir"
       >
-        <p class="mono-label text-ink-tertiary mb-1 md:mb-6 flex items-center gap-3">
+        <p class="mono-label text-ink-tertiary mb-2 md:mb-6 flex items-center gap-3">
           <span class="hero-duo-badge">NOUVEAU</span>
           LA NOTTE — LE RITUEL DU SOIR
         </p>
@@ -155,15 +173,20 @@ const BLOB_NIGHT =
   .hero-duo-cols {
     display: grid;
     grid-template-columns: 1fr;
-    row-gap: 8px;
+    row-gap: 20px;
   }
+
+  /* Sur mobile, LA NOTTE s'affiche en premier (demande de Bronte) : ordre
+     purement visuel, le HTML garde jour avant nuit. */
+  .hero-duo-panel:first-child { order: 2; }
+  .hero-duo-panel:last-child { order: 1; }
 
   .hero-duo-blobbox {
     position: relative;
     /* Hauteur pilotee par le ratio, pas fixee en dur : suffisamment
        genereuse pour ne jamais etre repoussee par le contenu (voir
        calcul en commentaire de composant). */
-    aspect-ratio: 1 / 1.05;
+    aspect-ratio: 1 / 1.2;
   }
 
   /* La bulle garde toujours ses proportions naturelles (viewBox 246x200,
@@ -173,14 +196,14 @@ const BLOB_NIGHT =
   .hero-duo-blob {
     position: absolute;
     top: 50%;
-    width: 129%;
+    width: 148%;
     aspect-ratio: 123 / 100;
     transform: translateY(-50%);
     z-index: 0;
     pointer-events: none;
   }
-  .hero-duo-blobbox--day .hero-duo-blob { left: -14.5%; }
-  .hero-duo-blobbox--night .hero-duo-blob { right: -14.5%; }
+  .hero-duo-blobbox--day .hero-duo-blob { left: -24%; }
+  .hero-duo-blobbox--night .hero-duo-blob { right: -24%; }
 
   .hero-duo-content {
     position: relative;
@@ -190,7 +213,7 @@ const BLOB_NIGHT =
     align-items: center;
     text-align: center;
     height: 100%;
-    padding: 22% 20px 16%;
+    padding: 25% 20px 18%;
   }
 
   .hero-duo-lineup {
@@ -205,12 +228,12 @@ const BLOB_NIGHT =
     filter: drop-shadow(0 8px 8px rgba(75, 55, 41, 0.16));
   }
 
-  .hero-duo-img--serum { height: 56px; }
-  .hero-duo-img--creme { height: 84px; }
-  .hero-duo-img--stick { height: 55px; }
-  .hero-duo-img--mousse { height: 94px; }
-  .hero-duo-img--contour { height: 47px; }
-  .hero-duo-img--tonique { height: 96px; }
+  .hero-duo-img--serum { height: 67px; }
+  .hero-duo-img--creme { height: 100px; }
+  .hero-duo-img--stick { height: 66px; }
+  .hero-duo-img--mousse { height: 97px; }
+  .hero-duo-img--contour { height: 50px; }
+  .hero-duo-img--tonique { height: 100px; }
 
   .hero-duo-cta {
     margin-top: auto;
@@ -261,18 +284,18 @@ const BLOB_NIGHT =
     .hero-duo-blob { width: 145%; }
     .hero-duo-blobbox--day .hero-duo-blob { left: -22%; }
     .hero-duo-blobbox--night .hero-duo-blob { right: -22%; }
-    .hero-duo-panel:last-child { position: relative; z-index: 1; }
-    .hero-duo-panel:first-child { position: relative; z-index: 0; }
+    .hero-duo-panel:last-child { position: relative; z-index: 1; order: 2; }
+    .hero-duo-panel:first-child { position: relative; z-index: 0; order: 1; }
 
     .hero-duo-content { padding: 25% 24px 18%; }
 
     .hero-duo-lineup { gap: 28px; }
-    .hero-duo-img--serum { height: 122px; }
-    .hero-duo-img--creme { height: 184px; }
-    .hero-duo-img--stick { height: 121px; }
-    .hero-duo-img--mousse { height: 204px; }
-    .hero-duo-img--contour { height: 105px; }
-    .hero-duo-img--tonique { height: 208px; }
+    .hero-duo-img--serum { height: 130px; }
+    .hero-duo-img--creme { height: 196px; }
+    .hero-duo-img--stick { height: 129px; }
+    .hero-duo-img--mousse { height: 192px; }
+    .hero-duo-img--contour { height: 99px; }
+    .hero-duo-img--tonique { height: 196px; }
     .hero-duo-pill { padding: 13px 22px; font-size: 0.625rem; }
   }
 </style>
