@@ -83,9 +83,18 @@ const storeOpen = isStoreOpen();
   .craquage-grid {
     grid-template-columns: repeat(2, minmax(0, 1fr));
   }
+  /* Carte seule et orpheline sur la derniere ligne mobile (nombre impair de
+     produits) : elle prend toute la largeur au lieu de laisser une case
+     vide beige a cote d'elle. */
+  .craquage-grid > :last-child:nth-child(odd) {
+    grid-column: 1 / -1;
+  }
   @media (min-width: 768px) {
     .craquage-grid {
       grid-template-columns: repeat(var(--craquage-cols), minmax(200px, 284px));
+    }
+    .craquage-grid > :last-child:nth-child(odd) {
+      grid-column: auto;
     }
   }
 </style>

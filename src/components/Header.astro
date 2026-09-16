@@ -13,7 +13,7 @@
  */
 import Wordmark from './Wordmark.astro';
 import { isStoreOpen } from '../lib/store-status';
-import { essentials, solaires, productLabel } from '../lib/products';
+import { solaires } from '../lib/products';
 
 interface Props {
   transparent?: boolean;
@@ -30,7 +30,6 @@ const {
 } = Astro.props;
 
 const storeOpen = isStoreOpen();
-const essentiels = essentials();
 const solaireProducts = solaires();
 
 /** Couleur des liens du header selon le fond sur lequel ils reposent. */
@@ -155,22 +154,17 @@ const wordmarkHidden = transparent && hideWordmarkAtTop;
     </div>
   </div>
 
-  <nav class="container-paolisa flex-1 flex items-start py-12 md:py-20">
+  <nav class="container-paolisa flex-1 flex flex-col items-start py-12 md:py-20">
+    <a
+      href="/gamme#la-notte"
+      class="inline-flex items-center gap-3 mb-12 md:mb-16 hover:opacity-70 transition-opacity duration-150 ease-in-out"
+    >
+      <span class="display-m">LA NOTTE</span>
+      <span class="menu-badge-nouveau">NOUVEAU</span>
+    </a>
     <div class="grid grid-cols-1 md:grid-cols-3 gap-12 md:gap-16 w-full">
       <div>
-        <p class="mono-label mb-6">LES ESSENTIELS</p>
-        <ul class="space-y-3">
-          {
-            essentiels.map((p) => (
-              <li>
-                <a href={p.href} class="display-s hover:opacity-70 transition-opacity duration-150 ease-in-out">
-                  {productLabel(p)} — {p.title}
-                </a>
-              </li>
-            ))
-          }
-        </ul>
-        <p class="mono-label mb-4 mt-8">LES SOLAIRES</p>
+        <p class="mono-label mb-6">LES SOLAIRES</p>
         <ul class="space-y-3">
           {
             solaireProducts.map((p) => (
@@ -202,6 +196,20 @@ const wordmarkHidden = transparent && hideWordmarkAtTop;
     </div>
   </nav>
 </div>
+
+<style>
+  .menu-badge-nouveau {
+    display: inline-flex;
+    align-items: center;
+    padding: 3px 10px;
+    border-radius: 999px;
+    background: #ff6b5e;
+    color: #fff;
+    font-family: '"JetBrains Mono"', ui-monospace, monospace;
+    font-size: 0.59375rem;
+    letter-spacing: 0.18em;
+  }
+</style>
 
 <script>
   // Scroll behaviour — header transparent → opaque au-delà de 100px (§5.2).
